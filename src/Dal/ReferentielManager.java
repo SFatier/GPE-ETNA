@@ -12,7 +12,7 @@ public class ReferentielManager {
 	
 	private ReferentielManager(){
 		
-		_cloudRepository = new ICloudRepository();
+		_cloudRepository = new CloudRepository();
 		//ajouter les interfaces ici
 	}
 	
