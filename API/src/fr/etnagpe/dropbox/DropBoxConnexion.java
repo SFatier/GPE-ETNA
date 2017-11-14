@@ -17,13 +17,15 @@ import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.users.FullAccount;
 
+import fr.etnagpe.constant.Constant;
+
 public class DropBoxConnexion {
 
 	/**
 	 * Récupère le token
 	 * */	
 	public String GetToken() {
-		DbxAppInfo dbxAppInfo = new DbxAppInfo("wvay6mx0i0a2gbo", "1qgfe6zpe62mqp3");
+		DbxAppInfo dbxAppInfo = new DbxAppInfo(Constant.DROPBOX_KEY, Constant.DROPBOX_SECRET);
 		DbxRequestConfig dbxRequestConfig = new DbxRequestConfig("GPE/1.0", Locale.getDefault().toString());
 		DbxWebAuthNoRedirect dbxWebAuthNoRedirect = new DbxWebAuthNoRedirect(dbxRequestConfig, dbxAppInfo);
 		String authorizeUrl = dbxWebAuthNoRedirect.start();
