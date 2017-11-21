@@ -34,8 +34,8 @@ public class GoogleAPI extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		OAuthService service = GoogleConnexion.CreateOAuthService();
-		GoogleConnexion.GetToken(service);
-		GoogleConnexion.GetInfos(service);	
+		//GoogleConnexion.GetToken(service);
+		GoogleConnexion.GetInfos(service);
 	}
 
 }

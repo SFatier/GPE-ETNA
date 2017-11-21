@@ -3,6 +3,10 @@ package fr.etnagpe.google;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.oauth.OAuthService;
+
+import com.google.api.client.auth.oauth2.TokenResponse;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+
 import fr.etnagpe.constant.Constant;
 import java.util.Scanner;
 import org.scribe.model.OAuthRequest;
@@ -20,7 +24,7 @@ public class GoogleConnexion {
  
   private static final Token EMPTY_TOKEN = null;
   private static Scanner in = new Scanner(System.in);
-  
+    
   //Google Auth2
   public static OAuthService CreateOAuthService() {
 	  OAuthService service = new ServiceBuilder().provider(Google2API.class)
@@ -30,8 +34,7 @@ public class GoogleConnexion {
 	  	return service;
   }
   
-  public static Token GetToken(OAuthService service){ 
-	   
+  public static Token GetToken(OAuthService service){	   
       Verifier verifier = null; 
       Token accessToken = null;
  
@@ -53,15 +56,16 @@ public class GoogleConnexion {
   }
   
   public static void GetInfos(OAuthService service) {
-	  OAuthRequest request = new OAuthRequest(Verb.GET,
-              PROTECTED_RESOURCE_URL);
-      service.signRequest(GetToken(service), request);
+	  OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+	  Token token = GetToken(service);
+      service.signRequest(token, request);
       Response response = request.send();
       System.out.println("Got it! Lets see what we found...");
       System.out.println();
       System.out.println(response.getCode());
       System.out.println(response.getBody());
+      GoogleCredential _GoogleCredential = new GoogleCredential().setAccessToken(token.toString());
+      System.out.println("Google Credential" + _GoogleCredential);
       in.close();
-  }
-  
+  } 
 }
