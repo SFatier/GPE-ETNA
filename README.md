@@ -13,6 +13,8 @@ http://localhost:8080/API/listeFile
 => retourner sur la page la liste de fichier de dropbox y est sous format JSON.
 
 GPE-ETNA
+
+
 L'application est une fenetre ayant plusieurs onglets.
 -onglet 1 
   => Se connecter à dropbox avec son email et son mot de passe en ouvrant automatique le navigateur sur l'url dropbox
