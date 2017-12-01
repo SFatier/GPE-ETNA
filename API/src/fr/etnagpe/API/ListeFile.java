@@ -60,35 +60,35 @@ public class ListeFile extends HttpServlet {
 		}
 		
 		//Récupère la liste des fichiers client
-		try {
-			rslt = dc.ListFiles(client);
-		} catch (ListFolderErrorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DbxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		int i = 0;
-		String strjson = "{\"record\": [";
-		
-		response.setContentType("application/json");
+//		try {
+//			rslt = dc.ListFiles(client);
+//		} catch (ListFolderErrorException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (DbxException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		int i = 0;
+//		String strjson = "{\"record\": [";
+//		
+//		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
+//		
+//		 for (Metadata metadata : rslt.getEntries()) {
+//             // writer.println( metadata.getPathLower()) ;
+//             if (i < (rslt.getEntries().size() - 1)) {
+//            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" : \"0\" },";
+//             }else {
+//            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" :  \"0\"}";
+//             }
+//             i++;
+//         }
+//		 		 
+//		 strjson += "]}";
 		
-		 for (Metadata metadata : rslt.getEntries()) {
-             // writer.println( metadata.getPathLower()) ;
-             if (i < (rslt.getEntries().size() - 1)) {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" : \"0\" },";
-             }else {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" :  \"0\"}";
-             }
-             i++;
-         }
-		 		 
-		 strjson += "]}";
-		
-		 writer.print(strjson);
+		 writer.print("");
 		 writer.flush();
 	}
 }

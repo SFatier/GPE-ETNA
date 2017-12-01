@@ -1,6 +1,5 @@
 package View;
 
-
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,21 +17,45 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.gpe.object.Utilisateur;
 
 public class ShowAllFiles extends JPanel {
+
+	private static final String URL_FILE_DROPBOX = "http://localhost:8080/API/dropbox_files";
+	private static ImageIcon icon_word = new ImageIcon("Ressource/pdf.png");
+	private static ImageIcon icon_pdf = new ImageIcon("Ressource/word2.jpg");
+
+	/**
+	 * Constructeur
+	 * */
+	public ShowAllFiles(Utilisateur u) {		
+        if (u.token != null || u.token != "") {
+        	System.out.println("Token enregistré : "+ u.token);
+        	DrawFiles(u);
+        }else {
+        	System.out.println("Pas de token enregistré");
+        	JLabel lbl1 = new JLabel("Cloud non synchronisé...");
+        	this.add(lbl1);
+        	lbl1.setLocation(40, 20);
+        	lbl1.setSize(300, 128);
+        }
+        this.setBackground(Color.WHITE);
+		this.setLayout(null);
+	}	
 	
-	public ShowAllFiles() {
+	/**
+	 * Dessine les fichiers sur l'onglet n°2
+	 * */
+	private void DrawFiles(Utilisateur u) {
+		JSONArray json = null;
 		int x = 40;
 		int y = 20;		
 		int x_label = 55;
 		int y_label = 160;
-		JSONArray json = null;
-		ImageIcon icon_word = new ImageIcon("Ressource/pdf.png");
-        ImageIcon icon_pdf = new ImageIcon("Ressource/word2.jpg");
 		
 		try {
-			json = readJsonFromUrl("http://localhost:8080/API/listeFile");
-			
+			json = readJsonFromUrl(URL_FILE_DROPBOX + "?token="+ u.token);
+	
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,8 +66,7 @@ public class ShowAllFiles extends JPanel {
 		final int n = json.length();	
 		
 		for (int i = 0; i < n; ++i) {
-		       final JSONObject person = json.getJSONObject(i);
-		        // System.out.println(person.getString("nom"));		        
+		       final JSONObject person = json.getJSONObject(i);	        
 			   if (isEven(n)) {
 					        	
 				   //Image
@@ -60,7 +82,7 @@ public class ShowAllFiles extends JPanel {
 		        	lbl_img.setWrapStyleWord(true);
 		        	lbl_img.setLineWrap(true);
 		        	lbl_img.setSize(100, 80);	  
-		        	lbl_img.setBackground(Color.LIGHT_GRAY);
+		        	lbl_img.setBackground(Color.WHITE);
 		        	
 		        	if (x > 700) {
 		        		x = 40;  
@@ -72,10 +94,8 @@ public class ShowAllFiles extends JPanel {
 		        	}
 		        }
 		}
-		this.setLayout(null);
-	}	
-	
-	//Vérifie si le int est pair ou impair
+	}
+
 	private boolean isEven(int num) { return ((num % 2) == 0); }
 	
 	private static String readAll(Reader rd) throws IOException {

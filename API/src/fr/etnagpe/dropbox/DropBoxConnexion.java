@@ -20,17 +20,27 @@ import com.dropbox.core.v2.users.FullAccount;
 import fr.etnagpe.constant.Constant;
 
 public class DropBoxConnexion {
-
+	static DbxAppInfo dbxAppInfo;
+	static DbxRequestConfig dbxRequestConfig;
+	static DbxWebAuthNoRedirect dbxWebAuthNoRedirect ;
+	
+	/**
+	 * URL redirected
+	 * */
+	public static String SendURLAuth() {
+		dbxAppInfo = new DbxAppInfo(Constant.DROPBOX_KEY, Constant.DROPBOX_SECRET);
+		dbxRequestConfig = new DbxRequestConfig("GPE/1.0", Locale.getDefault().toString());
+		dbxWebAuthNoRedirect = new DbxWebAuthNoRedirect(dbxRequestConfig, dbxAppInfo);
+		String authorizeUrl = dbxWebAuthNoRedirect.start();
+		//System.out.println("1. Autorisation de l'utilisateur, allez sur le lien et connectez-vous : " + authorizeUrl);
+		return authorizeUrl;
+	}
+	
 	/**
 	 * Récupère le token
 	 * */	
-	public String GetToken() {
-		DbxAppInfo dbxAppInfo = new DbxAppInfo(Constant.DROPBOX_KEY, Constant.DROPBOX_SECRET);
-		DbxRequestConfig dbxRequestConfig = new DbxRequestConfig("GPE/1.0", Locale.getDefault().toString());
-		DbxWebAuthNoRedirect dbxWebAuthNoRedirect = new DbxWebAuthNoRedirect(dbxRequestConfig, dbxAppInfo);
-		String authorizeUrl = dbxWebAuthNoRedirect.start();
-		System.out.println("1. Autorisation de l'utilisateur, allez sur le lien et connectez-vous : " + authorizeUrl);
-		System.out.println("2. Récupérer le code et copier dans la console d'eclipse");
+	public static String GetToken() {
+		//System.out.println("2. Récupérer le code et copier dans la console d'eclipse");
 		String dropboxAuthCode = null;
 		DbxAuthFinish authFinish = null;
 		
