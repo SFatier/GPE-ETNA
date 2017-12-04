@@ -2,18 +2,14 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Desktop;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,13 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import Controller.GoogleController;
-import fr.etnagpe.API.dropbox_files;
-import fr.etnagpe.dropbox.DropBoxConnexion;
 import fr.gpe.object.Utilisateur;
 
 //La fenetre de google
 public class JFrameGoogle extends GoogleView implements ActionListener{
-	private String uri_auth = DropBoxConnexion.SendURLAuth();
 	private JFrame frame = null;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 	private ImageIcon icon = new ImageIcon("https://media.giphy.com/media/l2R0aKwejYr8ycKAg/giphy.gif");
@@ -52,31 +45,26 @@ public class JFrameGoogle extends GoogleView implements ActionListener{
 	private void buildFrame() {	
 		frame = new JFrame("GED ETNA");		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	   
-		DrawTabPanel();		
+		DrawTabPanel(frame.getContentPane());		
 	    frame.add(tabbedPane, BorderLayout.CENTER);
 	    frame.setSize(900, 600);
 	    frame.setVisible(true);	    
 	}
 
-	private void DrawTabPanel() {
-		final SynchronisationCloud sc =  new SynchronisationCloud(new GridLayout(5,2,20,50), u);
-		JButton button = new JButton("Se connecter");
-		button.addActionListener(new ActionListener() {			
-			public void actionPerformed(ActionEvent e) {
-				   Auth();				    
-				sc.getText();
-			}		
-		});
-		sc.add(button);
-		JComponent panel1 = sc;
+	private void DrawTabPanel(Container container) {
+		
+		/**Onglet 1**/
+		JComponent panel1 =  new SynchronisationCloud(new GridLayout(2,2), u);	
 		panel1.setBackground(Color.WHITE);
-		tabbedPane.addTab("Drive", icon, panel1, "Does nothing");
+		tabbedPane.addTab("Drive", icon, panel1, "Il n'y a pas de panel");
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 		
+		/**Onglet 2 **/
 		JComponent panel2 = new ShowAllFiles(u);  //makeTextPanel("Panel #2");
-		tabbedPane.addTab("File", icon, panel2, "Does twice as much nothing");
+		tabbedPane.addTab("listFile", icon, panel2, "Il n'y a pas de panel");
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
+		/**Onglet 3**/
 		JComponent panel3 = makeTextPanel("Panel #3");
 		tabbedPane.addTab("Tab 3", icon, panel3,
 		                  "Still does nothing");
@@ -97,26 +85,7 @@ public class JFrameGoogle extends GoogleView implements ActionListener{
 	        panel.add(filler);
 	        return panel;
 	    }
-	
-	/**
-	 * Ouvre le navigateur pour autoriser l'application a accéder aux différents documents
-	 * */
-	private void Auth() {				
-		if(Desktop.isDesktopSupported())
-		{
-			 try {				    	
-			    Desktop.getDesktop().browse(new URI(uri_auth));
-			    if (u.token == null) {
-			    	u.token = DropBoxConnexion.GetToken();
-			    		}
-			    System.out.println("Token btn : " + u.token);
-			 } catch (IOException e1) {
-				 e1.printStackTrace();
-			 } catch (URISyntaxException e1) {
-				 e1.printStackTrace();
-			 }
-		}
-	}
+		
 	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
