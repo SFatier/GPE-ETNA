@@ -42,6 +42,7 @@ public class SynchronisationCloud extends JPanel{
 		//Ajout des deux panels dans le Courant Panel
 		this.add(p);
 		this.add(p2);
+		this.setBackground(Color.white);
 	  }
 	
 	private JPanel BorderGoogle() {

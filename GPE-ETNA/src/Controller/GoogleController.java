@@ -2,7 +2,7 @@ package Controller;
 
 import Model.GoogleModel;
 import View.GoogleView;
-import View.JFrameGoogle;
+import View.MainWindow;
 
 
 //Controlle la fenetre de test de google
@@ -15,7 +15,7 @@ public class GoogleController {
 	public GoogleController (GoogleModel model){
 		this.model = model;
  
-		view = new JFrameGoogle(this);
+		view = new MainWindow(this);  //new JFrameGoogle(this);
 		addListenersToModel();
 	}
  

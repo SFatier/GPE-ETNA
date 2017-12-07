@@ -20,10 +20,10 @@ import org.json.JSONObject;
 import fr.gpe.object.Utilisateur;
 
 public class ShowAllFiles extends JPanel {
-
+	private static final long serialVersionUID = 1L;
 	private static final String URL_FILE_DROPBOX = "http://localhost:8080/API/dropbox_files";
 	private static ImageIcon icon_word = new ImageIcon("Ressource/pdf.png");
-	private static ImageIcon icon_pdf = new ImageIcon("Ressource/word2.jpg");
+	//private static ImageIcon icon_pdf = new ImageIcon("Ressource/word2.jpg");
 
 	/**
 	 * Constructeur
