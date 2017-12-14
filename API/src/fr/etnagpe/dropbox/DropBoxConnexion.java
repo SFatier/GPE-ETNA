@@ -32,7 +32,6 @@ public class DropBoxConnexion {
 		dbxRequestConfig = new DbxRequestConfig("GPE/1.0", Locale.getDefault().toString());
 		dbxWebAuthNoRedirect = new DbxWebAuthNoRedirect(dbxRequestConfig, dbxAppInfo);
 		String authorizeUrl = dbxWebAuthNoRedirect.start();
-		//System.out.println("1. Autorisation de l'utilisateur, allez sur le lien et connectez-vous : " + authorizeUrl);
 		return authorizeUrl;
 	}
 	
@@ -84,17 +83,6 @@ public class DropBoxConnexion {
 	 * **/
 	public ListFolderResult ListFiles(DbxClientV2 client) throws ListFolderErrorException, DbxException {
 		  ListFolderResult result = client.files().listFolder("");
-	       /*s while (true) {
-	            for (Metadata metadata : result.getEntries()) {
-	                System.out.println(metadata.getPathLower());
-	            }
-
-	            if (!result.getHasMore()) {
-	                break;
-	            }
-
-	            result = client.files().listFolderContinue(result.getCursor());
-	        }*/
-	        return result;
+	      return result;
 	}
 }

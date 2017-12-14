@@ -29,7 +29,8 @@ public class MainWindow extends GoogleView implements ActionListener{
 	private JMenuItem menuItem_synchro_cloud = new JMenuItem("Synchonisation des clouds");
 	private JMenuItem menuItem_syncho_calendar = new JMenuItem("Synchonisation des plannings");
 	private Utilisateur u = new Utilisateur ();
-		
+	/**fin déclaration **/
+	
 	public MainWindow(GoogleController controller) {
 		super(controller);
 		
@@ -64,6 +65,27 @@ public class MainWindow extends GoogleView implements ActionListener{
 		});
 		
 		menuBar.add(menu_home);
+		menu_todolist.addMenuListener(new MenuListener() {
+			
+			public void menuSelected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("click todoList");
+				frame.getContentPane().removeAll();//remove
+				frame.setContentPane(new ShowTodoList(u));;//add
+				frame.revalidate();//refresh ui and layout
+				frame.repaint();
+			}
+			
+			public void menuDeselected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("Methode non implémenté");
+			}
+			
+			public void menuCanceled(MenuEvent e) {
+				// TODO Auto-generated method stub
+				 System.out.println("Methode non implémenté");
+			}
+		});
 		menuBar.add(menu_todolist);
 		menuBar.add(menu_plannings);
 		
