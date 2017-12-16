@@ -1,0 +1,10 @@
+--Ouvrir l'app
+ionic serve
+
+--ouvrir le lab
+ionic serve -l
+
+--Creer des pages dans le dossier page
+ionic g page users
+
+--

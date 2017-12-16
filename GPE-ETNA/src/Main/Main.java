@@ -1,10 +1,6 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import Controller.GoogleController;
-import Model.File;
 import Model.GoogleModel;
 
 public class Main {
@@ -12,14 +8,14 @@ public class Main {
         //System.out.println("Hello world!");
         
         //test -- on peut ne pas le mettre
-        List<File> lst = new ArrayList<File>();
-        File file = new File();
-        file.FileName = "toto";
-        file.ID_File = "iesmoifhsmgoiher";
-        lst.add(file);
+//        List<File> lst = new ArrayList<File>();
+//        File file = new File();
+//        file.FileName = "toto";
+//        file.ID_File = "iesmoifhsmgoiher";
+//        lst.add(file);
         
         //appelle le model puis le affiche la fenetre demandé par le controller
-        GoogleModel model = new GoogleModel(lst);
+        GoogleModel model = new GoogleModel();
 		GoogleController controller = new GoogleController(model);
 		controller.displayViews();
     }

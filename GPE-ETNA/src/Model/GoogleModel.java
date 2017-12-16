@@ -1,6 +1,5 @@
 package Model;
 
-import java.util.List;
 import javax.swing.event.EventListenerList;
 import Event.GoogleListener;
 
@@ -10,7 +9,7 @@ public class GoogleModel extends File {
 	
 	private EventListenerList listeners;
 	 
-	public GoogleModel(List<File> lstFile) {
+	public GoogleModel() {
 		super();
 		
 		listeners = new EventListenerList();
