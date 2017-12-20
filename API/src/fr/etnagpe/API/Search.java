@@ -36,18 +36,17 @@ public class Search extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ListFolderResult rslt = null;
 		String token = request.getParameter("token");
 		String word = request.getParameter("word");
 		DropBoxConnexion dc = new DropBoxConnexion();
 		DbxClientV2 client = dc.ConnectClient(token);	
-		String strjson = "{\"record\": [";
-		
+				
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		//Récupère la liste des fichiers client
+				
+		String strjson = "";
 		try {
-			rslt = dc.ListFiles(client);
+			strjson = dc.SearchFilesByName(client, word);
 		} catch (ListFolderErrorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,16 +54,6 @@ public class Search extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				
-		for (Metadata metadata : rslt.getEntries()) {   
-			 System.out.println(metadata.getName());
-			 System.out.println(word);
-			 if (metadata.getPathLower() == word) {
-				 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" :  \"0\"}";
-			 }
-         }
-		 		 
-		 strjson += "]}";
 		
 		 writer.print(strjson);
 		 writer.flush();

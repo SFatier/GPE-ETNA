@@ -59,9 +59,17 @@ public class dropbox_files extends HttpServlet {
 		 for (Metadata metadata : rslt.getEntries()) {
              // writer.println( metadata.getPathLower()) ;
              if (i < (rslt.getEntries().size() - 1)) {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" : \"0\" },";
+            	 strjson += "{\"pathDisplay\":\""+ metadata.getPathDisplay() + "\",";
+            	 strjson += "\"nom\":\""+ metadata.getName() + "\",";
+            	 strjson += "\"type_icone\":\""+ dc.GetTypeMime(metadata.getName()) + "\",";
+            	 strjson += "\"parentSharedFolderId\":\""+ metadata.getParentSharedFolderId() + "\",";
+            	 strjson += "\"pathLower\":\""+ metadata.getPathLower() + "\" },";
              }else {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" :  \"0\"}";
+            	 strjson += "{\"pathDisplay\":\""+ metadata.getPathDisplay() + "\",";
+            	 strjson += "\"nom\":\""+ metadata.getName() + "\",";
+            	 strjson += "\"type_icone\":\""+ dc.GetTypeMime(metadata.getName())  + "\",";
+            	 strjson += "\"parentSharedFolderId\":\""+ metadata.getParentSharedFolderId() + "\",";
+            	 strjson += "\"pathLower\":\""+ metadata.getPathLower() + "\" }";
              }
              i++;
          }
