@@ -37,10 +37,7 @@ public class ListeFile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 * Retourne un JSON
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		ListFolderResult rslt = null;
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {				
 		DropBoxConnexion dc = new DropBoxConnexion();
 		System.out.println(token);
 		if (token == "" || token == null) {
@@ -58,37 +55,10 @@ public class ListeFile extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//Récupère la liste des fichiers client
-		try {
-			rslt = dc.ListFiles(client);
-		} catch (ListFolderErrorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DbxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		int i = 0;
-		String strjson = "{\"record\": [";
-		
-		response.setContentType("application/json");
+
 		PrintWriter writer = response.getWriter();
 		
-		 for (Metadata metadata : rslt.getEntries()) {
-             // writer.println( metadata.getPathLower()) ;
-             if (i < (rslt.getEntries().size() - 1)) {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" : \"0\" },";
-             }else {
-            	 strjson += "{\"nom\" : \"" + metadata.getPathLower() + "\", \"id\" :  \"0\"}";
-             }
-             i++;
-         }
-		 		 
-		 strjson += "]}";
-		
-		 writer.print(strjson);
+		 writer.print("");
 		 writer.flush();
 	}
 }
