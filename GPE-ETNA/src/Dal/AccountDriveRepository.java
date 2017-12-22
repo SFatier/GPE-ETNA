@@ -27,7 +27,6 @@ public class AccountDriveRepository implements IAccountDriveRepository {
 			resultSet = statement.executeQuery("SELECT ID, EMAIL, MOTDEPASSE, TOKEN FROM AccountDrive WHERE ID =" + id);
 			while(resultSet.next()) {
 				accountDrive.setId(resultSet.getInt("ID"));
-				//accountDrive.setNom(resultSet.getString("NOM"));
 				accountDrive.setEmail(resultSet.getString("EMAIL"));
 				accountDrive.setMdp(resultSet.getString("MOTDEPASSE"));
 				accountDrive.setToken(resultSet.getString("TOKEN"));
@@ -35,14 +34,14 @@ public class AccountDriveRepository implements IAccountDriveRepository {
 			}
 			System.out.println("Account Drive a été récupéré avec success");
 		} catch (SQLException ex) {
-			System.out.println("L'utilisateur n'a été récupéré. Message : "+ ex.getMessage());
-		}finally {
+			System.out.println("L'account Drive n'a pas été récupé. Message : "+ ex.getMessage());
+		}/*finally {
 			try {
 				Conn.close();
 			} catch (SQLException e) {
 				System.out.println("Erreur de fermeture de la connexion");
 			}
-		}
+		}*/
 		
 		return ListAccountDrive;		
 	}

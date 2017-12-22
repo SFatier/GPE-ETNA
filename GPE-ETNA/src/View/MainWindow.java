@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -14,6 +15,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import Controller.GoogleController;
+import Dal.ReferentielManager;
 import fr.gpe.object.AccountDrive;
 
 public class MainWindow extends GoogleView implements ActionListener{
@@ -27,20 +29,23 @@ public class MainWindow extends GoogleView implements ActionListener{
 	private JMenu menu_parametre = new JMenu("Paramètres");
 	private JMenuItem menuItem_synchro_cloud = new JMenuItem("Synchonisation des clouds");
 	private JMenuItem menuItem_syncho_calendar = new JMenuItem("Synchonisation des plannings");
-	private AccountDrive ad = new AccountDrive ();
+	
+	private ArrayList<AccountDrive> Listad = ReferentielManager.Instance().GetAccountDriveByID(1);
+	private AccountDrive ad = new AccountDrive();
+	
 	/**fin déclaration **/
 	
 	public MainWindow(GoogleController controller) {
 		super(controller);
 		
-		ad.setNom("FATIER");
-		ad.setMdp("etna");
-		ad.setToken("yJLkyP3VBKAAAAAAAAAAXPz72gQ_MWAmUeZmYY8lH_ssFo-hTZIEVXS99OYCtooN"); //token de mon compte
+		//Utilise un compte pour le moment
+		if ( Listad.size() != 0) {
+			ad.setToken(Listad.get(0).getToken());
+		}
 		
-		frame = new JFrame("GED ETNA");		
+		frame = new JFrame("GED ETNA");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	   
 		
-		//menu_home.add(new JMenuItem("Quitter"));
 		menu_home.addMenuListener(new MenuListener() {
 			
 			public void menuSelected(MenuEvent e) {
