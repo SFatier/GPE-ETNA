@@ -26,7 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.gpe.object.Utilisateur;
+import fr.gpe.object.AccountDrive;
 
 public class ShowAllFiles extends JPanel {
 	/**
@@ -62,7 +62,7 @@ public class ShowAllFiles extends JPanel {
 	/**
 	 * Constructeur
 	 * */
-	public ShowAllFiles(Utilisateur u) {
+	public ShowAllFiles(AccountDrive u) {
         CreatePanel(u);
         this.setBackground(Color.WHITE);
 		this.setLayout(null);		
@@ -71,8 +71,8 @@ public class ShowAllFiles extends JPanel {
 	/**
 	 * Creation du Panel
 	 */
-	private void CreatePanel(Utilisateur u) {
-		 if ( u.token != "") {
+	private void CreatePanel(AccountDrive u) {
+		 if ( u.getToken() != "") {
 	        	DrawSearchBar(u); 
 	        	DrawFilters(u);
 	        	DrawFiles(u);
@@ -84,7 +84,7 @@ public class ShowAllFiles extends JPanel {
 	        }
 	}
 
-	private void DrawFilters(final Utilisateur u) {
+	private void DrawFilters(final AccountDrive u) {
 		label_refresh = new JLabel(icon_refresh);
 		label_refresh.setToolTipText("Rafaîchir les fichiers");
 		label_refresh.addMouseListener(new MouseListener() {
@@ -158,7 +158,7 @@ public class ShowAllFiles extends JPanel {
 	/**Dessine la barre de recherche
 	 * 
 	 */
-	private void DrawSearchBar(final Utilisateur u) {
+	private void DrawSearchBar(final AccountDrive u) {
 		tbx_search = new JTextField();
 		tbx_search.setForeground(Color.BLUE);
 		tbx_search.setPreferredSize(new Dimension(150, 30));
@@ -192,7 +192,7 @@ public class ShowAllFiles extends JPanel {
 	 * 
 	 * @param u
 	 */
-	private void DrawFiles(Utilisateur u) {
+	private void DrawFiles(AccountDrive u) {
 		JSONArray json = null;
 		int x = 60;
 		int y = 100;		
@@ -200,7 +200,7 @@ public class ShowAllFiles extends JPanel {
 		int y_label = 260;
 		
 		try {
-			json = readJsonFromUrl(URL_FILE_DROPBOX + "?token="+ u.token);	
+			json = readJsonFromUrl(URL_FILE_DROPBOX + "?token="+ u.getToken());	
 			System.out.println(json);
 			final int n = json.length();	
 			
@@ -243,10 +243,10 @@ public class ShowAllFiles extends JPanel {
 		}		
 	}
 
-	private ImageIcon GetIcon(String str) {
+	private ImageIcon GetIcon(String nameType) {
 		ImageIcon icone =  null;
 		
-		switch (str)
+		switch (nameType)
 		{
 			case "image" : icone = icon_image;break;
 			case "archive" : icone = icon_archive;break;
@@ -310,7 +310,7 @@ public class ShowAllFiles extends JPanel {
 	 * @param u
 	 * @param word
 	 */
-	public void SelectItemSearch(Utilisateur u, String word) {
+	public void SelectItemSearch(AccountDrive u, String word) {
 		JSONArray json = null;	
 		int x = 40;
 		int y = 100;		
@@ -318,7 +318,7 @@ public class ShowAllFiles extends JPanel {
 		int y_label = 260;
 		
 		try {
-			String URL = URL_FILE_DROPBOX_SEARCH + "?token="+ u.token + "&" + "word=" + word.replace(" ", "");
+			String URL = URL_FILE_DROPBOX_SEARCH + "?token="+ u.getToken() + "&" + "word=" + word.replace(" ", "");
 			System.out.println(URL);
 			json = readJsonFromUrl(URL);
 			System.out.println(json);

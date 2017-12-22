@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -14,7 +15,8 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import Controller.GoogleController;
-import fr.gpe.object.Utilisateur;
+import Dal.ReferentielManager;
+import fr.gpe.object.AccountDrive;
 
 public class MainWindow extends GoogleView implements ActionListener{
 	/**Declaration **/
@@ -25,25 +27,25 @@ public class MainWindow extends GoogleView implements ActionListener{
 	private JMenu menu_plannings = new JMenu("Plannings");
 	private JMenu menu_clouds = new JMenu("Clouds");
 	private JMenu menu_parametre = new JMenu("Paramètres");
-	private JMenuItem menuItem_listFile = new JMenuItem("Liste des fichiers");
 	private JMenuItem menuItem_synchro_cloud = new JMenuItem("Synchonisation des clouds");
 	private JMenuItem menuItem_syncho_calendar = new JMenuItem("Synchonisation des plannings");
-	private Utilisateur u = new Utilisateur ();
+	
+	private ArrayList<AccountDrive> Listad = ReferentielManager.Instance().GetAccountDriveByID(1);
+	private AccountDrive ad = new AccountDrive();
+	
 	/**fin déclaration **/
 	
 	public MainWindow(GoogleController controller) {
 		super(controller);
 		
-		u.nom= "FATIER";
-		u.prenom = "Ségolène";
-		u.login = "fatier_segolene";
-		u.mdp = "etna";
-		u.token = "yJLkyP3VBKAAAAAAAAAAXPz72gQ_MWAmUeZmYY8lH_ssFo-hTZIEVXS99OYCtooN"; //token de mon compte
+		//Utilise un compte pour le moment
+		if ( Listad.size() != 0) {
+			ad.setToken(Listad.get(0).getToken());
+		}
 		
-		frame = new JFrame("GED ETNA");		
+		frame = new JFrame("GED ETNA");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	   
 		
-		//menu_home.add(new JMenuItem("Quitter"));
 		menu_home.addMenuListener(new MenuListener() {
 			
 			public void menuSelected(MenuEvent e) {
@@ -71,7 +73,7 @@ public class MainWindow extends GoogleView implements ActionListener{
 				// TODO Auto-generated method stub
 				System.out.println("click todoList");
 				frame.getContentPane().removeAll();//remove
-				frame.setContentPane(new ShowTodoList(u));;//add
+				frame.setContentPane(new ShowTodoList(ad));;//add
 				frame.revalidate();//refresh ui and layout
 				frame.repaint();
 			}
@@ -89,12 +91,11 @@ public class MainWindow extends GoogleView implements ActionListener{
 		menuBar.add(menu_todolist);
 		menuBar.add(menu_plannings);
 		
-		menu_clouds.add(menuItem_listFile);
 		menu_clouds.addMenuListener(new MenuListener() {
 			
 			public void menuSelected(MenuEvent e) {
 				frame.getContentPane().removeAll();//remove
-				frame.setContentPane(new ShowAllFiles(u));;//add
+				frame.setContentPane(new ShowAllFiles(ad));;//add
 				frame.revalidate();//refresh ui and layout
 				frame.repaint();	
 			}
@@ -115,7 +116,7 @@ public class MainWindow extends GoogleView implements ActionListener{
 		menuItem_synchro_cloud.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent e) {
 				frame.getContentPane().removeAll();//remove
-				frame.setContentPane(new SynchronisationCloud(new GridLayout(2,2,2,2), u));;//add
+				frame.setContentPane(new SynchronisationCloud(new GridLayout(2,2,2,2), ad));;//add
 				frame.revalidate();//refresh ui and layout
 				frame.repaint();	
 			}

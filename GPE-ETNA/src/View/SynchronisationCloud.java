@@ -12,25 +12,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import fr.etnagpe.dropbox.DropBoxConnexion;
-import fr.gpe.object.Utilisateur;
+import fr.gpe.object.AccountDrive;
 
 public class SynchronisationCloud extends JPanel{
+	private static final long serialVersionUID = 1L;
 	private String uri_auth = DropBoxConnexion.SendURLAuth();
 	private JTextField jtf = new JTextField("");
 	private JTextField jtf2 = new JTextField("");
 	private JTextField jtf_email_google = new JTextField("");
 	private JTextField jtf_mdp_google = new JTextField("");
-	private Utilisateur u = new Utilisateur();
+	private AccountDrive u = new AccountDrive();
 	Font police = new Font("Arial", Font.BOLD, 14);	 
 	
-	public SynchronisationCloud(GridLayout gridLayout, Utilisateur _u) {
+	public SynchronisationCloud(GridLayout gridLayout, AccountDrive _u) {
 		u = _u;		
 		
 		//Panel1 - Dropbox
@@ -141,15 +141,15 @@ public class SynchronisationCloud extends JPanel{
 	/**
 	 * Ouvre le navigateur pour autoriser l'application a accéder aux différents documents
 	 * */
-	private void Auth(Utilisateur u) {				
+	private void Auth(AccountDrive u) {				
 		if(Desktop.isDesktopSupported())
 		{
 			 try {				    	
 			    Desktop.getDesktop().browse(new URI(uri_auth));
-			    if (u.token == null) {
-			    	u.token = DropBoxConnexion.GetToken();
+			    if (u.getToken() == null) {
+			    	u.setToken(DropBoxConnexion.GetToken());
 			    		}
-			    System.out.println("Token btn : " + u.token);
+			    System.out.println("Token btn : " + u.getToken());
 			 } catch (IOException e1) {
 				 e1.printStackTrace();
 			 } catch (URISyntaxException e1) {
