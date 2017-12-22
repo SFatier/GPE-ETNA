@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
-import fr.gpe.object.Utilisateur;
+import fr.gpe.object.AccountDrive;
 
 public class ShowTodoList extends  JPanel{
 		private JTextPane textpan1 =  new JTextPane();
@@ -18,7 +18,7 @@ public class ShowTodoList extends  JPanel{
 		/**
 		 * Constructeur TodoList
 		 * */
-		public ShowTodoList(Utilisateur u) {
+		public ShowTodoList(AccountDrive u) {
 			if( u != null) {	
 				setLayout(new GridLayout(2,2));
 				

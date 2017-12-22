@@ -1,18 +1,25 @@
 package Dal;
 
-import Interface.ICloudRepository;
-import Model.CloudObject;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import Interface.IAccountDriveRepository;
+import fr.gpe.object.AccountDrive;
 
 public class ReferentielManager {
 	
+	private static Connection Conn = null;
 	private static ReferentielManager instance = null;
 	
-	private ICloudRepository _cloudRepository;
+	private IAccountDriveRepository _AccountDriveRepository;
 	//Declarer les interfaces
 	
 	private ReferentielManager(){
-		
-		_cloudRepository = new CloudRepository();
+		StartConnection();
+		_AccountDriveRepository = new AccountDriveRepository(Conn);
 		//ajouter les interfaces ici
 	}
 	
@@ -21,16 +28,51 @@ public class ReferentielManager {
 	{
 		//Synchronisation Globale
 		if(instance == null)
-		{
+		{		
 			instance = new ReferentielManager();
 		}
+			
 		return instance;
 	}
 
-
-	public void GetInfosCloud(CloudObject c)
+	
+	public static Connection StartConnection () {
+		try {
+			Class<?> driverClass = Class.forName("com.mysql.cj.jdbc.Driver");
+			DriverManager.registerDriver((Driver)driverClass.newInstance());
+			System.out.println( "Vérification du driver ok\n");
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			System.out.println("Vérification du driver impossible.");
+		}
+		
+		try {
+			// DriverManager: The basic service for managing a set of JDBC drivers.
+			Conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3308/bbgpe?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root", "");
+			if (Conn != null) {
+				System.out.println( "Base de donnée connecté\n");
+			} else {
+				System.out.println( "Echec connection Base de donnée");
+			}
+		} catch (SQLException ex) {
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		return Conn;
+	}
+	
+	public static void closeConnection(){
+		try{
+			if(Conn!=null)
+				Conn.close();
+		}catch(SQLException se){
+		}
+		System.out.println("Connection closed");
+	}
+	
+	public ArrayList<AccountDrive> GetAccountDriveByID(int id)
 	{
-		_cloudRepository.getCloud(c);
+		return _AccountDriveRepository.FindAccountDriveByIdCloud(id);
 	}
 	
 }
