@@ -63,9 +63,13 @@
     <Compile Include="Helpers\DropboxBase.cs" />
     <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="ModelView\HomeModelView.cs" />
     <Compile Include="ModelView\ListModelView.cs" />
     <Compile Include="ModelView\LoginModelView.cs" />
     <Compile Include="ModelView\MainModelView.cs" />
+    <Compile Include="View\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\RegisterView.xaml.cs">
       <DependentUpon>RegisterView.xaml</DependentUpon>
     </Compile>
@@ -94,6 +98,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\RegisterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

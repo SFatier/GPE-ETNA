@@ -1,4 +1,5 @@
-﻿using IHM.ViewModel;
+﻿using IHM.ModelView;
+using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace IHM.Helpers
     class Singleton
     {
         MainModelView cMain;
+        HomeModelView cContent;
 
         static Singleton _instance;
         public static Singleton GetInstance()
@@ -19,6 +21,8 @@ namespace IHM.Helpers
             return _instance;
         }
 
+        /********/
+
         public void SetMainWindowViewModel(MainModelView mainWindowViewModel)
         {
             cMain = mainWindowViewModel;
@@ -26,6 +30,17 @@ namespace IHM.Helpers
         public MainModelView GetMainWindowViewModel()
         {
             return cMain;
+        }
+
+        /********/
+
+        public void SetHomeModelView(HomeModelView homeModelView)
+        {
+            cContent = homeModelView;
+        }
+        public HomeModelView GetHomeModelView()
+        {
+            return cContent;
         }
     }
 }

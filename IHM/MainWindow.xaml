@@ -12,41 +12,18 @@
         <DataTemplate DataType="{x:Type local1:ListModelView}">
             <local:ListView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local1:LoginModelView}">
-            <local:LoginView />
+        <DataTemplate DataType="{x:Type local1:HomeModelView}">
+            <local:HomeView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type local1:RegisterViewModel}">
             <local:RegisterView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:LoginModelView}">
+            <local:LoginView />
+        </DataTemplate>
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <!--Row  0-->
-        <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
-        <Button Content="Se Connecter" HorizontalAlignment="Left" Margin="894,10,0,0" VerticalAlignment="Top" Width="74"/>
-
-        <!--Row 1-->
-
-        <!--Menu-->
-        <Button Content="{Binding strDP}" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterDP}"/>
-        <Button Content="Documents" Grid.Row="1" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="1.673,0.275"/>
-
-        <!--Recherche-->
-        <Button Content="o-" Grid.Row="1" HorizontalAlignment="Left" Margin="894,15,0,0" VerticalAlignment="Top" Width="74"/>
-        <TextBox HorizontalAlignment="Left" Grid.Row="1" Height="20" Margin="755,15,0,0" TextWrapping="Wrap" Text="Rechercher" VerticalAlignment="Top" Width="139"/>
-        
-        <!--Row 2-->
+    <Grid>         
         <ContentControl Content="{Binding CurrentPageViewModel}" Grid.Row="2" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
