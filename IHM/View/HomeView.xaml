@@ -20,7 +20,7 @@
 
         <!--Row  0-->
         <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
-        <Button Content="Se Connecter" HorizontalAlignment="Left" Margin="894,10,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button Content="{Binding IsConnect}" HorizontalAlignment="Left" Margin="864,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown"/>
 
         <!--Row 1-->
 

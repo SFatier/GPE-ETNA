@@ -42,7 +42,7 @@
 
         <!--Row 2-->
         <Button  Name="btnReload" HorizontalAlignment="Left" Margin="234,0,0,0" VerticalAlignment="Top" Width="75" Height="40" IsEnabled="False">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\reload.png" Width="40"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\reload.png" Width="40"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -52,7 +52,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\upload.png"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\upload.png"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -62,7 +62,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\download.png"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\download.png"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -72,7 +72,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="474,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\add.png" Width="32"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\add.png" Width="32"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -82,7 +82,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="554,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\edit.png" Width="31"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\edit.png" Width="31"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -92,7 +92,7 @@
             </Button.ToolTip>
         </Button>
         <Button  HorizontalAlignment="Left" Margin="634,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\trash.png" Height="30" Width="43"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\trash.png" Height="30" Width="43"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -102,7 +102,7 @@
             </Button.ToolTip>
         </Button>
         <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE\IHM\IMG\open.png" Height="24" Width="26"/>
+            <Image Source="D:\GPE\ZIP\GPE-ETNA\IHM\IMG\open.png" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
