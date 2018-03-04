@@ -76,7 +76,9 @@ namespace IHM.ModelView
          * */
         private void ActionLogiIn(object p)
         {
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = new HomeModelView();
+            HomeModelView HMV = new HomeModelView();
+            HMV.IsConnect = "Se deconnecter";
+            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
         }
 
         /**
