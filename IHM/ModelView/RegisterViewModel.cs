@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace IHM.ModelView
 {
     public class RegisterViewModel : ObservableObject, IPageViewModel
     {
         public string Name => "Register";
+        public ICommand Inscription { get; set; }
 
         public RegisterViewModel()
         {
@@ -20,6 +22,7 @@ namespace IHM.ModelView
             lst.Add("Gestionnaire de cloud");
 
             lstRole = lst;
+            Inscription = new RelayCommand(ActionInscription);
         }
 
         #region [Binding]
@@ -81,5 +84,14 @@ namespace IHM.ModelView
         }
         
         #endregion
+
+        public void ActionInscription(object parameter)
+        {
+            //Enregistrement de l'utilisateur 
+
+            HomeModelView HMV = new HomeModelView();
+            HMV.IsConnect = "Se deconnecter";
+            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+        }
     }
 }
