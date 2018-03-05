@@ -67,6 +67,7 @@
     <Compile Include="ModelView\ListModelView.cs" />
     <Compile Include="ModelView\LoginModelView.cs" />
     <Compile Include="ModelView\MainModelView.cs" />
+    <Compile Include="Model\Utilisateur.cs" />
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>

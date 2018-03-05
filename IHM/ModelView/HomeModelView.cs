@@ -114,8 +114,7 @@ namespace IHM.ModelView
                 .FirstOrDefault(vm => vm == viewModel);
         }
         #endregion
-
-
+        
         private string _IsConnect = "Se connecter";
         public string IsConnect
         {

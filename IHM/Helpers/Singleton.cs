@@ -1,4 +1,5 @@
-﻿using IHM.ModelView;
+﻿using IHM.Model;
+using IHM.ModelView;
 using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace IHM.Helpers
     {
         MainModelView cMain;
         HomeModelView cContent;
+        Utilisateur cUtilisateur;
 
         static Singleton _instance;
         public static Singleton GetInstance()
@@ -41,6 +43,17 @@ namespace IHM.Helpers
         public HomeModelView GetHomeModelView()
         {
             return cContent;
+        }
+
+        /********/
+
+        public void SetUtilisateur(Utilisateur u)
+        {
+            cUtilisateur = u;
+        }
+        public Utilisateur GetUtilisateur()
+        {
+            return cUtilisateur;
         }
     }
 }
