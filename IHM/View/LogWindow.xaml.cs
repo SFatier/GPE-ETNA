@@ -101,9 +101,9 @@ namespace GPE
                 this.Uid = result.Uid;
                 this.Result = true;
             }
-
             catch (ArgumentException ex)
             {
+                throw;
             }
 
             finally

@@ -65,7 +65,7 @@ namespace IHM.ModelView
                     strAuthenticationURL = DBB.GeneratedAuthenticationURL();
                     strAccessToken = DBB.GenerateAccessToken();
                     strDP = "Dropbox connecté";
-                    lMVM.DgFiles = DBB.getEntries();
+                    lMVM.DgFiles = DBB.getEntries(lMVM);
                 }
             }
             catch (Exception)

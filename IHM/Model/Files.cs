@@ -36,10 +36,11 @@ namespace IHM.Model
             IsFile = _IsFile;
         }
 
-        public Files(string _IdDropbox, string _Nom, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, int _Taille, bool _IsFile)
+        public Files(string _IdDropbox, string _Nom, string _IMG, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, int _Taille, bool _IsFile)
         {
             IdDropbox = _IdDropbox;
             Nom = _Nom;
+            IMG = _IMG;
             Type = _Type;
             DateDeCreation = _DateDeCreation;
             ModifieLe = _ModifieLe;

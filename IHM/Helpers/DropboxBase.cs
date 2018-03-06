@@ -1,6 +1,7 @@
 ﻿using Dropbox.Api;
 using Dropbox.Api.Files;
 using IHM.Model;
+using IHM.ModelView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,6 @@ namespace GPE
     {
         #region Variables  
         public DropboxClient DBClient;
-        public ListFolderArg DBFolders;
         private string oauth2State;
         private const string RedirectUri = "https://localhost/authorize"; // Same as we have configured Under [Application] -> settings -> redirect URIs.  
         #endregion
@@ -33,11 +33,11 @@ namespace GPE
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
         #endregion
+
         #region Properties  
         public string AppName
         {
@@ -270,7 +270,10 @@ namespace GPE
 
         }
 
-        public ObservableCollection<Files> getEntries()
+        /**
+         * Récupère la liste des fichiers et dossiers du compte dropbox connecté
+         * */
+        public ObservableCollection<Files> getEntries(ListModelView lMVM)
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
@@ -284,10 +287,11 @@ namespace GPE
                 string IdFile = item.AsFolder.Id;
                 string nom = item.Name;
                 string type = "dossier de fichiers";
+                string IMG = lMVM.GetIcoByType("dossier");
                 DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
                 DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
                 int taille = 0; // Convert.ToInt32(item.AsFile.Size);
-                Files f = new Files(IdFile, nom, type, dateDeCreation, ModifieLe, taille, false);
+                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);              
                 lstFiles.Add(f);
             }
 
@@ -297,10 +301,11 @@ namespace GPE
                 string IdFile = item.AsFile.Id;
                 string nom = item.Name;
                 var type = Path.GetExtension(item.Name);
+                string IMG = lMVM.GetIcoByType(type); 
                 DateTime dateDeCreation = item.AsFile.ClientModified;
                 DateTime ModifieLe = item.AsFile.ServerModified;
                 int taille = Convert.ToInt32(item.AsFile.Size);
-                Files f = new Files(IdFile, nom, type, dateDeCreation, ModifieLe, taille, true);
+                Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
                 lstFiles.Add(f);
             }
 
