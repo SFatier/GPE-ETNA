@@ -23,11 +23,11 @@
                 <Label Margin="0,1,0,-1" Width="235" Background="#FF4551CB">toto</Label>
             </Border>
             <DataGrid Height="760" VerticalAlignment="Top" Width="762" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  >
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" Width="SizeToCells" IsReadOnly="True">
+                <DataGrid.Columns >
+                    <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding IMG}" />
+                                <Image Source="{Binding IMG}" Width="20" Height="20" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

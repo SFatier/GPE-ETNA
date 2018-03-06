@@ -177,5 +177,23 @@
   <ItemGroup>
     <Resource Include="IMG\dropbox.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\image.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\text.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\excel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\doc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\pdf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\folder.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

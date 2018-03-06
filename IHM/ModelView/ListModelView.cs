@@ -32,11 +32,11 @@ namespace IHM.ModelView
             btnAdd = path_img + "add.png";
             btnReload = path_img + "reload.png";
             btnUpload = path_img + "upload.png";
-             btnDownload = path_img + "download.png";
+            btnDownload = path_img + "download.png";
         }
 
         #region [Binding]
-        private ObservableCollection<Files>_DgFiles;
+        private ObservableCollection<Files> _DgFiles;
         public ObservableCollection<Files> DgFiles
         {
             get { return this._DgFiles; }
@@ -50,7 +50,7 @@ namespace IHM.ModelView
             }
         }
 
-        private string  _btnEdit ;
+        private string _btnEdit;
         public string btnEdit
         {
             get { return this._btnEdit; }
@@ -63,7 +63,7 @@ namespace IHM.ModelView
                 }
             }
         }
-        private string _btnTrash ;
+        private string _btnTrash;
         public string btnTrash
         {
             get { return this._btnTrash; }
@@ -77,7 +77,7 @@ namespace IHM.ModelView
             }
         }
 
-        private string _btnOpen ;
+        private string _btnOpen;
         public string btnOpen
         {
             get { return this._btnOpen; }
@@ -91,7 +91,7 @@ namespace IHM.ModelView
             }
         }
 
-         private string _btnAdd ;
+        private string _btnAdd;
         public string btnAdd
         {
             get { return this._btnAdd; }
@@ -105,7 +105,7 @@ namespace IHM.ModelView
             }
         }
 
-        private string _btnReload ;
+        private string _btnReload;
         public string btnReload
         {
             get { return this._btnReload; }
@@ -133,7 +133,7 @@ namespace IHM.ModelView
             }
         }
 
-        private string _btnDownload ;
+        private string _btnDownload;
         public string btnDownload
         {
             get { return this._btnDownload; }
@@ -152,11 +152,37 @@ namespace IHM.ModelView
         /**
          * Récupère une ico en fonction du type de l'image
          * */
-        public string GetIcoByType()
+        public string GetIcoByType(string type)
         {
             string str = string.Empty;
-            return str;
+
+            switch (type)
+            {
+                case ".jpg":
+                case ".jpeg":
+                case ".png":
+                case ".gif":
+                    str = "image.ico";
+                    break;
+                case ".txt":
+                    str = "text.ico";
+                    break;
+                case ".doc":
+                case ".docx":
+                         str = "doc.ico";
+                    break;
+                case ".pdf":
+                    str = "pdf.ico";
+                    break;
+                case ".csv":
+                case ".excel":
+                    str = "excel.ico";
+                    break;
+                case "dossier":
+                    str = "folder.ico";
+                    break;
+            }
+            return path_img + str;
         }
-       
     }
 }
