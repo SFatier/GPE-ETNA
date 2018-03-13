@@ -51,6 +51,20 @@ namespace IHM.ModelView
             }
         }
 
+        private ObservableCollection<Files> _lstFiles;
+        public ObservableCollection<Files> lstFiles
+        {
+            get { return this._lstFiles; }
+            set
+            {
+                if (!string.Equals(this._lstFiles, value))
+                {
+                    this._lstFiles = value;
+                    RaisePropertyChanged(nameof(lstFiles));
+                }
+            }
+        }           
+
         private string _btnEdit;
         public string btnEdit
         {
@@ -210,10 +224,17 @@ namespace IHM.ModelView
          * */
         public void ActionLinkProject(object parameter)
         {
-            PopUp app = new PopUp();
-            PopUpModelView context = new PopUpModelView(app);
-            app.DataContext = context;
-            app.Show();
+            if (lstFiles.Count < 0)
+            {
+                PopUp app = new PopUp();
+                PopUpModelView context = new PopUpModelView(app);
+                app.DataContext = context;
+                app.Show();
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
         }
 
         #endregion
