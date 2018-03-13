@@ -14,6 +14,7 @@ namespace IHM.Helpers
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
+        PopUpModelView popUp;
 
         static Singleton _instance;
         public static Singleton GetInstance()
@@ -54,6 +55,17 @@ namespace IHM.Helpers
         public Utilisateur GetUtilisateur()
         {
             return cUtilisateur;
+        }
+
+        /********/
+
+        public void SetPopUp(PopUpModelView popup)
+        {
+            popUp = popup;
+        }
+        public PopUpModelView GetPopUp()
+        {
+            return popUp;
         }
     }
 }

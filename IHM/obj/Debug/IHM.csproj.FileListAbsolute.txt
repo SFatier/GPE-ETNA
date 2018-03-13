@@ -102,3 +102,5 @@ D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.csproj.GenerateResource.Cache
 D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.csproj.CoreCompileInputs.cache
 D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.exe
 D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.pdb
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\PopUp.g.cs
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\PopUp.baml
