@@ -1,4 +1,5 @@
-﻿using IHM.Helpers;
+﻿using GPE;
+using IHM.Helpers;
 using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace IHM.ModelView
     public class LoginModelView : ObservableObject, IPageViewModel
     {
         public string Name => "Se connecter";
-        
+
         #region [Command]
         public ICommand ForgetPsswd { get; set; }
         public ICommand LogIn { get; set; }
@@ -35,7 +36,7 @@ namespace IHM.ModelView
             }
         }
 
-        private string _Mdp ;
+        private string _Mdp;
         public string Mdp
         {
             get { return this._Mdp; }
@@ -49,8 +50,7 @@ namespace IHM.ModelView
             }
         }
         #endregion
-
-
+        
         #region [Constructor]
         public LoginModelView()
         {
@@ -76,7 +76,11 @@ namespace IHM.ModelView
          * */
         private void ActionLogiIn(object p)
         {
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = new ListModelView();
+            //Enregistrement de l'utilisateur 
+
+            HomeModelView HMV = new HomeModelView();
+            HMV.IsConnect = "Se deconnecter";
+            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
         }
 
         /**
@@ -84,8 +88,9 @@ namespace IHM.ModelView
          * */
         private void ActionResgister(object p)
         {
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel= new RegisterViewModel();
+            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = new RegisterViewModel();
         }
         #endregion
+        
     }
 }

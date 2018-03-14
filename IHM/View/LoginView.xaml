@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
-        <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="27,13,0,0" VerticalAlignment="Top" FontSize="36" Foreground="Brown"/>
 
         <Label Content="Se connecter" HorizontalAlignment="Left" Margin="436,201,0,0" VerticalAlignment="Top" Width="158" FontSize="24"/>
         
@@ -24,5 +23,8 @@
         
         <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="91" Margin="1,1,-1,0" Stroke="Black" VerticalAlignment="Top" Width="1000" />
         <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="91" Margin="0,711,0,-2" Stroke="Black" VerticalAlignment="Top" Width="1000"/>
+        <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="36" Foreground="Brown"/>
     </Grid>
+    
+    
 </UserControl>
