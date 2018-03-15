@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\
+C:\Users\Administrateur\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\
 IHM
 none
 false
 DEBUG;TRACE
-C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\App.xaml
+C:\Users\Administrateur\Documents\GitHub\GPE-ETNA\IHM\App.xaml
 7-2053062318
 
-25225794402
-15-510584915
+291750796501
+15-2049356752
 MainWindow.xaml;View\HomeView.xaml;View\PopUp.xaml;View\RegisterView.xaml;View\ListView.xaml;View\LoginView.xaml;View\LogWindow.xaml;
 
-False
+True
 
