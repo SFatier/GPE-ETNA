@@ -51,8 +51,8 @@ namespace IHM.ModelView
             }
         }
 
-        private ObservableCollection<Files> _lstFiles;
-        public ObservableCollection<Files> lstFiles
+        private Files _lstFiles;
+        public Files  lstFiles
         {
             get { return this._lstFiles; }
             set
@@ -224,10 +224,10 @@ namespace IHM.ModelView
          * */
         public void ActionLinkProject(object parameter)
         {
-            if (lstFiles.Count < 0)
+            if (lstFiles != null)
             {
                 PopUp app = new PopUp();
-                PopUpModelView context = new PopUpModelView(app);
+                PopUpModelView context = new PopUpModelView(app, lstFiles);
                 app.DataContext = context;
                 app.Show();
             }

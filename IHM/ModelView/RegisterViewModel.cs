@@ -1,10 +1,14 @@
 ﻿using IHM.Helpers;
+using IHM.Model;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IHM.ModelView
@@ -16,6 +20,15 @@ namespace IHM.ModelView
 
         public RegisterViewModel()
         {
+            List<Utilisateur> items;
+            StreamReader r;
+            using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+            {
+                string json = r.ReadToEnd();
+                items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                Singleton.GetInstance().SetListUtilisateur(items);
+            }
+
             List<string> lst = new List<string>();
             lst.Add("Administration");
             lst.Add("Utilisateur GED");
@@ -69,6 +82,20 @@ namespace IHM.ModelView
             }
         }
 
+        private string _Role;
+        public string Role
+        {
+            get { return this._Role; }
+            set
+            {
+                if (!string.Equals(this._Role, value))
+                {
+                    this._Role = value;
+                    RaisePropertyChanged(nameof(Email));
+                }
+            }
+        }
+
         private List<string> _lstRole;
         public List<string> lstRole
         {
@@ -88,6 +115,28 @@ namespace IHM.ModelView
         public void ActionInscription(object parameter)
         {
             //Enregistrement de l'utilisateur 
+            Utilisateur Nouvelle_Utilisateur = new Utilisateur();
+            Nouvelle_Utilisateur.Login = Login;
+            Nouvelle_Utilisateur.MDP = Mdp;
+            Nouvelle_Utilisateur.Email = Email;
+            Nouvelle_Utilisateur.Role = Role;
+            Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
+            Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
+                        
+             #region [Ecriture de l'utilisateur dans le fichier .JSON]
+            try
+            {
+                using (StreamWriter file = File.CreateText(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+            #endregion
 
             HomeModelView HMV = new HomeModelView();
             HMV.IsConnect = "Se deconnecter";

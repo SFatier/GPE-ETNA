@@ -11,6 +11,7 @@ namespace IHM.Helpers
 {
     class Singleton
     {
+        List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
@@ -66,6 +67,23 @@ namespace IHM.Helpers
         public PopUpModelView GetPopUp()
         {
             return popUp;
+        }
+
+        /********/
+
+        public void addUtilisateur(Utilisateur u)
+        {
+            lstUtilisateur.Add(u);
+        }
+        public List<Utilisateur> GetAllUtilisateur()
+        {
+            return lstUtilisateur;
+        }
+
+        public void SetListUtilisateur(List<Utilisateur> lstu)
+        {
+            lstUtilisateur.Clear();
+            lstUtilisateur = lstu;
         }
     }
 }

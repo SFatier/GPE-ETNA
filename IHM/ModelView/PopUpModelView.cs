@@ -12,16 +12,18 @@ namespace IHM.ModelView
     class PopUpModelView : ObservableObject, IPageViewModel
     {
         private PopUp app;
+        private Files file;
         private List<Projet> lstPChecked = new List<Projet>();
         public string Name => "PopUp";
 
 
         #region [Constructeur]
-        public PopUpModelView(PopUp _app)
+        public PopUpModelView(PopUp _app, Files _file)
         {
             Singleton.GetInstance().SetPopUp(this);
             _lstProjet = new ObservableCollection<Projet>();
             app = _app;
+            file = _file;
             LoadProject();
         }
 
@@ -57,6 +59,7 @@ namespace IHM.ModelView
         {
             var projet = LstProjet.FirstOrDefault(n => n.Nom.Equals(nomProjet));
             lstPChecked.Add(projet); //liste des projets cochés
+            projet.LstFiles.Add(file);         
         }
         #endregion
     }
