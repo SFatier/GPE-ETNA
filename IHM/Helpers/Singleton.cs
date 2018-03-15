@@ -1,4 +1,5 @@
-﻿using IHM.Model;
+﻿using GPE;
+using IHM.Model;
 using IHM.ModelView;
 using IHM.ViewModel;
 using System;
@@ -12,6 +13,7 @@ namespace IHM.Helpers
     class Singleton
     {
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
+        DropBoxBase DBB;
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
@@ -85,6 +87,19 @@ namespace IHM.Helpers
             lstUtilisateur.Clear();
             lstUtilisateur = lstu;
         }
+
+        /********/
+
+        public void SetDBB(DropBoxBase _DBB)
+        {
+            DBB = _DBB;
+        }
+        public DropBoxBase GetDBB()
+        {
+            return DBB;
+        }
+
+        /********/
     }
 }
 

@@ -8,6 +8,7 @@ namespace IHM.Model
 {
     public class Files
     {
+
         public int Id{ get; set; }
         public string IdDropbox{ get; set; }
         public string IMG { get; set; }
@@ -17,7 +18,8 @@ namespace IHM.Model
         public DateTime ModifieLe { get; set; }
         public int Taille{ get; set; }
         public bool IsFile { get; set; }
-
+        public string path;
+        
         public Files()
         {
 

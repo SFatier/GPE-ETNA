@@ -61,7 +61,7 @@ namespace IHM.ModelView
                 if (DBB == null)
                 {
                     DBB = new DropBoxBase(strAppKey, "PTM_Centralized");
-
+                    Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
                     strAuthenticationURL = DBB.GeneratedAuthenticationURL();
                     strAccessToken = DBB.GenerateAccessToken();
                     strDP = "Dropbox connecté";
