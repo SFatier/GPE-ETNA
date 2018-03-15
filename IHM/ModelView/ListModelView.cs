@@ -18,8 +18,11 @@ namespace IHM.ModelView
     {
         private static string path_img = "C:\\Users\\sigt_sf\\Documents\\GitHub\\GPE-ETNA\\IHM\\IMG\\"; //a modifier par rapport à votre ordinateur
         public string Name => "Liste des documents du cloud dropbox";
+
         public ICommand  LinkProject { get; set; }
-        
+        public ICommand Supprimer { get; set; }
+        public ICommand CreateFolder { get; set; }
+
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
@@ -33,7 +36,8 @@ namespace IHM.ModelView
             btnProject = path_img + "link.png";
 
             LinkProject = new RelayCommand(ActionLinkProject);
-
+            Supprimer = new RelayCommand(ActionSupprimer);
+            CreateFolder = new RelayCommand(ActionCreateFolder);
         }
 
         #region [Binding]
@@ -222,7 +226,7 @@ namespace IHM.ModelView
          * Lie un fichier à un projet 
          * Partage le fichier/dossier aux utilisateurs
          * */
-        public void ActionLinkProject(object parameter)
+        private void ActionLinkProject(object parameter)
         {
             if (lstFiles != null)
             {
@@ -235,6 +239,42 @@ namespace IHM.ModelView
             {
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");
             }
+        }
+
+        /**
+         * Supprimer un dossier ou un fichier
+         * */
+        private void ActionSupprimer(object parameter)
+        {
+            if (lstFiles != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer le film " + lstFiles.Nom + "?", "Infos", MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        string test = lstFiles.path;
+                        Singleton.GetInstance().GetDBB().Delete(lstFiles.path);
+                        //notification 
+                        break;
+                    case MessageBoxResult.No:
+                        //
+                        break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+        }
+
+        /**
+        * Lie un fichier à un projet 
+        * Partage le fichier/dossier aux utilisateurs
+        * */
+        private void ActionCreateFolder(object parameter)
+        {
+            string Nouveau_dossier  = "/test";
+            Singleton.GetInstance().GetDBB().CreateFolder(Nouveau_dossier);
         }
 
         #endregion

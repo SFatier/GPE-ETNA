@@ -220,6 +220,7 @@ namespace GPE
                 return false;
             }
         }
+
         /// <summary>  
         /// Method to upload files on Dropbox  
         /// </summary>  
@@ -291,7 +292,9 @@ namespace GPE
                 DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
                 DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
                 int taille = 0; // Convert.ToInt32(item.AsFile.Size);
-                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);              
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
+                f.path = path;
                 lstFiles.Add(f);
             }
 
@@ -305,7 +308,9 @@ namespace GPE
                 DateTime dateDeCreation = item.AsFile.ClientModified;
                 DateTime ModifieLe = item.AsFile.ServerModified;
                 int taille = Convert.ToInt32(item.AsFile.Size);
+                string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
+                f.path = path;
                 lstFiles.Add(f);
             }
 

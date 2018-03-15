@@ -39,6 +39,7 @@
                     <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" />
                     <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
                     <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" />
+                    <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
@@ -74,7 +75,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button HorizontalAlignment="Left" Margin="474,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
+        <Button HorizontalAlignment="Left" Margin="474,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding CreateFolder}">
             <Image Source="{Binding btnAdd}" Width="32"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -94,12 +95,12 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="634,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
+        <Button  HorizontalAlignment="Left" Margin="634,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Supprimer}">
             <Image Source="{Binding btnTrash}" Height="30" Width="43"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
-                        <TextBlock>Permet de supprimer un document.</TextBlock>
+                        <TextBlock>Permet de supprimer un dossier / fichier.</TextBlock>
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
