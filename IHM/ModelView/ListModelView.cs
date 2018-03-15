@@ -1,6 +1,7 @@
 ﻿using GPE;
 using IHM.Helpers;
 using IHM.Model;
+using IHM.View;
 using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,13 @@ namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        public static string path_img = "C:\\Users\\sigt_sf\\Documents\\GitHub\\GPE-ETNA\\IHM\\IMG\\"; //a modifier par rapport à votre ordinateur
+        private static string path_img = "C:\\Users\\sigt_sf\\Documents\\GitHub\\GPE-ETNA\\IHM\\IMG\\"; //a modifier par rapport à votre ordinateur
         public string Name => "Liste des documents du cloud dropbox";
-
+        public ICommand  LinkProject { get; set; }
+        
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
-            //_DgFiles.Add(new Files() { Id = 1, IMG= GetIcoByType(), Nom = "John Doe", Type = "Image JPEG", Taille = 2 ,  DateDeCreation = new DateTime(1971, 7, 23) , ModifieLe = DateTime.Now});
-            //_DgFiles.Add(new Files() { Id = 2, IMG= GetIcoByType(), Nom = "Jane Doe", Type = "Doc", Taille = 2, DateDeCreation = new DateTime(1974, 1, 17), ModifieLe = DateTime.Now });
-            //_DgFiles.Add(new Files() { Id = 3, IMG= GetIcoByType(), Nom = "Sammy Doe", Type = "Texte", Taille = 2, DateDeCreation = new DateTime(1991, 9, 2), ModifieLe = DateTime.Now });
-            //DgFiles = _DgFiles;
-
             btnEdit = path_img + "edit.png";
             btnTrash = path_img + "trash.png";
             btnOpen = path_img + "open.png";
@@ -33,6 +30,10 @@ namespace IHM.ModelView
             btnReload = path_img + "reload.png";
             btnUpload = path_img + "upload.png";
             btnDownload = path_img + "download.png";
+            btnProject = path_img + "link.png";
+
+            LinkProject = new RelayCommand(ActionLinkProject);
+
         }
 
         #region [Binding]
@@ -50,6 +51,20 @@ namespace IHM.ModelView
             }
         }
 
+        private Files _lstFiles;
+        public Files  lstFiles
+        {
+            get { return this._lstFiles; }
+            set
+            {
+                if (!string.Equals(this._lstFiles, value))
+                {
+                    this._lstFiles = value;
+                    RaisePropertyChanged(nameof(lstFiles));
+                }
+            }
+        }           
+
         private string _btnEdit;
         public string btnEdit
         {
@@ -63,6 +78,21 @@ namespace IHM.ModelView
                 }
             }
         }
+
+        private string _btnProject;
+        public string btnProject
+        {
+            get { return this._btnProject; }
+            set
+            {
+                if (!string.Equals(this._btnProject, value))
+                {
+                    this._btnProject = value;
+                    RaisePropertyChanged(nameof(btnProject));
+                }
+            }
+        }        
+
         private string _btnTrash;
         public string btnTrash
         {
@@ -149,6 +179,7 @@ namespace IHM.ModelView
 
         #endregion
 
+        #region [Methods]
         /**
          * Récupère une ico en fonction du type de l'image
          * */
@@ -184,5 +215,28 @@ namespace IHM.ModelView
             }
             return path_img + str;
         }
+        #endregion
+
+        #region {Action ICommand]
+        /**
+         * Lie un fichier à un projet 
+         * Partage le fichier/dossier aux utilisateurs
+         * */
+        public void ActionLinkProject(object parameter)
+        {
+            if (lstFiles != null)
+            {
+                PopUp app = new PopUp();
+                PopUpModelView context = new PopUpModelView(app, lstFiles);
+                app.DataContext = context;
+                app.Show();
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+        }
+
+        #endregion
     }
 }

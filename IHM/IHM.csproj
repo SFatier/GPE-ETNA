@@ -67,9 +67,14 @@
     <Compile Include="ModelView\ListModelView.cs" />
     <Compile Include="ModelView\LoginModelView.cs" />
     <Compile Include="ModelView\MainModelView.cs" />
+    <Compile Include="ModelView\PopUpModelView.cs" />
+    <Compile Include="Model\Projet.cs" />
     <Compile Include="Model\Utilisateur.cs" />
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PopUp.xaml.cs">
+      <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RegisterView.xaml.cs">
       <DependentUpon>RegisterView.xaml</DependentUpon>
@@ -100,6 +105,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,6 +203,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="IMG\folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\link.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -24,7 +24,7 @@
             </TextBox.RenderTransform>
         </TextBox>
         <TextBox HorizontalAlignment="Left" Height="22" Margin="383,357,0,0" TextWrapping="Wrap" Text="{Binding Mdp}" VerticalAlignment="Top" Width="272"/>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding lstRole}" Margin="383,428,0,0" VerticalAlignment="Top" Width="272" Height="26"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding lstRole}" SelectedItem="{Binding Role}" Margin="383,428,0,0" VerticalAlignment="Top" Width="272" Height="26"/>
         <Button Content="Enregistrer" HorizontalAlignment="Left" Margin="580,547,0,0" VerticalAlignment="Top" Width="75" Command="{Binding Inscription}"/>
 
         <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="91" Margin="1,1,-1,0" Stroke="Black" VerticalAlignment="Top" Width="1000" />

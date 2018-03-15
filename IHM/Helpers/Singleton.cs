@@ -11,9 +11,11 @@ namespace IHM.Helpers
 {
     class Singleton
     {
+        List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
+        PopUpModelView popUp;
 
         static Singleton _instance;
         public static Singleton GetInstance()
@@ -54,6 +56,34 @@ namespace IHM.Helpers
         public Utilisateur GetUtilisateur()
         {
             return cUtilisateur;
+        }
+
+        /********/
+
+        public void SetPopUp(PopUpModelView popup)
+        {
+            popUp = popup;
+        }
+        public PopUpModelView GetPopUp()
+        {
+            return popUp;
+        }
+
+        /********/
+
+        public void addUtilisateur(Utilisateur u)
+        {
+            lstUtilisateur.Add(u);
+        }
+        public List<Utilisateur> GetAllUtilisateur()
+        {
+            return lstUtilisateur;
+        }
+
+        public void SetListUtilisateur(List<Utilisateur> lstu)
+        {
+            lstUtilisateur.Clear();
+            lstUtilisateur = lstu;
         }
     }
 }

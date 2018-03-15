@@ -20,9 +20,12 @@
         <!--Row 3-->
         <DockPanel HorizontalAlignment="Left" Height="760" LastChildFill="False" Grid.Row="1" VerticalAlignment="Top"  >
             <Border DockPanel.Dock="Left" BorderBrush="White">
-                <Label Margin="0,1,0,-1" Width="235" Background="#FF4551CB">toto</Label>
+                <StackPanel Margin="0,1,0,-1" Width="235" Background="#FF4551CB">
+                    <Label Content="Label" Margin="3,0,0,0"/>
+
+                </StackPanel>
             </Border>
-            <DataGrid Height="760" VerticalAlignment="Top" Width="762" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  >
+            <DataGrid Height="760" VerticalAlignment="Top" Width="762" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedItem="{Binding lstFiles}" ItemBindingGroup="{Binding lstFiles}" >
                 <DataGrid.Columns >
                     <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -107,6 +110,16 @@
                 <ToolTip>
                     <StackPanel>
                         <TextBlock>Permet de visualiser un document.</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        <Button  HorizontalAlignment="Left" Margin="795,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding LinkProject}">
+            <Image Source="{Binding btnProject}" Height="24" Width="26"/>
+            <Button.ToolTip>
+                <ToolTip>
+                    <StackPanel>
+                        <TextBlock>Permet de lier un document/dossier à un projet.</TextBlock>
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>

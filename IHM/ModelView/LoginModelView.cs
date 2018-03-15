@@ -1,8 +1,11 @@
 ﻿using GPE;
 using IHM.Helpers;
+using IHM.Model;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +60,15 @@ namespace IHM.ModelView
             ForgetPsswd = new RelayCommand(ActionForgetPsswd);
             LogIn = new RelayCommand(ActionLogiIn);
             Register = new RelayCommand(ActionResgister);
+
+            List<Utilisateur> items;
+            StreamReader r;
+            using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+            {
+                string json = r.ReadToEnd();
+                items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                Singleton.GetInstance().SetListUtilisateur(items);
+            }
         }
         #endregion
 
@@ -76,11 +88,18 @@ namespace IHM.ModelView
          * */
         private void ActionLogiIn(object p)
         {
-            //Enregistrement de l'utilisateur 
-
-            HomeModelView HMV = new HomeModelView();
-            HMV.IsConnect = "Se deconnecter";
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+            List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
+            Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
+            if (u != null)
+            {
+                HomeModelView HMV = new HomeModelView();
+                HMV.IsConnect = "Se deconnecter";
+                Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+            }
+            else
+            {
+                MessageBox.Show("Aucun utilisateur trouvé.");
+            }
         }
 
         /**
