@@ -3,9 +3,11 @@ using IHM.Helpers;
 using IHM.Model;
 using IHM.View;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,10 +24,27 @@ namespace IHM.ModelView
         public ICommand  LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
+        public ICommand recherche { get; set; } //nom de ton binding
 
+        //constructeur
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
+
+            LoadProject();
+            LoadIcon();
+            LoadAction();
+        }
+
+        private void LoadAction()
+        {
+            LinkProject = new RelayCommand(ActionLinkProject);
+            Supprimer = new RelayCommand(ActionSupprimer);
+            CreateFolder = new RelayCommand(ActionCreateFolder);
+        }
+
+        private void LoadIcon()
+        {
             btnEdit = path_img + "edit.png";
             btnTrash = path_img + "trash.png";
             btnOpen = path_img + "open.png";
@@ -34,10 +53,24 @@ namespace IHM.ModelView
             btnUpload = path_img + "upload.png";
             btnDownload = path_img + "download.png";
             btnProject = path_img + "link.png";
+        }
 
-            LinkProject = new RelayCommand(ActionLinkProject);
-            Supprimer = new RelayCommand(ActionSupprimer);
-            CreateFolder = new RelayCommand(ActionCreateFolder);
+        private void LoadProject()
+        {
+            List<Projet> items;
+            try
+            {
+                StreamReader r;
+                using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\projets.json"))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<List<Projet>>(json);
+                }
+            }catch(Exception ex)
+            {
+                items = new List<Projet>();
+            }
+            Singleton.GetInstance().SetListProject(items);
         }
 
         #region [Binding]
@@ -232,6 +265,7 @@ namespace IHM.ModelView
             {
                 PopUp app = new PopUp();
                 PopUpModelView context = new PopUpModelView(app, lstFiles);
+                Singleton.GetInstance().SetPopUp(context);
                 app.DataContext = context;
                 app.Show();
             }
@@ -276,7 +310,7 @@ namespace IHM.ModelView
             string Nouveau_dossier  = "/test";
             Singleton.GetInstance().GetDBB().CreateFolder(Nouveau_dossier);
         }
-
+        
         #endregion
     }
 }

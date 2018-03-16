@@ -10,8 +10,9 @@ namespace IHM.Model
     public class Projet : ObservableObject
     {
         public string Nom { get; set; }
+        public string Description { get; set; }
         private List<Files> lstFiles;
-        private bool isChecked;
+        private bool isChecked = false;
 
         public bool Ischecked
         {
@@ -22,7 +23,8 @@ namespace IHM.Model
                 {
                     this.isChecked = value;
                     RaisePropertyChanged(nameof(Ischecked));
-                    Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
+                    if (Singleton.GetInstance().GetPopUp() != null)
+                        Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
                 }
             }
         }

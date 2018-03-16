@@ -113,11 +113,7 @@ namespace GPE
                         _strAccessToken = login.AccessToken;
                         AccessTocken = login.AccessToken;
                         Uid = login.Uid;
-                        DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
-                        HttpClient HTC = new HttpClient();
-                        HTC.Timeout = TimeSpan.FromMinutes(10);  
-                        CC.HttpClient = HTC;
-                        DBClient = new DropboxClient(AccessTocken, CC);
+                        GetDBClient(AccessTocken);
                     }
                     else
                     {
@@ -133,6 +129,15 @@ namespace GPE
             {
                 throw ex;
             }
+        }
+
+        public void GetDBClient(string AccessTocken)
+        {
+            DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
+            HttpClient HTC = new HttpClient();
+            HTC.Timeout = TimeSpan.FromMinutes(10);
+            CC.HttpClient = HTC;
+            DBClient = new DropboxClient(AccessTocken, CC);
         }
 
         /// <summary>  

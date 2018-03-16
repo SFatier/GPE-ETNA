@@ -2,9 +2,11 @@
 using IHM.Model;
 using IHM.View;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 namespace IHM.ModelView
@@ -21,7 +23,6 @@ namespace IHM.ModelView
         public PopUpModelView(PopUp _app, Files _file)
         {
             Singleton.GetInstance().SetPopUp(this);
-            _lstProjet = new ObservableCollection<Projet>();
             app = _app;
             file = _file;
             LoadProject();
@@ -30,8 +31,8 @@ namespace IHM.ModelView
         #endregion
 
         #region [Binding]
-        private ObservableCollection<Projet> _lstProjet;
-        public ObservableCollection<Projet> LstProjet
+        private List<Projet> _lstProjet;
+        public List<Projet> LstProjet
         {
             get { return this._lstProjet; }
             set
@@ -48,18 +49,43 @@ namespace IHM.ModelView
         #region [Methods]
         private void LoadProject()
         {
-            ObservableCollection<Projet> _lst = new ObservableCollection<Projet>();
-            _lst.Add(new Projet() { Nom = "toto", Ischecked = false });
-            _lst.Add(new Projet() { Nom = "tata", Ischecked = false });
-            _lst.Add(new Projet() { Nom = "titi", Ischecked = false });
-            LstProjet = _lst;
+            if (file != null) { 
+                var lst = Singleton.GetInstance().GetAllProject();
+                List<Projet> l = new List<Projet>();
+                foreach (Projet p in lst)
+                {
+                    if (p.LstFiles.Contains(file))
+                    {
+                        p.Ischecked = true;
+                    }
+                    l.Add(p);
+                }
+                LstProjet = l;
+            }
+            else
+            {
+                LstProjet = Singleton.GetInstance().GetAllProject();
+            }
         }
 
         public void setLstPChecked( string nomProjet)
         {
             var projet = LstProjet.FirstOrDefault(n => n.Nom.Equals(nomProjet));
             lstPChecked.Add(projet); //liste des projets cochés
-            projet.LstFiles.Add(file);         
+            
+            projet.LstFiles.Add(file);
+
+            UpdateProject();
+        }
+
+        private void UpdateProject()
+        {
+            using (StreamWriter file = File.CreateText(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\projets.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
+            }
+
         }
         #endregion
     }
