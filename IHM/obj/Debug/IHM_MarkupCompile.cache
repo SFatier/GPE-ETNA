@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\App.xaml
-7-2053062318
+9-607352331
 
-25225794402
+29542105790
 15-510584915
-MainWindow.xaml;View\HomeView.xaml;View\PopUp.xaml;View\RegisterView.xaml;View\ListView.xaml;View\LoginView.xaml;View\LogWindow.xaml;
+MainWindow.xaml;View\AddProjectView.xaml;View\AdminView.xaml;View\HomeView.xaml;View\PopUp.xaml;View\RegisterView.xaml;View\ListView.xaml;View\LoginView.xaml;View\LogWindow.xaml;
 
 False
 

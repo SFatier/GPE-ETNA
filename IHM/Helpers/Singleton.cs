@@ -13,6 +13,7 @@ namespace IHM.Helpers
     class Singleton
     {
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
+        List<Projet> lstProject = new List<Projet>();
         DropBoxBase DBB;
         MainModelView cMain;
         HomeModelView cContent;
@@ -97,6 +98,23 @@ namespace IHM.Helpers
         public DropBoxBase GetDBB()
         {
             return DBB;
+        }
+
+        /********/
+
+        public void addProject(Projet p)
+        {
+            lstProject.Add(p);
+        }
+        public List<Projet> GetAllProject()
+        {
+            return lstProject;
+        }
+
+        public void SetListProject(List<Projet> _lstProject)
+        {
+            lstProject.Clear();
+            lstProject = _lstProject;
         }
 
         /********/

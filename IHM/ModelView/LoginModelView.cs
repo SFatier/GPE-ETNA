@@ -62,13 +62,23 @@ namespace IHM.ModelView
             Register = new RelayCommand(ActionResgister);
 
             List<Utilisateur> items;
-            StreamReader r;
-            using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+            try
             {
-                string json = r.ReadToEnd();
-                items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
-                Singleton.GetInstance().SetListUtilisateur(items);
+                StreamReader r;
+                using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                }
+            }catch(Exception ex)
+            {
+                items = new List<Utilisateur>();
             }
+
+            Singleton.GetInstance().SetListUtilisateur(items);
+
+            Login = "fatier_s";
+            Mdp = "pass";
         }
         #endregion
 
@@ -92,7 +102,7 @@ namespace IHM.ModelView
             Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
             if (u != null)
             {
-                HomeModelView HMV = new HomeModelView();
+                HomeModelView HMV = new HomeModelView(u);
                 HMV.IsConnect = "Se deconnecter";
                 Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
             }

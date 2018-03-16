@@ -104,3 +104,7 @@ D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.exe
 D:\GPE\ZIP\GPE-ETNA\IHM\obj\Debug\IHM.pdb
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\PopUp.g.cs
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\PopUp.baml
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AdminView.g.cs
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AdminView.baml
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AddProjectView.g.cs
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AddProjectView.baml

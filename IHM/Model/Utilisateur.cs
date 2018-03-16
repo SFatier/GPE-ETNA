@@ -9,6 +9,7 @@ namespace IHM.Model
 {
     public class Utilisateur : ObservableObject
     {
+        private string token;
         private string login;
         private string email;
         private string mdp;
@@ -49,6 +50,19 @@ namespace IHM.Model
                 {
                     this.mdp = value;
                     RaisePropertyChanged(nameof(MDP));
+                }
+            }
+        }
+
+        public string Token
+        {
+            get { return this.token; }
+            set
+            {
+                if (!string.Equals(this.token, value))
+                {
+                    this.token = value;
+                    RaisePropertyChanged(nameof(Token));
                 }
             }
         }
