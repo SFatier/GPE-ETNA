@@ -103,7 +103,7 @@ namespace GPE
             }
             catch (ArgumentException ex)
             {
-                throw;
+                MessageBox.Show(ex.Message);
             }
 
             finally

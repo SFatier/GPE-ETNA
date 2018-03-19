@@ -3,6 +3,7 @@ using IHM.Helpers;
 using IHM.Model;
 using IHM.View;
 using IHM.ViewModel;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,6 @@ namespace IHM.ModelView
         public ICommand  LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-        public ICommand recherche { get; set; } //nom de ton binding
 
         //constructeur
         public ListModelView()
@@ -308,10 +308,15 @@ namespace IHM.ModelView
         * */
         private void ActionCreateFolder(object parameter)
         {
-            string Nouveau_dossier  = "/test";
-            Singleton.GetInstance().GetDBB().CreateFolder(Nouveau_dossier);
+            //AddFolderView _AddFolder = new AddFolderView();
+            //AddFolderModelView context = new AddFolderModelView(_AddFolder);
+            //_AddFolder.Width = 300;
+            //_AddFolder.Height = 200;
+            //_AddFolder.Show();
+
+            Singleton.GetInstance().GetDBB().CreateFolder("/test__");
         }
-        
+
         #endregion
     }
 }
