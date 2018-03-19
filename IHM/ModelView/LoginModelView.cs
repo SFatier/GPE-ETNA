@@ -5,6 +5,7 @@ using IHM.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -65,7 +66,7 @@ namespace IHM.ModelView
             try
             {
                 StreamReader r;
-                using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
                 {
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);

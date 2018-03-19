@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        private static string path_img = "C:\\Users\\sigt_sf\\Documents\\GitHub\\GPE-ETNA\\IHM\\IMG\\"; //a modifier par rapport à votre ordinateur
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  //a modifier par rapport à votre ordinateur
         public string Name => "Liste des documents du cloud dropbox";
 
         public ICommand  LinkProject { get; set; }
@@ -61,7 +62,7 @@ namespace IHM.ModelView
             try
             {
                 StreamReader r;
-                using (r = new StreamReader(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\projets.json"))
+                using (r = new StreamReader(@ConfigurationSettings.AppSettings["ProjetJSON"]))
                 {
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);

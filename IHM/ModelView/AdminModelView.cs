@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace IHM.ModelView
     public class AdminModelView : ObservableObject, IPageViewModel
     {
         public string Name => "Adminstration GED";
-        private static string path_img = "C:\\Users\\sigt_sf\\Documents\\GitHub\\GPE-ETNA\\IHM\\IMG\\"; //a modifier par rapport à votre ordinateur
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"]; //a modifier par rapport à votre ordinateur
 
         public ICommand AddProject { get; set; }
 

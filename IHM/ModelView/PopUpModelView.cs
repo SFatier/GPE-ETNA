@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 
@@ -80,7 +81,7 @@ namespace IHM.ModelView
 
         private void UpdateProject()
         {
-            using (StreamWriter file = File.CreateText(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\projets.json"))
+            using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, Singleton.GetInstance().GetAllProject());

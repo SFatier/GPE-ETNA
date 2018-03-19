@@ -5,6 +5,7 @@ using IHM.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,8 +38,10 @@ namespace IHM.ModelView
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
 
             if (curentUtilisateur.Token != null)
+            {
                 DBB.GetDBClient(curentUtilisateur.Token);
                 GetFiles();
+            }
 
             ConnecterDP = new RelayCommand(ActionConnecterDropbox);
             PageAdmin = new RelayCommand(ActionPageAdmin);
@@ -61,7 +64,7 @@ namespace IHM.ModelView
                     MessageBox.Show("Please enter valid App Key !");
                     return;
                 }
-                if (DBB == null)
+                if (DBB != null)
                 {
                     strAuthenticationURL = DBB.GeneratedAuthenticationURL();
                     strAccessToken = DBB.GenerateAccessToken();
@@ -86,7 +89,8 @@ namespace IHM.ModelView
 
         private void UpdateUtilisateur()
         {
-            using (StreamWriter file = File.CreateText(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\utilisateur.json"))
+            StreamWriter file;
+            using (file = File.CreateText(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
