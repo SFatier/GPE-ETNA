@@ -1,5 +1,6 @@
 ﻿using Dropbox.Api;
 using Dropbox.Api.Files;
+using IHM.Helpers;
 using IHM.Model;
 using IHM.ModelView;
 using System;
@@ -149,15 +150,6 @@ namespace GPE
         {
             try
             {
-                if (AccessTocken == null)
-                {
-                    throw new Exception("AccessToken not generated !");
-                }
-                if (AuthenticationURL == null)
-                {
-                    throw new Exception("AuthenticationURI not generated !");
-                }
-
                 var folderArg = new CreateFolderArg(path);
                 var folder = DBClient.Files.CreateFolderAsync(folderArg);
                 var result = folder.Result;
@@ -167,7 +159,6 @@ namespace GPE
             {
                 return false;
             }
-
         }
 
         /// <summary>  
@@ -249,7 +240,6 @@ namespace GPE
             {
                 return false;
             }
-
         }
 
         /// <summary>  

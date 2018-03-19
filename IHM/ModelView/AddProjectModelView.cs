@@ -4,6 +4,7 @@ using IHM.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -70,7 +71,7 @@ namespace IHM.ModelView
                 #region [Ecriture de l'utilisateur dans le fichier .JSON]
                 try
                 {
-                    using (StreamWriter file = File.CreateText(@"C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\projets.json"))
+                    using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
                     {
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
