@@ -198,16 +198,7 @@ namespace GPE
         {
             try
             {
-                if (AccessTocken == null)
-                {
-                    throw new Exception("AccessToken not generated !");
-                }
-                if (AuthenticationURL == null)
-                {
-                    throw new Exception("AuthenticationURI not generated !");
-                }
-
-                var folders = DBClient.Files.DeleteAsync(path);
+                 var folders = DBClient.Files.DeleteAsync(path);
                 var result = folders.Result;
                 return true;
             }
@@ -230,7 +221,7 @@ namespace GPE
             {
                 using (var stream = new MemoryStream(File.ReadAllBytes(SourceFilePath)))
                 {
-                    var response = DBClient.Files.UploadAsync(UploadfolderPath + "/" + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
+                    var response = DBClient.Files.UploadAsync(UploadfolderPath + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
                     var rest = response.Result; //Added to wait for the result from Async method  
                 }
 
