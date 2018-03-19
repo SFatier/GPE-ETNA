@@ -54,7 +54,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
+        <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Upload}">
             <Image Source="{Binding btnUpload}"/>
             <Button.ToolTip>
                 <ToolTip>

@@ -78,7 +78,7 @@ namespace IHM.ModelView
 
             Singleton.GetInstance().SetListUtilisateur(items);
 
-            Login = "fatier_s";
+            Login = "tanor";
             Mdp = "pass";
         }
         #endregion
