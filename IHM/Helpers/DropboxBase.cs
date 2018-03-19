@@ -230,7 +230,7 @@ namespace GPE
             {
                 using (var stream = new MemoryStream(File.ReadAllBytes(SourceFilePath)))
                 {
-                    var response = DBClient.Files.UploadAsync(UploadfolderPath + "/" + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
+                    var response = DBClient.Files.UploadAsync(UploadfolderPath + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
                     var rest = response.Result; //Added to wait for the result from Async method  
                 }
 
