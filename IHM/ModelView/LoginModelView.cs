@@ -58,9 +58,7 @@ namespace IHM.ModelView
         #region [Constructor]
         public LoginModelView()
         {
-            ForgetPsswd = new RelayCommand(ActionForgetPsswd);
-            LogIn = new RelayCommand(ActionLogiIn);
-            Register = new RelayCommand(ActionResgister);
+            LoadAction();
 
             List<Utilisateur> items;
             try
@@ -82,6 +80,13 @@ namespace IHM.ModelView
             Mdp = "pass";
         }
         #endregion
+
+        public void LoadAction()
+        {
+            ForgetPsswd = new RelayCommand(ActionForgetPsswd);
+            LogIn = new RelayCommand(ActionLogiIn);
+            Register = new RelayCommand(ActionResgister);
+        }
 
         #region [Action]
 

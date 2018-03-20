@@ -21,11 +21,11 @@ namespace IHM.ModelView
         
         public AddProjectModelView()
         {
-            Save = new RelayCommand(ActionAddProject);
+            LoadAction();
+            lstUser = Singleton.GetInstance().GetAllUtilisateur();
         }
 
         #region [Binding]
-
         private string nomProjet;
         public string NomProjet
         {
@@ -50,6 +50,20 @@ namespace IHM.ModelView
                 {
                     this.descriptionProjet = value;
                     RaisePropertyChanged(nameof(DescriptionProjet));
+                }
+            }
+        }
+
+        private List<Utilisateur> _lstUser;
+        public List<Utilisateur> lstUser
+        {
+            get { return _lstUser; }
+            set
+            {
+                if (!string.Equals(this._lstUser, value))
+                {
+                    this._lstUser = value;
+                    RaisePropertyChanged(nameof(lstUser));
                 }
             }
         }
@@ -89,8 +103,13 @@ namespace IHM.ModelView
             {
                 MessageBox.Show("Veuillez renseigner tous les champs obligatoires");
             }
-           
-            #endregion
+        }
+
+        #endregion
+
+        public void LoadAction()
+        {
+            Save = new RelayCommand(ActionAddProject);
         }
     }
 }

@@ -109,3 +109,4 @@ C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.Properties.Resource
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.csproj.GenerateResource.Cache
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.exe
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.pdb
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.csprojResolveAssemblyReference.cache

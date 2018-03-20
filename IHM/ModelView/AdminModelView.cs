@@ -25,10 +25,7 @@ namespace IHM.ModelView
         public AdminModelView()
         {
             LstProject = Singleton.GetInstance().GetAllProject(); ;
-
-            // btnTrash = path_img + "trash.png";
-
-            AddProject = new RelayCommand(ActionAddProject);
+            LoadAction();
         }
         #endregion
 
@@ -48,7 +45,7 @@ namespace IHM.ModelView
         }
 
         private string _btnTrash;
-        public string btnTrash
+        public string BtnTrash
         {
             get { return this._btnTrash; }
             set
@@ -56,19 +53,22 @@ namespace IHM.ModelView
                 if (!string.Equals(this._btnTrash, value))
                 {
                     this._btnTrash = value;
-                    RaisePropertyChanged(nameof(btnTrash));
+                    RaisePropertyChanged(nameof(BtnTrash));
                 }
             }
         }
         #endregion
-
 
         #region [Action]
         private void ActionAddProject(object parameter)
         {
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AddProjectModelView();
         }
-
         #endregion
+
+        public void LoadAction()
+        {
+            AddProject = new RelayCommand(ActionAddProject);
+        }
     }
 }

@@ -27,8 +27,10 @@ namespace IHM.ModelView
         private string strAccessToken = string.Empty;
         private string strAuthenticationURL = string.Empty;
         private DropBoxBase DBB;
+
         public ICommand ConnecterDP { get; set; }
         public ICommand PageAdmin { get; set; }
+        public ICommand BtnHome { get; set; }
 
         public HomeModelView(Utilisateur u)
         {
@@ -43,19 +45,17 @@ namespace IHM.ModelView
                 GetFiles();
             }
 
-            ConnecterDP = new RelayCommand(ActionConnecterDropbox);
-            PageAdmin = new RelayCommand(ActionPageAdmin);
-
             ContentViewModels.Add(lMVM);
-            ContentViewModels.Add(new ListModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             Singleton.GetInstance().SetHomeModelView(this);
         }
 
-        #region Dropbox
-
-        private void ActionConnecterDropbox(object paramter)
+        #region Dropbox        
+        /**
+         * Ouvre une nouvelle fenêtre qui demande l'autorasition de se connecter à dropbox
+         * */
+        private void ActionConnecterDropbox(object parameter)
         {
             try
             {
@@ -81,12 +81,18 @@ namespace IHM.ModelView
             }
         }
 
-        private void GetFiles()
+        /**
+         * Récupère les fichiers correspondant au dropbox connecté
+         * */
+        public void GetFiles()
         {
             strDP = "Dropbox connecté";
             lMVM.DgFiles = DBB.getEntries(lMVM);
         }
 
+        /**
+         * Met à jour l'utilisateur
+         * */
         private void UpdateUtilisateur()
         {
             StreamWriter file;
@@ -97,9 +103,20 @@ namespace IHM.ModelView
             }
         }
 
-        private void ActionPageAdmin(object paramter)
+        /**
+         * Retourne la page Administration
+         * */
+        private void ActionPageAdmin(object parameter)
         {
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+        }
+       
+        /**
+         * Retourne sur la page Home
+         * */
+        private void ActionPageHome(object parameter)
+        {
+            CurrentContentViewModel = lMVM;
         }
         #endregion
 
@@ -141,6 +158,8 @@ namespace IHM.ModelView
             CurrentContentViewModel = ContentViewModels
                 .FirstOrDefault(vm => vm == viewModel);
         }
+
+     
         #endregion
 
         #region [Binding]
@@ -172,5 +191,12 @@ namespace IHM.ModelView
             }
         }
         #endregion
+
+        public void LoadAction()
+        {
+            ConnecterDP = new RelayCommand(ActionConnecterDropbox);
+            PageAdmin = new RelayCommand(ActionPageAdmin);
+            BtnHome = new RelayCommand(ActionPageHome);
+        }
     }
 }

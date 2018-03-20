@@ -26,6 +26,7 @@ namespace IHM.ModelView
         public ICommand  LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
+        public ICommand ReloadDataGrid { get; set; }
 
         //constructeur
         public ListModelView()
@@ -37,23 +38,24 @@ namespace IHM.ModelView
             LoadAction();
         }
 
-        private void LoadAction()
+        public void LoadAction()
         {
             LinkProject = new RelayCommand(ActionLinkProject);
             Supprimer = new RelayCommand(ActionSupprimer);
             CreateFolder = new RelayCommand(ActionCreateFolder);
+            ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
         }
 
         private void LoadIcon()
         {
-            btnEdit = path_img + "edit.png";
-            btnTrash = path_img + "trash.png";
-            btnOpen = path_img + "open.png";
-            btnAdd = path_img + "add.png";
-            btnReload = path_img + "reload.png";
-            btnUpload = path_img + "upload.png";
-            btnDownload = path_img + "download.png";
-            btnProject = path_img + "link.png";
+            BtnEdit = path_img + "edit.png";
+            BtnTrash = path_img + "trash.png";
+            BtnOpen = path_img + "open.png";
+            BtnAdd = path_img + "add.png";
+            BtnReload = path_img + "reload.png";
+            BtnUpload = path_img + "upload.png";
+            BtnDownload = path_img + "download.png";
+            BtnProject = path_img + "link.png";
         }
 
         private void LoadProject()
@@ -103,114 +105,114 @@ namespace IHM.ModelView
             }
         }           
 
-        private string _btnEdit;
-        public string btnEdit
+        private string _BtnEdit;
+        public string BtnEdit
         {
-            get { return this._btnEdit; }
+            get { return this._BtnEdit; }
             set
             {
-                if (!string.Equals(this._btnEdit, value))
+                if (!string.Equals(this._BtnEdit, value))
                 {
-                    this._btnEdit = value;
-                    RaisePropertyChanged(nameof(btnEdit));
+                    this._BtnEdit = value;
+                    RaisePropertyChanged(nameof(BtnEdit));
                 }
             }
         }
 
-        private string _btnProject;
-        public string btnProject
+        private string _BtnProject;
+        public string BtnProject
         {
-            get { return this._btnProject; }
+            get { return this._BtnProject; }
             set
             {
-                if (!string.Equals(this._btnProject, value))
+                if (!string.Equals(this._BtnProject, value))
                 {
-                    this._btnProject = value;
-                    RaisePropertyChanged(nameof(btnProject));
+                    this._BtnProject = value;
+                    RaisePropertyChanged(nameof(BtnProject));
                 }
             }
         }        
 
-        private string _btnTrash;
-        public string btnTrash
+        private string _BtnTrash;
+        public string BtnTrash
         {
-            get { return this._btnTrash; }
+            get { return this._BtnTrash; }
             set
             {
-                if (!string.Equals(this._btnTrash, value))
+                if (!string.Equals(this._BtnTrash, value))
                 {
-                    this._btnTrash = value;
-                    RaisePropertyChanged(nameof(btnTrash));
+                    this._BtnTrash = value;
+                    RaisePropertyChanged(nameof(BtnTrash));
                 }
             }
         }
 
-        private string _btnOpen;
-        public string btnOpen
+        private string _BtnOpen;
+        public string BtnOpen
         {
-            get { return this._btnOpen; }
+            get { return this._BtnOpen; }
             set
             {
-                if (!string.Equals(this._btnOpen, value))
+                if (!string.Equals(this._BtnOpen, value))
                 {
-                    this._btnOpen = value;
-                    RaisePropertyChanged(nameof(btnOpen));
+                    this._BtnOpen = value;
+                    RaisePropertyChanged(nameof(BtnOpen));
                 }
             }
         }
 
-        private string _btnAdd;
-        public string btnAdd
+        private string _BtnAdd;
+        public string BtnAdd
         {
-            get { return this._btnAdd; }
+            get { return this._BtnAdd; }
             set
             {
-                if (!string.Equals(this._btnAdd, value))
+                if (!string.Equals(this._BtnAdd, value))
                 {
-                    this._btnAdd = value;
-                    RaisePropertyChanged(nameof(btnAdd));
+                    this._BtnAdd = value;
+                    RaisePropertyChanged(nameof(BtnAdd));
                 }
             }
         }
 
-        private string _btnReload;
-        public string btnReload
+        private string _BtnReload;
+        public string BtnReload
         {
-            get { return this._btnReload; }
+            get { return this._BtnReload; }
             set
             {
-                if (!string.Equals(this._btnReload, value))
+                if (!string.Equals(this._BtnReload, value))
                 {
-                    this._btnReload = value;
-                    RaisePropertyChanged(nameof(btnReload));
+                    this._BtnReload = value;
+                    RaisePropertyChanged(nameof(BtnReload));
                 }
             }
         }
 
-        private string _btnUpload;
-        public string btnUpload
+        private string _BtnUpload;
+        public string BtnUpload
         {
-            get { return this._btnUpload; }
+            get { return this._BtnUpload; }
             set
             {
-                if (!string.Equals(this._btnUpload, value))
+                if (!string.Equals(this._BtnUpload, value))
                 {
-                    this._btnUpload = value;
-                    RaisePropertyChanged(nameof(btnUpload));
+                    this._BtnUpload = value;
+                    RaisePropertyChanged(nameof(BtnUpload));
                 }
             }
         }
 
-        private string _btnDownload;
-        public string btnDownload
+        private string _BtnDownload;
+        public string BtnDownload
         {
-            get { return this._btnDownload; }
+            get { return this._BtnDownload; }
             set
             {
-                if (!string.Equals(this._btnDownload, value))
+                if (!string.Equals(this._BtnDownload, value))
                 {
-                    this._btnDownload = value;
-                    RaisePropertyChanged(nameof(btnDownload));
+                    this._BtnDownload = value;
+                    RaisePropertyChanged(nameof(BtnDownload));
                 }
             }
         }
@@ -308,15 +310,40 @@ namespace IHM.ModelView
         * */
         private void ActionCreateFolder(object parameter)
         {
-            //AddFolderView _AddFolder = new AddFolderView();
-            //AddFolderModelView context = new AddFolderModelView(_AddFolder);
-            //_AddFolder.Width = 300;
-            //_AddFolder.Height = 200;
-            //_AddFolder.Show();
+            try
+            {
+                //AddFolderView _AddFolder = new AddFolderView();
+                //AddFolderModelView context = new AddFolderModelView(_AddFolder);
+                //_AddFolder.Width = 300;
+                //_AddFolder.Height = 200;
+                //_AddFolder.Show();
 
-            Singleton.GetInstance().GetDBB().CreateFolder("/test__");
+                Singleton.GetInstance().GetDBB().CreateFolder("/test__");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:\"" + ex.Message);
+            }
         }
 
+        /**
+         * Reload Grid
+         * */
+         private void ActionReloadDataGrid(object parameter)
+        {
+           try
+            {
+                Singleton.GetInstance().GetHomeModelView().GetFiles();
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Error:\"" + ex.Message);
+            }
+        }
+
+        void IPageViewModel.LoadAction()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
