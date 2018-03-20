@@ -3,3 +3,4 @@
 IHM/App.config
 *.ide
 IHM/obj/Debug/View/RegisterView.g.cs
+IHM/obj/Debug/View/PopUp.g.i.cs
