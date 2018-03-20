@@ -26,6 +26,7 @@ namespace IHM.ModelView
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
         public ICommand Upload { get; set; }
+        public ICommand Download { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
 
         //constructeur
@@ -44,6 +45,7 @@ namespace IHM.ModelView
             Supprimer = new RelayCommand(ActionSupprimer);
             CreateFolder = new RelayCommand(ActionCreateFolder);
             Upload = new RelayCommand(ActionUpload);
+            Download = new RelayCommand(ActionDownload);
         }
 
         private void LoadIcon()
@@ -315,45 +317,9 @@ namespace IHM.ModelView
         }
 
         // Upload un fichier 
-      //  OpenFileDialog openFileDialog = new OpenFileDialog();
-
-        //private void ActionUpload(object paramater)
-        //{
-        //    // send fil
-
-        //    //var fs = new FileStream(this.openFileDialog.FileName, FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
-        //    // fileInfo = (String.IsNullOrEmpty(this.pathFichier) ?"/" : "") + Path.Combine(this.pathFichier,Path.GetFileName(this.openFileDialog.FileName)).Replace("\\","/");
-        //    // if (this.openFileDialog.ShowDialog() != true) { return; }
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    openFileDialog.Multiselect = true;
-        //    openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-        //    openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        //    string folderPath = "/";
-        //    string fileName = "/test";
-        //    string SourceFilePath = "/";
-        //    if (openFileDialog.ShowDialog() == true)
-        //    {
-        //        folderPath = Path.GetFullPath(folderPath);
-        //        fileName = openFileDialog.FileName;
-
-
-
-
-        //        Singleton.GetInstance().GetDBB().Upload("/", fileName, fileName);
-        //    }
-        //}
         private void ActionUpload(object paramater)
 
         {
-
-            // send fil
-
-            //var fs = new FileStream(this.openFileDialog.FileName, FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
-
-            // fileInfo = (String.IsNullOrEmpty(this.pathFichier) ?"/" : "") + Path.Combine(this.pathFichier,Path.GetFileName(this.openFileDialog.FileName)).Replace("\\","/");
-
-            // if (this.openFileDialog.ShowDialog() != true) { return; }
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.Multiselect = true;
@@ -373,6 +339,11 @@ namespace IHM.ModelView
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
 
             }
+
+        }
+
+        private void ActionDownload(object paramater)
+        {
 
         }
 
