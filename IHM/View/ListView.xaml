@@ -44,8 +44,8 @@
         </DockPanel>
 
         <!--Row 2-->
-        <Button  Name="btnReload" HorizontalAlignment="Left" Margin="234,0,0,0" VerticalAlignment="Top" Width="75" Height="40" >
-            <Image Source="{Binding btnReload}" Width="40"/>
+        <Button  Name="BtnReload" HorizontalAlignment="Left" Margin="234,0,0,0" VerticalAlignment="Top" Width="75" Height="40" Command="{Binding ReloadDataGrid}" >
+            <Image Source="{Binding BtnReload}" Width="40"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -54,11 +54,8 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-<<<<<<< HEAD
-        <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding UploadFile}">
-=======
+
         <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Upload}">
->>>>>>> origin/devTanor
             <Image Source="{Binding btnUpload}"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -69,7 +66,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="{Binding btnDownload}"/>
+            <Image Source="{Binding BtnDownload}"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -79,7 +76,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="474,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding CreateFolder}">
-            <Image Source="{Binding btnAdd}" Width="32"/>
+            <Image Source="{Binding BtnAdd}" Width="32"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -89,7 +86,7 @@
             </Button.ToolTip>
         </Button>
         <Button HorizontalAlignment="Left" Margin="554,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="{Binding btnEdit}" Width="31"/>
+            <Image Source="{Binding BtnEdit}" Width="31"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -99,7 +96,7 @@
             </Button.ToolTip>
         </Button>
         <Button  HorizontalAlignment="Left" Margin="634,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Supprimer}">
-            <Image Source="{Binding btnTrash}" Height="30" Width="43"/>
+            <Image Source="{Binding BtnTrash}" Height="30" Width="43"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -109,7 +106,7 @@
             </Button.ToolTip>
         </Button>
         <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
-            <Image Source="{Binding btnOpen}" Height="24" Width="26"/>
+            <Image Source="{Binding BtnOpen}" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -119,7 +116,7 @@
             </Button.ToolTip>
         </Button>
         <Button  HorizontalAlignment="Left" Margin="795,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding LinkProject}">
-            <Image Source="{Binding btnProject}" Height="24" Width="26"/>
+            <Image Source="{Binding BtnProject}" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>

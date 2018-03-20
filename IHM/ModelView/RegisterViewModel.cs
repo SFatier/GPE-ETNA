@@ -21,29 +21,9 @@ namespace IHM.ModelView
 
         public RegisterViewModel()
         {
-            List<Utilisateur> items;
-            try
-            {
-                StreamReader r;
-                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-                {
-                    string json = r.ReadToEnd();
-                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
-                }
-            }
-            catch (Exception ex)
-            {
-                items = new List<Utilisateur>();
-            }
-            Singleton.GetInstance().SetListUtilisateur(items);
-
-            List<string> lst = new List<string>();
-            lst.Add("Administration");
-            lst.Add("Utilisateur GED");
-            lst.Add("Gestionnaire de cloud");
-
-            lstRole = lst;
-            Inscription = new RelayCommand(ActionInscription);
+            LoadAction();
+            LoadUtilisateur();            
+            LstRole = LoadRole();
         }
 
         #region [Binding]
@@ -105,7 +85,7 @@ namespace IHM.ModelView
         }
 
         private List<string> _lstRole;
-        public List<string> lstRole
+        public List<string> LstRole
         {
             get { return this._lstRole; }
             set
@@ -113,7 +93,7 @@ namespace IHM.ModelView
                 if (!string.Equals(this._lstRole, value))
                 {
                     this._lstRole = value;
-                    RaisePropertyChanged(nameof(lstRole));
+                    RaisePropertyChanged(nameof(LstRole));
                 }
             }
         }
@@ -150,6 +130,39 @@ namespace IHM.ModelView
             HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
             HMV.IsConnect = "Se deconnecter";
             Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+        }
+
+        public void LoadAction()
+        {
+            Inscription = new RelayCommand(ActionInscription);
+        }
+
+        private void LoadUtilisateur()
+        {
+            List<Utilisateur> items;
+            try
+            {
+                StreamReader r;
+                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                }
+            }
+            catch (Exception ex)
+            {
+                items = new List<Utilisateur>();
+            }
+            Singleton.GetInstance().SetListUtilisateur(items);
+        }
+
+        private List<string> LoadRole()
+        {
+            List<string> lst = new List<string>();
+            lst.Add("Administration");
+            lst.Add("Utilisateur GED");
+            lst.Add("Gestionnaire de cloud");
+            return lst;
         }
     }
 }
