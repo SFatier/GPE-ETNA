@@ -23,18 +23,12 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  //a modifier par rapport à votre ordinateur
         public string Name => "Liste des documents du cloud dropbox";
 
-        public ICommand  LinkProject { get; set; }
+        public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-<<<<<<< HEAD
         public ICommand ReloadDataGrid { get; set; }
-=======
-<<<<<<< HEAD
-=======
         public ICommand Upload { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
->>>>>>> origin/devTanor
->>>>>>> master
 
         //constructeur
         public ListModelView()
@@ -51,11 +45,8 @@ namespace IHM.ModelView
             LinkProject = new RelayCommand(ActionLinkProject);
             Supprimer = new RelayCommand(ActionSupprimer);
             CreateFolder = new RelayCommand(ActionCreateFolder);
-<<<<<<< HEAD
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
-=======
             Upload = new RelayCommand(ActionUpload);
->>>>>>> master
         }
 
         private void LoadIcon()
@@ -81,7 +72,7 @@ namespace IHM.ModelView
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
                 }
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 items = new List<Projet>();
             }
@@ -104,7 +95,7 @@ namespace IHM.ModelView
         }
 
         private Files _lstFiles;
-        public Files  lstFiles
+        public Files lstFiles
         {
             get { return this._lstFiles; }
             set
@@ -115,7 +106,7 @@ namespace IHM.ModelView
                     RaisePropertyChanged(nameof(lstFiles));
                 }
             }
-        }           
+        }
 
         private string _BtnEdit;
         public string BtnEdit
@@ -143,7 +134,7 @@ namespace IHM.ModelView
                     RaisePropertyChanged(nameof(BtnProject));
                 }
             }
-        }        
+        }
 
         private string _BtnTrash;
         public string BtnTrash
@@ -252,7 +243,7 @@ namespace IHM.ModelView
                     break;
                 case ".doc":
                 case ".docx":
-                         str = "doc.ico";
+                    str = "doc.ico";
                     break;
                 case ".pdf":
                     str = "pdf.ico";
@@ -341,64 +332,19 @@ namespace IHM.ModelView
         /**
          * Reload Grid
          * */
-         private void ActionReloadDataGrid(object parameter)
+        private void ActionReloadDataGrid(object parameter)
         {
-           try
+            try
             {
                 Singleton.GetInstance().GetHomeModelView().GetFiles();
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 MessageBox.Show("Error:\"" + ex.Message);
             }
         }
 
-<<<<<<< HEAD
-        void IPageViewModel.LoadAction()
-        {
-            throw new NotImplementedException();
-        }
-=======
-<<<<<<< HEAD
-=======
-        // Upload un fichier 
-      //  OpenFileDialog openFileDialog = new OpenFileDialog();
-
-        //private void ActionUpload(object paramater)
-        //{
-        //    // send fil
-
-        //    //var fs = new FileStream(this.openFileDialog.FileName, FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
-        //    // fileInfo = (String.IsNullOrEmpty(this.pathFichier) ?"/" : "") + Path.Combine(this.pathFichier,Path.GetFileName(this.openFileDialog.FileName)).Replace("\\","/");
-        //    // if (this.openFileDialog.ShowDialog() != true) { return; }
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    openFileDialog.Multiselect = true;
-        //    openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-        //    openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        //    string folderPath = "/";
-        //    string fileName = "/test";
-        //    string SourceFilePath = "/";
-        //    if (openFileDialog.ShowDialog() == true)
-        //    {
-        //        folderPath = Path.GetFullPath(folderPath);
-        //        fileName = openFileDialog.FileName;
-
-
-
-
-        //        Singleton.GetInstance().GetDBB().Upload("/", fileName, fileName);
-        //    }
-        //}
         private void ActionUpload(object paramater)
-
         {
-
-            // send fil
-
-            //var fs = new FileStream(this.openFileDialog.FileName, FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
-
-            // fileInfo = (String.IsNullOrEmpty(this.pathFichier) ?"/" : "") + Path.Combine(this.pathFichier,Path.GetFileName(this.openFileDialog.FileName)).Replace("\\","/");
-
-            // if (this.openFileDialog.ShowDialog() != true) { return; }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
@@ -411,20 +357,12 @@ namespace IHM.ModelView
             string SourceFilePath = "/";
 
             if (openFileDialog.ShowDialog() == true)
-
             {
-
                 SourceFilePath = openFileDialog.FileName;
-
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
 
             }
-
         }
-
-
->>>>>>> origin/devTanor
->>>>>>> master
         #endregion
     }
 }
