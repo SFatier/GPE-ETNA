@@ -48,6 +48,7 @@ namespace IHM.ModelView
             ContentViewModels.Add(lMVM);
             CurrentContentViewModel = ContentViewModels[0];
 
+            LoadAction();
             Singleton.GetInstance().SetHomeModelView(this);
         }
 

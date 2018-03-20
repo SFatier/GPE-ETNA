@@ -12,6 +12,7 @@ namespace IHM.Model
         public string Nom { get; set; }
         public string Description { get; set; }
         private List<Files> lstFiles;
+        private List<Utilisateur> lstUser;
         private bool isChecked = false;
 
         public bool Ischecked
@@ -41,5 +42,18 @@ namespace IHM.Model
                 }
             }
         }
+
+        public List<Utilisateur> LstUser
+        {
+            get { return this.lstUser; }
+            set
+            {
+                if (!string.Equals(this.lstUser, value))
+                {
+                    this.lstUser = value;
+                    RaisePropertyChanged(nameof(LstUser));
+                }
+            }
+        }        
     }
 }

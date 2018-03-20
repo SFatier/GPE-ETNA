@@ -68,6 +68,19 @@ namespace IHM.ModelView
             }
         }
 
+        private List<Utilisateur> test;
+        public List<Utilisateur> Test
+        {
+            get { return test; }
+            set
+            {
+                if (!string.Equals(this.test, value))
+                {
+                    this.test = value;
+                    RaisePropertyChanged(nameof(Test));
+                }
+            }
+        }
         #endregion
 
         #region [Action]
@@ -80,6 +93,7 @@ namespace IHM.ModelView
                 p.Nom = NomProjet;
                 p.Description = DescriptionProjet;
                 p.LstFiles = new List<Files>();
+                p.LstUser = Test;
                 Singleton.GetInstance().addProject(p);
 
                 #region [Ecriture de l'utilisateur dans le fichier .JSON]
