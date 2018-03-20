@@ -18,8 +18,7 @@ namespace IHM.ModelView
         private Files file;
         private List<Projet> lstPChecked = new List<Projet>();
         public string Name => "PopUp";
-
-
+        
         #region [Constructeur]
         public PopUpModelView(PopUp _app, Files _file)
         {
@@ -87,6 +86,11 @@ namespace IHM.ModelView
                 serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
             }
 
+        }
+
+        public void LoadAction()
+        {
+            //
         }
         #endregion
     }

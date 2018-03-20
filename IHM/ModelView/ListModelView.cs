@@ -23,15 +23,13 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  //a modifier par rapport à votre ordinateur
         public string Name => "Liste des documents du cloud dropbox";
 
-        public ICommand  LinkProject { get; set; }
+        public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-<<<<<<< HEAD
-=======
+        public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
         public ICommand Download { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
->>>>>>> origin/devTanor
 
         //constructeur
         public ListModelView()
@@ -43,25 +41,26 @@ namespace IHM.ModelView
             LoadAction();
         }
 
-        private void LoadAction()
+        public void LoadAction()
         {
             LinkProject = new RelayCommand(ActionLinkProject);
             Supprimer = new RelayCommand(ActionSupprimer);
             CreateFolder = new RelayCommand(ActionCreateFolder);
+            ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
             Download = new RelayCommand(ActionDownload);
         }
 
         private void LoadIcon()
         {
-            btnEdit = path_img + "edit.png";
-            btnTrash = path_img + "trash.png";
-            btnOpen = path_img + "open.png";
-            btnAdd = path_img + "add.png";
-            btnReload = path_img + "reload.png";
-            btnUpload = path_img + "upload.png";
-            btnDownload = path_img + "download.png";
-            btnProject = path_img + "link.png";
+            BtnEdit = path_img + "edit.png";
+            BtnTrash = path_img + "trash.png";
+            BtnOpen = path_img + "open.png";
+            BtnAdd = path_img + "add.png";
+            BtnReload = path_img + "reload.png";
+            BtnUpload = path_img + "upload.png";
+            BtnDownload = path_img + "download.png";
+            BtnProject = path_img + "link.png";
         }
 
         private void LoadProject()
@@ -75,7 +74,7 @@ namespace IHM.ModelView
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
                 }
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 items = new List<Projet>();
             }
@@ -98,7 +97,7 @@ namespace IHM.ModelView
         }
 
         private Files _lstFiles;
-        public Files  lstFiles
+        public Files lstFiles
         {
             get { return this._lstFiles; }
             set
@@ -109,116 +108,116 @@ namespace IHM.ModelView
                     RaisePropertyChanged(nameof(lstFiles));
                 }
             }
-        }           
+        }
 
-        private string _btnEdit;
-        public string btnEdit
+        private string _BtnEdit;
+        public string BtnEdit
         {
-            get { return this._btnEdit; }
+            get { return this._BtnEdit; }
             set
             {
-                if (!string.Equals(this._btnEdit, value))
+                if (!string.Equals(this._BtnEdit, value))
                 {
-                    this._btnEdit = value;
-                    RaisePropertyChanged(nameof(btnEdit));
+                    this._BtnEdit = value;
+                    RaisePropertyChanged(nameof(BtnEdit));
                 }
             }
         }
 
-        private string _btnProject;
-        public string btnProject
+        private string _BtnProject;
+        public string BtnProject
         {
-            get { return this._btnProject; }
+            get { return this._BtnProject; }
             set
             {
-                if (!string.Equals(this._btnProject, value))
+                if (!string.Equals(this._BtnProject, value))
                 {
-                    this._btnProject = value;
-                    RaisePropertyChanged(nameof(btnProject));
-                }
-            }
-        }        
-
-        private string _btnTrash;
-        public string btnTrash
-        {
-            get { return this._btnTrash; }
-            set
-            {
-                if (!string.Equals(this._btnTrash, value))
-                {
-                    this._btnTrash = value;
-                    RaisePropertyChanged(nameof(btnTrash));
+                    this._BtnProject = value;
+                    RaisePropertyChanged(nameof(BtnProject));
                 }
             }
         }
 
-        private string _btnOpen;
-        public string btnOpen
+        private string _BtnTrash;
+        public string BtnTrash
         {
-            get { return this._btnOpen; }
+            get { return this._BtnTrash; }
             set
             {
-                if (!string.Equals(this._btnOpen, value))
+                if (!string.Equals(this._BtnTrash, value))
                 {
-                    this._btnOpen = value;
-                    RaisePropertyChanged(nameof(btnOpen));
+                    this._BtnTrash = value;
+                    RaisePropertyChanged(nameof(BtnTrash));
                 }
             }
         }
 
-        private string _btnAdd;
-        public string btnAdd
+        private string _BtnOpen;
+        public string BtnOpen
         {
-            get { return this._btnAdd; }
+            get { return this._BtnOpen; }
             set
             {
-                if (!string.Equals(this._btnAdd, value))
+                if (!string.Equals(this._BtnOpen, value))
                 {
-                    this._btnAdd = value;
-                    RaisePropertyChanged(nameof(btnAdd));
+                    this._BtnOpen = value;
+                    RaisePropertyChanged(nameof(BtnOpen));
                 }
             }
         }
 
-        private string _btnReload;
-        public string btnReload
+        private string _BtnAdd;
+        public string BtnAdd
         {
-            get { return this._btnReload; }
+            get { return this._BtnAdd; }
             set
             {
-                if (!string.Equals(this._btnReload, value))
+                if (!string.Equals(this._BtnAdd, value))
                 {
-                    this._btnReload = value;
-                    RaisePropertyChanged(nameof(btnReload));
+                    this._BtnAdd = value;
+                    RaisePropertyChanged(nameof(BtnAdd));
                 }
             }
         }
 
-        private string _btnUpload;
-        public string btnUpload
+        private string _BtnReload;
+        public string BtnReload
         {
-            get { return this._btnUpload; }
+            get { return this._BtnReload; }
             set
             {
-                if (!string.Equals(this._btnUpload, value))
+                if (!string.Equals(this._BtnReload, value))
                 {
-                    this._btnUpload = value;
-                    RaisePropertyChanged(nameof(btnUpload));
+                    this._BtnReload = value;
+                    RaisePropertyChanged(nameof(BtnReload));
                 }
             }
         }
 
-        private string _btnDownload;
-        public string btnDownload
+        private string _BtnUpload;
+        public string BtnUpload
         {
-            get { return this._btnDownload; }
+            get { return this._BtnUpload; }
             set
             {
-                if (!string.Equals(this._btnDownload, value))
+                if (!string.Equals(this._BtnUpload, value))
                 {
-                    this._btnDownload = value;
-                    RaisePropertyChanged(nameof(btnDownload));
+                    this._BtnUpload = value;
+                    RaisePropertyChanged(nameof(BtnUpload));
+                }
+            }
+        }
+
+        private string _BtnDownload;
+        public string BtnDownload
+        {
+            get { return this._BtnDownload; }
+            set
+            {
+                if (!string.Equals(this._BtnDownload, value))
+                {
+                    this._BtnDownload = value;
+                    RaisePropertyChanged(nameof(BtnDownload));
                 }
             }
         }
@@ -246,7 +245,7 @@ namespace IHM.ModelView
                     break;
                 case ".doc":
                 case ".docx":
-                         str = "doc.ico";
+                    str = "doc.ico";
                     break;
                 case ".pdf":
                     str = "pdf.ico";
@@ -316,21 +315,48 @@ namespace IHM.ModelView
         * */
         private void ActionCreateFolder(object parameter)
         {
-            //AddFolderView _AddFolder = new AddFolderView();
-            //AddFolderModelView context = new AddFolderModelView(_AddFolder);
-            //_AddFolder.Width = 300;
-            //_AddFolder.Height = 200;
-            //_AddFolder.Show();
+            try
+            {
+                //AddFolderView _AddFolder = new AddFolderView();
+                //AddFolderModelView context = new AddFolderModelView(_AddFolder);
+                //_AddFolder.Width = 300;
+                //_AddFolder.Height = 200;
+                //_AddFolder.Show();
 
-            Singleton.GetInstance().GetDBB().CreateFolder("/test__");
+                Singleton.GetInstance().GetDBB().CreateFolder("/test__");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:\"" + ex.Message);
+            }
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         // Upload un fichier 
-        private void ActionUpload(object paramater)
-
+=======
+        /**
+         * Reload Grid
+         * */
+        private void ActionReloadDataGrid(object parameter)
         {
+            try
+            {
+                Singleton.GetInstance().GetHomeModelView().GetFiles();
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Error:\"" + ex.Message);
+            }
+        }
+
+>>>>>>> 75e2205f40157f885e3fecdf722e25e3ccabccd7
+        private void ActionUpload(object paramater)
+        {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 75e2205f40157f885e3fecdf722e25e3ccabccd7
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.Multiselect = true;
@@ -342,16 +368,13 @@ namespace IHM.ModelView
             string SourceFilePath = "/";
 
             if (openFileDialog.ShowDialog() == true)
-
             {
-
                 SourceFilePath = openFileDialog.FileName;
-
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
 
             }
-
         }
+<<<<<<< HEAD
 
         private void ActionDownload(object paramater)
         {
@@ -360,6 +383,8 @@ namespace IHM.ModelView
 
 
 >>>>>>> origin/devTanor
+=======
+>>>>>>> 75e2205f40157f885e3fecdf722e25e3ccabccd7
         #endregion
     }
 }

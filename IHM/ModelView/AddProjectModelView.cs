@@ -21,11 +21,11 @@ namespace IHM.ModelView
         
         public AddProjectModelView()
         {
-            Save = new RelayCommand(ActionAddProject);
+            LoadAction();
+            lstUser = Singleton.GetInstance().GetAllUtilisateur();
         }
 
         #region [Binding]
-
         private string nomProjet;
         public string NomProjet
         {
@@ -54,6 +54,33 @@ namespace IHM.ModelView
             }
         }
 
+        private List<Utilisateur> _lstUser;
+        public List<Utilisateur> lstUser
+        {
+            get { return _lstUser; }
+            set
+            {
+                if (!string.Equals(this._lstUser, value))
+                {
+                    this._lstUser = value;
+                    RaisePropertyChanged(nameof(lstUser));
+                }
+            }
+        }
+
+        private List<Utilisateur> test;
+        public List<Utilisateur> Test
+        {
+            get { return test; }
+            set
+            {
+                if (!string.Equals(this.test, value))
+                {
+                    this.test = value;
+                    RaisePropertyChanged(nameof(Test));
+                }
+            }
+        }
         #endregion
 
         #region [Action]
@@ -66,6 +93,7 @@ namespace IHM.ModelView
                 p.Nom = NomProjet;
                 p.Description = DescriptionProjet;
                 p.LstFiles = new List<Files>();
+                p.LstUser = Test;
                 Singleton.GetInstance().addProject(p);
 
                 #region [Ecriture de l'utilisateur dans le fichier .JSON]
@@ -89,8 +117,13 @@ namespace IHM.ModelView
             {
                 MessageBox.Show("Veuillez renseigner tous les champs obligatoires");
             }
-           
-            #endregion
+        }
+
+        #endregion
+
+        public void LoadAction()
+        {
+            Save = new RelayCommand(ActionAddProject);
         }
     }
 }

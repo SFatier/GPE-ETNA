@@ -22,7 +22,7 @@
         <!--Row 1-->
 
         <!--Menu-->
-        <Button Content="Home" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" Command="{Binding ConnecterDP}"  BorderBrush="White" Background="White"/>
+        <Button Content="Home" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" Command="{Binding BtnHome}"  BorderBrush="White" Background="White"/>
         <Button Content="Administration" Grid.Row="1" HorizontalAlignment="Left" Margin="68,10,0,0" VerticalAlignment="Top" Width="97" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="White" Background="White"></Button>
         <Button Content="{Binding strDP}" Grid.Row="1" HorizontalAlignment="Left" Margin="168,10,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterDP}"  BorderBrush="White" Background="White"/>
 
