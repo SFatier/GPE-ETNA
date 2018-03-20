@@ -18,7 +18,7 @@ namespace IHM.ModelView
         public AddFolderModelView(AddFolderView _app)
         {
             app = _app;
-            SaveFolder = new RelayCommand(ActionCreateFolder);
+            LoadAction();
         }
 
         #region [Binding]
@@ -46,6 +46,11 @@ namespace IHM.ModelView
                 Singleton.GetInstance().GetDBB().CreateFolder(Nouveau_dossier);
                 app.Close();
             }
+        }
+
+        public void LoadAction()
+        {
+            SaveFolder = new RelayCommand(ActionCreateFolder);
         }
     }
 }

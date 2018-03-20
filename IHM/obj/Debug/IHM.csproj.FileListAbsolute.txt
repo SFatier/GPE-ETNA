@@ -109,6 +109,9 @@ C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.Properties.Resource
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.csproj.GenerateResource.Cache
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.exe
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.pdb
+<<<<<<< HEAD
+C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\IHM.csprojResolveAssemblyReference.cache
+=======
 C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\bin\Debug\IHM.exe.config
 C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\bin\Debug\IHM.exe
 C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\bin\Debug\IHM.pdb
@@ -182,3 +185,4 @@ C:\Users\Administrateur\Documents\GitHub\PE-ETNA\IHM\obj\Debug\IHM.csproj.Genera
 C:\Users\Administrateur\Documents\GitHub\PE-ETNA\IHM\obj\Debug\IHM.csproj.CoreCompileInputs.cache
 C:\Users\Administrateur\Documents\GitHub\PE-ETNA\IHM\obj\Debug\IHM.exe
 C:\Users\Administrateur\Documents\GitHub\PE-ETNA\IHM\obj\Debug\IHM.pdb
+>>>>>>> master
