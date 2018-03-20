@@ -21,6 +21,12 @@
         <DataTemplate DataType="{x:Type local1:LoginModelView}">
             <local:LoginView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:AdminModelView}">
+            <local:AdminView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:AddProjectModelView}">
+            <local:AddProjectView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>         

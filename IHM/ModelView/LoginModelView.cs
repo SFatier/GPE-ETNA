@@ -1,8 +1,12 @@
 ﻿using GPE;
 using IHM.Helpers;
+using IHM.Model;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,11 +58,35 @@ namespace IHM.ModelView
         #region [Constructor]
         public LoginModelView()
         {
+            LoadAction();
+
+            List<Utilisateur> items;
+            try
+            {
+                StreamReader r;
+                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                }
+            }catch(Exception )
+            {
+                items = new List<Utilisateur>();
+            }
+
+            Singleton.GetInstance().SetListUtilisateur(items);
+
+            Login = "tanor";
+            Mdp = "pass";
+        }
+        #endregion
+
+        public void LoadAction()
+        {
             ForgetPsswd = new RelayCommand(ActionForgetPsswd);
             LogIn = new RelayCommand(ActionLogiIn);
             Register = new RelayCommand(ActionResgister);
         }
-        #endregion
 
         #region [Action]
 
@@ -76,11 +104,18 @@ namespace IHM.ModelView
          * */
         private void ActionLogiIn(object p)
         {
-            //Enregistrement de l'utilisateur 
-
-            HomeModelView HMV = new HomeModelView();
-            HMV.IsConnect = "Se deconnecter";
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+            List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
+            Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
+            if (u != null)
+            {
+                HomeModelView HMV = new HomeModelView(u);
+                HMV.IsConnect = "Se deconnecter";
+                Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+            }
+            else
+            {
+                MessageBox.Show("Aucun utilisateur trouvé.");
+            }
         }
 
         /**

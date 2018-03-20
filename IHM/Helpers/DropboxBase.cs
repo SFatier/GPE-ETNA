@@ -1,5 +1,6 @@
 ﻿using Dropbox.Api;
 using Dropbox.Api.Files;
+using IHM.Helpers;
 using IHM.Model;
 using IHM.ModelView;
 using System;
@@ -113,11 +114,7 @@ namespace GPE
                         _strAccessToken = login.AccessToken;
                         AccessTocken = login.AccessToken;
                         Uid = login.Uid;
-                        DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
-                        HttpClient HTC = new HttpClient();
-                        HTC.Timeout = TimeSpan.FromMinutes(10);  
-                        CC.HttpClient = HTC;
-                        DBClient = new DropboxClient(AccessTocken, CC);
+                        GetDBClient(AccessTocken);
                     }
                     else
                     {
@@ -135,6 +132,15 @@ namespace GPE
             }
         }
 
+        public void GetDBClient(string AccessTocken)
+        {
+            DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
+            HttpClient HTC = new HttpClient();
+            HTC.Timeout = TimeSpan.FromMinutes(10);
+            CC.HttpClient = HTC;
+            DBClient = new DropboxClient(AccessTocken, CC);
+        }
+
         /// <summary>  
         /// Method to create new folder on Dropbox  
         /// </summary>  
@@ -144,15 +150,6 @@ namespace GPE
         {
             try
             {
-                if (AccessTocken == null)
-                {
-                    throw new Exception("AccessToken not generated !");
-                }
-                if (AuthenticationURL == null)
-                {
-                    throw new Exception("AuthenticationURI not generated !");
-                }
-
                 var folderArg = new CreateFolderArg(path);
                 var folder = DBClient.Files.CreateFolderAsync(folderArg);
                 var result = folder.Result;
@@ -162,7 +159,6 @@ namespace GPE
             {
                 return false;
             }
-
         }
 
         /// <summary>  
@@ -202,16 +198,7 @@ namespace GPE
         {
             try
             {
-                if (AccessTocken == null)
-                {
-                    throw new Exception("AccessToken not generated !");
-                }
-                if (AuthenticationURL == null)
-                {
-                    throw new Exception("AuthenticationURI not generated !");
-                }
-
-                var folders = DBClient.Files.DeleteAsync(path);
+                 var folders = DBClient.Files.DeleteAsync(path);
                 var result = folders.Result;
                 return true;
             }
@@ -220,6 +207,7 @@ namespace GPE
                 return false;
             }
         }
+
         /// <summary>  
         /// Method to upload files on Dropbox  
         /// </summary>  
@@ -233,7 +221,7 @@ namespace GPE
             {
                 using (var stream = new MemoryStream(File.ReadAllBytes(SourceFilePath)))
                 {
-                    var response = DBClient.Files.UploadAsync(UploadfolderPath + "/" + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
+                    var response = DBClient.Files.UploadAsync(UploadfolderPath + UploadfileName, WriteMode.Overwrite.Instance, body: stream);
                     var rest = response.Result; //Added to wait for the result from Async method  
                 }
 
@@ -243,7 +231,6 @@ namespace GPE
             {
                 return false;
             }
-
         }
 
         /// <summary>  
@@ -291,7 +278,9 @@ namespace GPE
                 DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
                 DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
                 int taille = 0; // Convert.ToInt32(item.AsFile.Size);
-                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);              
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
+                f.path = path;
                 lstFiles.Add(f);
             }
 
@@ -305,7 +294,9 @@ namespace GPE
                 DateTime dateDeCreation = item.AsFile.ClientModified;
                 DateTime ModifieLe = item.AsFile.ServerModified;
                 int taille = Convert.ToInt32(item.AsFile.Size);
+                string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
+                f.path = path;
                 lstFiles.Add(f);
             }
 

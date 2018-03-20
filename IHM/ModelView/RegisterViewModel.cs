@@ -1,10 +1,15 @@
 ﻿using IHM.Helpers;
+using IHM.Model;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IHM.ModelView
@@ -16,13 +21,9 @@ namespace IHM.ModelView
 
         public RegisterViewModel()
         {
-            List<string> lst = new List<string>();
-            lst.Add("Administration");
-            lst.Add("Utilisateur GED");
-            lst.Add("Gestionnaire de cloud");
-
-            lstRole = lst;
-            Inscription = new RelayCommand(ActionInscription);
+            LoadAction();
+            LoadUtilisateur();            
+            LstRole = LoadRole();
         }
 
         #region [Binding]
@@ -69,8 +70,22 @@ namespace IHM.ModelView
             }
         }
 
+        private string _Role;
+        public string Role
+        {
+            get { return this._Role; }
+            set
+            {
+                if (!string.Equals(this._Role, value))
+                {
+                    this._Role = value;
+                    RaisePropertyChanged(nameof(Email));
+                }
+            }
+        }
+
         private List<string> _lstRole;
-        public List<string> lstRole
+        public List<string> LstRole
         {
             get { return this._lstRole; }
             set
@@ -78,7 +93,7 @@ namespace IHM.ModelView
                 if (!string.Equals(this._lstRole, value))
                 {
                     this._lstRole = value;
-                    RaisePropertyChanged(nameof(lstRole));
+                    RaisePropertyChanged(nameof(LstRole));
                 }
             }
         }
@@ -88,10 +103,66 @@ namespace IHM.ModelView
         public void ActionInscription(object parameter)
         {
             //Enregistrement de l'utilisateur 
+            Utilisateur Nouvelle_Utilisateur = new Utilisateur();
+            Nouvelle_Utilisateur.Login = Login;
+            Nouvelle_Utilisateur.MDP = Mdp;
+            Nouvelle_Utilisateur.Email = Email;
+            Nouvelle_Utilisateur.Role = Role;
+            Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
+            Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
+                        
+             #region [Ecriture de l'utilisateur dans le fichier .JSON]
+            try
+            {
+                string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                using (StreamWriter file = File.CreateText(@test))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+            #endregion
 
-            HomeModelView HMV = new HomeModelView();
+            HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
             HMV.IsConnect = "Se deconnecter";
             Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+        }
+
+        public void LoadAction()
+        {
+            Inscription = new RelayCommand(ActionInscription);
+        }
+
+        private void LoadUtilisateur()
+        {
+            List<Utilisateur> items;
+            try
+            {
+                StreamReader r;
+                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
+                }
+            }
+            catch (Exception ex)
+            {
+                items = new List<Utilisateur>();
+            }
+            Singleton.GetInstance().SetListUtilisateur(items);
+        }
+
+        private List<string> LoadRole()
+        {
+            List<string> lst = new List<string>();
+            lst.Add("Administration");
+            lst.Add("Utilisateur GED");
+            lst.Add("Gestionnaire de cloud");
+            return lst;
         }
     }
 }
