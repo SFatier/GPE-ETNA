@@ -4,17 +4,26 @@
 winexe
 C#
 .cs
-C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\
+C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\
 IHM
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\App.xaml
 101675229313
 
 31778061281
 15-510584915
 MainWindow.xaml;View\AddFolderView.xaml;View\AddProjectView.xaml;View\AdminView.xaml;View\HomeView.xaml;View\PopUp.xaml;View\RegisterView.xaml;View\ListView.xaml;View\LoginView.xaml;View\LogWindow.xaml;
+=======
+C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\App.xaml
+9-607352331
+
+29542105790
+15-533257088
+MainWindow.xaml;View\AddProjectView.xaml;View\AdminView.xaml;View\HomeView.xaml;View\PopUp.xaml;View\RegisterView.xaml;View\ListView.xaml;View\LoginView.xaml;View\LogWindow.xaml;
+>>>>>>> origin/devTanor
 
 False
 
