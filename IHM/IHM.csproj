@@ -63,6 +63,7 @@
     <Compile Include="Helpers\DropboxBase.cs" />
     <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="ModelView\AddFolderModelView.cs" />
     <Compile Include="ModelView\AddProjectModelView.cs" />
     <Compile Include="ModelView\AdminModelView.cs" />
     <Compile Include="ModelView\HomeModelView.cs" />
@@ -72,6 +73,9 @@
     <Compile Include="ModelView\PopUpModelView.cs" />
     <Compile Include="Model\Projet.cs" />
     <Compile Include="Model\Utilisateur.cs" />
+    <Compile Include="View\AddFolderView.xaml.cs">
+      <DependentUpon>AddFolderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AddProjectView.xaml.cs">
       <DependentUpon>AddProjectView.xaml</DependentUpon>
     </Compile>
@@ -112,6 +116,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\AddFolderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AddProjectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
