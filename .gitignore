@@ -1,4 +1,5 @@
-
 .vs/GPE/v15/.suo
 IHM/App.config
-.vs/GPE/v15/.suo
+*.ide
+IHM/obj/Debug/View/RegisterView.g.cs
+IHM/obj/Debug/View/PopUp.g.i.cs
