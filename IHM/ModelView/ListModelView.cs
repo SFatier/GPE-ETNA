@@ -72,7 +72,7 @@ namespace IHM.ModelView
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
                 }
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 items = new List<Projet>();
             }
