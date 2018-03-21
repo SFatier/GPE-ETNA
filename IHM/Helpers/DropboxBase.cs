@@ -245,7 +245,7 @@ namespace GPE
         {
             try
             {
-                var response = DBClient.Files.DownloadAsync(DropboxFolderPath + "/" + DropboxFileName);
+                var response = DBClient.Files.DownloadAsync(DropboxFolderPath  + DropboxFileName);
                 var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
 
                 return true;
@@ -256,7 +256,21 @@ namespace GPE
             }
 
         }
+        //public bool Download(string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath)
+        //{
+        //    try
+        //    {
+        //        var response = DBClient.Files.DownloadAsync(DropboxFolderPath  + DropboxFileName);
+        //        var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
 
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+
+    //}
         /**
          * Récupère la liste des fichiers et dossiers du compte dropbox connecté
          * */

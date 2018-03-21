@@ -218,3 +218,5 @@ C:\Users\sigt_sf\Desktop\GPE-ETNA\IHM\obj\Debug\IHM.Properties.Resources.resourc
 C:\Users\sigt_sf\Desktop\GPE-ETNA\IHM\obj\Debug\IHM.csproj.GenerateResource.Cache
 C:\Users\sigt_sf\Desktop\GPE-ETNA\IHM\obj\Debug\IHM.exe
 C:\Users\sigt_sf\Desktop\GPE-ETNA\IHM\obj\Debug\IHM.pdb
+C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AddFolderView.g.cs
+C:\Users\ta013be\Documents\GitHub\GPE-ETNA\IHM\obj\Debug\View\AddFolderView.baml

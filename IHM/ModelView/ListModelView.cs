@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Dropbox.Api.Common;
+using Dropbox.Api.Files;
 using Microsoft.Win32;
 namespace IHM.ModelView
 {
@@ -29,6 +31,7 @@ namespace IHM.ModelView
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
+        public ICommand Download { get; set; }
 
         //constructeur
         public ListModelView()
@@ -47,6 +50,7 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
+            Download = new RelayCommand(ActionDownload);
         }
 
         private void LoadIcon()
@@ -342,7 +346,9 @@ namespace IHM.ModelView
                 MessageBox.Show("Error:\"" + ex.Message);
             }
         }
-
+        /**
+         * Upload File
+         * */
         private void ActionUpload(object paramater)
         {
 
@@ -361,6 +367,37 @@ namespace IHM.ModelView
                 SourceFilePath = openFileDialog.FileName;
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
 
+            }
+        }
+        /**
+         * Download File
+         * */
+        private void ActionDownload(object paramater)
+        {
+            if (lstFiles != null)
+            {
+                string DropboxFolderPath = lstFiles.path;
+                string DropboxFileName =   lstFiles.Nom;
+                string DownloadFolderPath = "";
+                string DownloadFileName = "";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = lstFiles.Nom;
+                if ( saveFileDialog.ShowDialog ()== true)
+                {
+                    string SourceFilePath = "/";
+                    string test = lstFiles.path;
+                   // DownloadFolderPath = Path.GetDirectoryName(DownloadFolderPath).Replace("\\", "/");
+                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName); 
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+                }
+             
+                   
+                }
+            
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
             }
         }
         #endregion
