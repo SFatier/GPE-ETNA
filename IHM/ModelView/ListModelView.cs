@@ -390,7 +390,21 @@ namespace IHM.ModelView
             
             if (lstFiles != null)
             {
+                
                 string DropboxFolderPath = lstFiles.path;
+                //string filename = Path.Combine(lstFiles.path, @"..\..\");
+                //System.IO.FileInfo file = new System.IO.FileInfo(lstFiles.path);
+                //try
+                //{ 
+                // var respos Response.AddHeader("Content-Disposition", "attachment; filename=" + '"' + file.Name + '"');
+
+                //Response.AddHeader("Content-Length", file.Length.ToString());
+
+                //Response.ContentType = "application/octet-stream";
+                //Response.WriteFile(file.FullName);
+                //}
+                //filename = Path.GetFullPath(filename) + "test.txt";
+                //System.Diagnostics.Process.Start(filename);
                 string DropboxFileName =   lstFiles.Nom;
                 string DownloadFolderPath = "";
                 string DownloadFileName = "";
@@ -399,7 +413,7 @@ namespace IHM.ModelView
 
                 if ( saveFileDialog.ShowDialog ()== true)
                 {
-                    string SourceFilePath = "/";
+                    string SourceFilePath = " / ";
                     string test = lstFiles.path;
                     //currentPath = saveFileDialog.FileName.Replace("\\", "/");
                     //DownloadFolderPath = Path.GetDirectoryName(currentPath).Replace("\\", "/");
