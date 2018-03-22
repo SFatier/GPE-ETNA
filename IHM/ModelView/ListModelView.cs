@@ -111,6 +111,19 @@ namespace IHM.ModelView
                 }
             }
         }
+        private string _currentPath;
+        public string currentPath
+        {
+            get { return this._currentPath; }
+            set
+            {
+                if (!string.Equals(this._currentPath, value))
+                {
+                    this._currentPath = value;
+                    RaisePropertyChanged(nameof(currentPath));
+                }
+            }
+        }
 
         private string _BtnEdit;
         public string BtnEdit
@@ -374,6 +387,7 @@ namespace IHM.ModelView
          * */
         private void ActionDownload(object paramater)
         {
+            
             if (lstFiles != null)
             {
                 string DropboxFolderPath = lstFiles.path;
@@ -382,14 +396,17 @@ namespace IHM.ModelView
                 string DownloadFileName = "";
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.FileName = lstFiles.Nom;
+
                 if ( saveFileDialog.ShowDialog ()== true)
                 {
                     string SourceFilePath = "/";
                     string test = lstFiles.path;
-                   // DownloadFolderPath = Path.GetDirectoryName(DownloadFolderPath).Replace("\\", "/");
+                    //currentPath = saveFileDialog.FileName.Replace("\\", "/");
+                    //DownloadFolderPath = Path.GetDirectoryName(currentPath).Replace("\\", "/");
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName); 
                     Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+                   // Singleton.GetInstance().GetDBB().Download(DownloadFolderPath, DownloadFileName);
                 }
              
                    
