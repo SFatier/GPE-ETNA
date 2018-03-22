@@ -58,27 +58,30 @@ namespace IHM.ModelView
          * */
         private void ActionConnecterDropbox(object parameter)
         {
-            try
+            if (curentUtilisateur.Token == null)
             {
-                if (string.IsNullOrEmpty(strAppKey))
+                try
                 {
-                    MessageBox.Show("Please enter valid App Key !");
-                    return;
+                    if (string.IsNullOrEmpty(strAppKey))
+                    {
+                        MessageBox.Show("Please enter valid App Key !");
+                        return;
+                    }
+                    if (DBB != null)
+                    {
+                        strAuthenticationURL = DBB.GeneratedAuthenticationURL();
+                        strAccessToken = DBB.GenerateAccessToken();
+                        var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => curentUtilisateur.Equals(user));
+                        if (uUpdate != null)
+                            uUpdate.Token = strAccessToken;
+                        UpdateUtilisateur();
+                        GetFiles();
+                    }
                 }
-                if (DBB != null)
+                catch (Exception)
                 {
-                    strAuthenticationURL = DBB.GeneratedAuthenticationURL();
-                    strAccessToken = DBB.GenerateAccessToken();
-                    var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => curentUtilisateur.Equals(user));
-                    if (uUpdate != null)
-                        uUpdate.Token = strAccessToken;
-                    UpdateUtilisateur();
-                    GetFiles();
+                    MessageBox.Show("Impossible d'autoriser l'application à se connecter à l'application");
                 }
-            }
-            catch (Exception)
-            {
-                throw;
             }
         }
 
