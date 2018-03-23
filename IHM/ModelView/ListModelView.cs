@@ -32,6 +32,8 @@ namespace IHM.ModelView
         public ICommand Upload { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
         public ICommand Download { get; set; }
+        public ICommand Open { get; set; }
+        
 
         //constructeur
         public ListModelView()
@@ -51,6 +53,7 @@ namespace IHM.ModelView
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
             Download = new RelayCommand(ActionDownload);
+            Open = new RelayCommand(ActionOpen);
         }
 
         private void LoadIcon()
@@ -379,6 +382,7 @@ namespace IHM.ModelView
             {
                 SourceFilePath = openFileDialog.FileName;
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
+                ActionReloadDataGrid(paramater);
 
             }
         }
@@ -392,19 +396,6 @@ namespace IHM.ModelView
             {
                 
                 string DropboxFolderPath = lstFiles.path;
-                //string filename = Path.Combine(lstFiles.path, @"..\..\");
-                //System.IO.FileInfo file = new System.IO.FileInfo(lstFiles.path);
-                //try
-                //{ 
-                // var respos Response.AddHeader("Content-Disposition", "attachment; filename=" + '"' + file.Name + '"');
-
-                //Response.AddHeader("Content-Length", file.Length.ToString());
-
-                //Response.ContentType = "application/octet-stream";
-                //Response.WriteFile(file.FullName);
-                //}
-                //filename = Path.GetFullPath(filename) + "test.txt";
-                //System.Diagnostics.Process.Start(filename);
                 string DropboxFileName =   lstFiles.Nom;
                 string DownloadFolderPath = "";
                 string DownloadFileName = "";
@@ -413,14 +404,11 @@ namespace IHM.ModelView
 
                 if ( saveFileDialog.ShowDialog ()== true)
                 {
-                    string SourceFilePath = " / ";
                     string test = lstFiles.path;
-                    //currentPath = saveFileDialog.FileName.Replace("\\", "/");
-                    //DownloadFolderPath = Path.GetDirectoryName(currentPath).Replace("\\", "/");
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName); 
                     Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
-                   // Singleton.GetInstance().GetDBB().Download(DownloadFolderPath, DownloadFileName);
+      
                 }
              
                    
@@ -431,6 +419,26 @@ namespace IHM.ModelView
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");
             }
         }
+
+        private void ActionOpen(object paramater)
+        {
+            if (lstFiles != null)
+            {
+
+                string DropboxFileName = lstFiles.Nom;
+                string DropboxFolderPath = lstFiles.path;
+                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+                Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+                System.Diagnostics.Process.Start(fileName);
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+
+            
+        }
+
         #endregion
     }
 }
