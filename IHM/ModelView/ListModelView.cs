@@ -403,25 +403,30 @@ namespace IHM.ModelView
             string nomRechercher = Nom;
 
           Results =   new ObservableCollection<Files>();
-
+            bool trouve = false;
             //List<Files> results = new List<Files>();
             foreach (Files item in DgFiles)
             {
 
                 if (item.Nom.Contains(nomRechercher))
                 {
+                    trouve = true;
                     Results.Add(item);
                     Console.WriteLine(Results);
                     DgFiles = Results;
+                  
                 }
-                else
-                {
 
-                    MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
-                }
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
          
+             
 
+              
+           
         }
         #endregion
     }
