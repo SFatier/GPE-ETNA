@@ -4,6 +4,7 @@ using IHM.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -16,13 +17,14 @@ namespace IHM.ModelView
 {
     public class AddProjectModelView : ObservableObject, IPageViewModel
     {
-        public string Name => throw new NotImplementedException();
+        ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
+        //public string Name => throw new NotImplementedException();
         public ICommand  Save{ get; set; }
         
         public AddProjectModelView()
         {
             LoadAction();
-            lstUser = Singleton.GetInstance().GetAllUtilisateur();
+            lstUser = Singleton.GetInstance().GetAllUtilisateur().Where(user => user.Role != "Admin").Select(u => u.Login).ToList() ;
         }
 
         #region [Binding]
@@ -54,8 +56,8 @@ namespace IHM.ModelView
             }
         }
 
-        private List<Utilisateur> _lstUser;
-        public List<Utilisateur> lstUser
+        private List<string> _lstUser;
+        public List<string> lstUser
         {
             get { return _lstUser; }
             set
@@ -68,17 +70,19 @@ namespace IHM.ModelView
             }
         }
 
-        private List<Utilisateur> test;
-        public List<Utilisateur> Test
+        public ObservableCollection<string> SelectedUsers
         {
-            get { return test; }
-            set
+            get
             {
-                if (!string.Equals(this.test, value))
-                {
-                    this.test = value;
-                    RaisePropertyChanged(nameof(Test));
-                }
+                return _selectedUsers;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion
@@ -93,9 +97,10 @@ namespace IHM.ModelView
                 p.Nom = NomProjet;
                 p.Description = DescriptionProjet;
                 p.LstFiles = new List<Files>();
-                p.LstUser = Test;
+                p.LstUser = new List<Utilisateur>();
+                p.LstUser = GetUserProject();               
                 Singleton.GetInstance().addProject(p);
-
+            
                 #region [Ecriture de l'utilisateur dans le fichier .JSON]
                 try
                 {
@@ -125,5 +130,25 @@ namespace IHM.ModelView
         {
             Save = new RelayCommand(ActionAddProject);
         }
+
+        private List<Utilisateur> GetUserProject()
+        {
+            List<Utilisateur> lst = new List<Utilisateur>();
+            if (SelectedUsers != null)
+            {
+                List<Utilisateur> lstUtilisateur = Singleton.GetInstance().GetAllUtilisateur();
+
+                foreach (var item in SelectedUsers)
+                {
+                    Utilisateur u = lstUtilisateur.FirstOrDefault(user => user.Login == item);
+                    if (u != null)
+                    {
+                        lst.Add(u);
+                    }
+                }
+            }
+            return lst;
+        }
+        
     }
 }

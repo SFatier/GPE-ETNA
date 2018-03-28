@@ -72,10 +72,12 @@ namespace IHM.ModelView
         {
             var projet = LstProjet.FirstOrDefault(n => n.Nom.Equals(nomProjet));
             lstPChecked.Add(projet); //liste des projets cochés
-            
+
+            DoShare(projet, file);
             projet.LstFiles.Add(file);
 
             UpdateProject();
+
         }
 
         private void UpdateProject()
@@ -85,7 +87,17 @@ namespace IHM.ModelView
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
             }
+        }
 
+        /**
+        * Partage le fichier entre le chef de projet et les utilisateurs
+        * */
+        private void DoShare(Projet _projet, Files _file)
+        {
+            foreach (Utilisateur _utilisateur in _projet.LstUser)
+            {
+                Singleton.GetInstance().GetDBB().SharingFile(_file, _utilisateur);
+            }
         }
 
         public void LoadAction()

@@ -28,13 +28,14 @@ namespace IHM.ModelView
         public ICommand CreateFolder { get; set; }
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
-        public ICommand recherche { get; set; } //nom de ton binding
-
+        public ICommand Recherche { get; set; } //nom de ton binding
+        public string Mot => "Recherche";
         //constructeur
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
-
+            
+            //dgFiles = new ObservableCollection<Files>();
             LoadProject();
             LoadIcon();
             LoadAction();
@@ -47,7 +48,13 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
+            Recherche = new RelayCommand(ActionRecherche);
+
+
+
         }
+
+       
 
         private void LoadIcon()
         {
@@ -72,7 +79,7 @@ namespace IHM.ModelView
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
                 }
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 items = new List<Projet>();
             }
@@ -93,6 +100,19 @@ namespace IHM.ModelView
                 }
             }
         }
+        private ObservableCollection<Files> _Results;
+        public ObservableCollection<Files> Results
+        {
+            get { return this._Results; }
+            set
+            {
+                if (!string.Equals(this._Results, value))
+                {
+                    this._Results = value;
+                    RaisePropertyChanged(nameof(Results));
+                }
+            }
+        }
 
         private Files _lstFiles;
         public Files lstFiles
@@ -104,6 +124,19 @@ namespace IHM.ModelView
                 {
                     this._lstFiles = value;
                     RaisePropertyChanged(nameof(lstFiles));
+                }
+            }
+        }
+        private string _Nom;
+        public string Nom
+        {
+            get { return this._Nom; }
+            set
+            {
+                if (!string.Equals(this._Nom, value))
+                {
+                    this._Nom = value;
+                    RaisePropertyChanged(nameof(Nom));
                 }
             }
         }
@@ -333,6 +366,7 @@ namespace IHM.ModelView
          * Reload Grid
          * */
         private void ActionReloadDataGrid(object parameter)
+
         {
             try
             {
@@ -362,6 +396,32 @@ namespace IHM.ModelView
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
 
             }
+        }
+
+        private void ActionRecherche(object par)
+        {
+            string nomRechercher = Nom;
+
+          Results =   new ObservableCollection<Files>();
+
+            //List<Files> results = new List<Files>();
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.Nom.Contains(nomRechercher))
+                {
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+                }
+                else
+                {
+
+                    MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+                }
+            }
+         
+
         }
         #endregion
     }

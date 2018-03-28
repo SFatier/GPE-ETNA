@@ -24,6 +24,7 @@ namespace IHM.ModelView
             LoadAction();
             LoadUtilisateur();            
             LstRole = LoadRole();
+            Role = "Sélectionnez un rôle...";
         }
 
         #region [Binding]
@@ -103,33 +104,40 @@ namespace IHM.ModelView
         public void ActionInscription(object parameter)
         {
             //Enregistrement de l'utilisateur 
-            Utilisateur Nouvelle_Utilisateur = new Utilisateur();
-            Nouvelle_Utilisateur.Login = Login;
-            Nouvelle_Utilisateur.MDP = Mdp;
-            Nouvelle_Utilisateur.Email = Email;
-            Nouvelle_Utilisateur.Role = Role;
-            Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
-            Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
-                        
-             #region [Ecriture de l'utilisateur dans le fichier .JSON]
-            try
+            if (Login != "" && Email != "" && Role != "")
             {
-                string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
-                using (StreamWriter file = File.CreateText(@test))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error :\" " + ex.Message);
-            }
-            #endregion
+                Utilisateur Nouvelle_Utilisateur = new Utilisateur();
+                Nouvelle_Utilisateur.Login = Login;
+                Nouvelle_Utilisateur.MDP = Mdp;
+                Nouvelle_Utilisateur.Email = Email;
+                Nouvelle_Utilisateur.Role = Role;
+                Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
+                Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
 
-            HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
-            HMV.IsConnect = "Se deconnecter";
-            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+                #region [Ecriture de l'utilisateur dans le fichier .JSON]
+                try
+                {
+                    string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                    using (StreamWriter file = File.CreateText(@test))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error :\" " + ex.Message);
+                }
+                #endregion
+
+                HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
+                HMV.IsConnect = "Se deconnecter";
+                Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+            }
+            else
+            {
+                MessageBox.Show("Veuillez remplir tous les champs obligatoires.");
+            }
         }
 
         public void LoadAction()
@@ -149,7 +157,7 @@ namespace IHM.ModelView
                     items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 items = new List<Utilisateur>();
             }
@@ -159,6 +167,7 @@ namespace IHM.ModelView
         private List<string> LoadRole()
         {
             List<string> lst = new List<string>();
+            lst.Add("Sélectionnez un rôle...");
             lst.Add("Administration");
             lst.Add("Utilisateur GED");
             lst.Add("Gestionnaire de cloud");

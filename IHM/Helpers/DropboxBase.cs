@@ -1,5 +1,6 @@
 ﻿using Dropbox.Api;
 using Dropbox.Api.Files;
+using Dropbox.Api.Sharing;
 using IHM.Helpers;
 using IHM.Model;
 using IHM.ModelView;
@@ -155,7 +156,7 @@ namespace GPE
                 var result = folder.Result;
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -183,7 +184,7 @@ namespace GPE
                 var result = folders.Result;
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return false;
             }
@@ -198,11 +199,11 @@ namespace GPE
         {
             try
             {
-                 var folders = DBClient.Files.DeleteAsync(path);
+                var folders = DBClient.Files.DeleteAsync(path);
                 var result = folders.Result;
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -227,7 +228,7 @@ namespace GPE
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return false;
             }
@@ -250,7 +251,7 @@ namespace GPE
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return false;
             }
@@ -305,7 +306,24 @@ namespace GPE
             return lstFiles;
         }
 
+        /**
+         * Demande a consulté le fichier
+         * */
+        public bool SharingFile (Files fichier, Utilisateur utilisateur)
+        {
+            try
+            {
+                var members = new[] { new MemberSelector.Email(utilisateur.Email) };
+                DBClient.Sharing.AddFileMemberAsync(fichier.path, members);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         #endregion
+
         #region Validation Methods  
         /// <summary>  
         /// Validation method to verify that AppKey and AppSecret is not blank.  

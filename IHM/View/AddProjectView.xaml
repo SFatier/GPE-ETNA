@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IHM.View"
+             xmlns:ff="clr-namespace:IHM.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
@@ -25,15 +26,9 @@
         <TextBox Grid.Row="1" Grid.Column="1" AcceptsReturn="True" Margin="24,126,65,-198" Text="{Binding DescriptionProjet, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150"/>
 
         <Label Grid.Row="1" Grid.Column="0" Margin="189,307,0,-307" Content="Team :"/>
-        <ListBox Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="24,307,0,-332" Grid.Row="1" VerticalAlignment="Top" Width="563" ItemsSource="{Binding lstUser}" SelectionMode="Multiple" SelectedItem="{Binding Test}">
-            <ListBox.ItemTemplate >
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" >
-                        <Label Content="{Binding Login}" VerticalAlignment="Center" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <!--<ListBox Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="24,307,0,-332" Grid.Row="1" VerticalAlignment="Top" Width="563" ItemsSource="{Binding lstUser}" SelectionMode="Extended"
+                 ff:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedUsers}">
+        </ListBox>-->
 
         <Button Content="Enregistrer" Command="{Binding Save}" Grid.Column="1" Margin="473,481,65,-445" Grid.Row="1"/>
 

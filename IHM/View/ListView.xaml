@@ -19,12 +19,21 @@
 
         <!--Row 3-->
         <DockPanel HorizontalAlignment="Left" Height="760" LastChildFill="False" Grid.Row="1" VerticalAlignment="Top"  >
-            <Border DockPanel.Dock="Left" BorderBrush="White">
-                <StackPanel Margin="0,1,0,-1" Width="235" Background="#FF4551CB">
-                    <Label Content="Label" Margin="3,0,0,0"/>
-                </StackPanel>
-            </Border>
-            <DataGrid Height="760" VerticalAlignment="Top" Width="762" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedItem="{Binding lstFiles}" ItemBindingGroup="{Binding lstFiles}" >
+            <Grid Width="233" Background="CadetBlue" Margin="0,0,0,7">
+
+
+
+                <TextBox  x:Name="Filter"  HorizontalAlignment="Left" Height="23" Margin="6,46,0,0" Text="{Binding Nom}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" />
+
+
+
+                <Button x:Name="button1" Content="Recherche" HorizontalAlignment="Left" Margin="137,43,0,0" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.133,0.45" Height="26"  Command="{Binding Recherche}"/>
+                <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+
+
+
+            </Grid>
+            <DataGrid Height="759" VerticalAlignment="Top" Width="767" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedItem="{Binding lstFiles}" ItemBindingGroup="{Binding lstFiles}" Margin="0,1,0,0" >
                 <DataGrid.Columns >
                     <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
