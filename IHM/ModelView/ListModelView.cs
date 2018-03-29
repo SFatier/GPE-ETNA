@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Globalization;
+
 namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
@@ -29,7 +33,10 @@ namespace IHM.ModelView
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
         public ICommand Recherche { get; set; } //nom de ton binding
+        public ICommand RechercheDate { get; set; }
         public string Mot => "Recherche";
+   
+
         //constructeur
         public ListModelView()
         {
@@ -49,12 +56,12 @@ namespace IHM.ModelView
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
             Recherche = new RelayCommand(ActionRecherche);
-
+            RechercheDate = new RelayCommand(ActionRechercheDate);
 
 
         }
 
-       
+        
 
         private void LoadIcon()
         {
@@ -127,6 +134,20 @@ namespace IHM.ModelView
                 }
             }
         }
+        private string _Date;
+        public string Date
+        {
+            get { return this._Date; }
+            set
+            {
+                if (!string.Equals(this._Date, value))
+                {
+                    this._Date = value;
+                    RaisePropertyChanged(nameof(Date));
+                }
+            }
+        }
+
         private string _Nom;
         public string Nom
         {
@@ -240,6 +261,10 @@ namespace IHM.ModelView
         }
 
         private string _BtnDownload;
+        private string Title;
+        private DateTime value;
+        private object datePickDebut;
+
         public string BtnDownload
         {
             get { return this._BtnDownload; }
@@ -252,6 +277,8 @@ namespace IHM.ModelView
                 }
             }
         }
+
+        public object myDatePicker { get; private set; }
 
         #endregion
 
@@ -397,14 +424,14 @@ namespace IHM.ModelView
 
             }
         }
-
+        // search Files
         private void ActionRecherche(object par)
         {
             string nomRechercher = Nom;
 
           Results =   new ObservableCollection<Files>();
             bool trouve = false;
-            //List<Files> results = new List<Files>();
+           
             foreach (Files item in DgFiles)
             {
 
@@ -421,13 +448,44 @@ namespace IHM.ModelView
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
-            }
-         
-             
-
-              
+            }     
            
         }
-        #endregion
-    }
+        private void ActionRechercheDate(object obj)
+        {
+            string rechercheDate = this.Date;
+            char[] delimiters = new char[] { '/', ' ' };
+            string[] words = rechercheDate.Split(delimiters);
+            int month = int.Parse( words[0]);
+            int day = int.Parse(words[1]);
+            int year = int.Parse(words[2]);
+
+            Results = new ObservableCollection<Files>();
+            bool trouve = false;
+
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.DateDeCreation.Year==year && item.DateDeCreation.Month==month && item.DateDeCreation.Day == day)
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("La date séléctioné  n’existe pas");
+            }
+
+        }
+        
+
 }
+
+}
+        #endregion
+    

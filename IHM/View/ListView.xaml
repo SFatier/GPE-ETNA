@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IHM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1000">
+    d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -30,6 +30,17 @@
                 <Button x:Name="button1" Content="Recherche" HorizontalAlignment="Left" Margin="137,43,0,0" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.133,0.45" Height="26"  Command="{Binding Recherche}"/>
                 <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 
+
+
+                <Button x:Name="button" Content="Recherche" HorizontalAlignment="Left" Margin="129,150,0,0" VerticalAlignment="Top" Width="98" Height="30" Command="{Binding RechercheDate}" RenderTransformOrigin="1.618,-5.077"/>
+
+
+
+                <TextBlock
+                Grid.Column="0"
+                Text="Date de cration" Margin="12,81,84,647" FontSize="16" />
+                <DatePicker SelectedDate="{Binding Date, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Margin="8,114,0,0" VerticalAlignment="Top" Width="203" FontSize="16" Cursor="Hand" Height="28"/>
+               
 
 
             </Grid>
