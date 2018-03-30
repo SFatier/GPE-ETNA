@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Dropbox.Api.Common;
+using Dropbox.Api.Files;
 using Microsoft.Win32;
 namespace IHM.ModelView
 {
@@ -29,6 +31,9 @@ namespace IHM.ModelView
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
         public ICommand recherche { get; set; } //nom de ton binding
+        public ICommand Download { get; set; }
+        public ICommand Open { get; set; }
+        
 
         //constructeur
         public ListModelView()
@@ -47,6 +52,8 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
+            Download = new RelayCommand(ActionDownload);
+            Open = new RelayCommand(ActionOpen);
         }
 
         private void LoadIcon()
@@ -104,6 +111,19 @@ namespace IHM.ModelView
                 {
                     this._lstFiles = value;
                     RaisePropertyChanged(nameof(lstFiles));
+                }
+            }
+        }
+        private string _currentPath;
+        public string currentPath
+        {
+            get { return this._currentPath; }
+            set
+            {
+                if (!string.Equals(this._currentPath, value))
+                {
+                    this._currentPath = value;
+                    RaisePropertyChanged(nameof(currentPath));
                 }
             }
         }
@@ -342,7 +362,9 @@ namespace IHM.ModelView
                 MessageBox.Show("Error:\"" + ex.Message);
             }
         }
-
+        /**
+         * Upload File
+         * */
         private void ActionUpload(object paramater)
         {
 
@@ -360,9 +382,63 @@ namespace IHM.ModelView
             {
                 SourceFilePath = openFileDialog.FileName;
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
+                ActionReloadDataGrid(paramater);
 
             }
         }
+        /**
+         * Download File
+         * */
+        private void ActionDownload(object paramater)
+        {
+            
+            if (lstFiles != null)
+            {
+                
+                string DropboxFolderPath = lstFiles.path;
+                string DropboxFileName =   lstFiles.Nom;
+                string DownloadFolderPath = "";
+                string DownloadFileName = "";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = lstFiles.Nom;
+
+                if ( saveFileDialog.ShowDialog ()== true)
+                {
+                    string test = lstFiles.path;
+                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName); 
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+      
+                }
+             
+                   
+                }
+            
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+        }
+
+        private void ActionOpen(object paramater)
+        {
+            if (lstFiles != null)
+            {
+
+                string DropboxFileName = lstFiles.Nom;
+                string DropboxFolderPath = lstFiles.path;
+                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+                Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+                System.Diagnostics.Process.Start(fileName);
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+
+            
+        }
+
         #endregion
     }
 }

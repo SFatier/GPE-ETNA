@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
 namespace GPE
 {
     class DropBoxBase
@@ -242,12 +241,16 @@ namespace GPE
         /// <param name="DownloadFolderPath"> Local folder path where we want to download file</param>  
         /// <param name="DownloadFileName">File name to download Dropbox files in local drive</param>  
         /// <returns></returns>  
+       
         public bool Download(string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName)
         {
             try
             {
-                var response = DBClient.Files.DownloadAsync(DropboxFolderPath + "/" + DropboxFileName);
-                var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
+                var response = DBClient.Files.DownloadAsync(DropboxFolderPath + DropboxFileName);
+                        using (var fileStream = File.Create(DownloadFolderPath))
+                        {
+                              response.Result.GetContentAsStreamAsync().Result.CopyTo(fileStream); //Added to wait for the result from Async method  
+                        }
 
                 return true;
             }
@@ -257,7 +260,7 @@ namespace GPE
             }
 
         }
-
+        
         /**
          * Récupère la liste des fichiers et dossiers du compte dropbox connecté
          * */

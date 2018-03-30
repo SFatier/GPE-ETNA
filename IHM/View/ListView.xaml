@@ -65,7 +65,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40">
+        <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Download}">
             <Image Source="{Binding BtnDownload}"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -105,7 +105,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
+        <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Open}">
             <Image Source="{Binding BtnOpen}" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
