@@ -14,7 +14,7 @@
 
         <Label Margin="14,10,10,10">Gestion des Projets </Label>
         <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}"> </Button>
-        
+        <Button Content="Ajouter Utilisateurs" HorizontalAlignment="Left" Margin="700,14,0,0" Grid.Row="1" VerticalAlignment="Top" Width="118" Height="24" Command="{Binding AddUser}"/>
         <ItemsControl
             Name="ItemsList"
             ItemsSource="{Binding LstProject}" Background="WhiteSmoke"  Grid.Row="2" >

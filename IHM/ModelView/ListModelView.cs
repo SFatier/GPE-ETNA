@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Globalization;
+
 namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
@@ -28,13 +32,17 @@ namespace IHM.ModelView
         public ICommand CreateFolder { get; set; }
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
-        public ICommand recherche { get; set; } //nom de ton binding
+        public ICommand Recherche { get; set; } //nom de ton binding
+        public ICommand RechercheDate { get; set; }
+        public string Mot => "Recherche";
+   
 
         //constructeur
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
-
+            
+            //dgFiles = new ObservableCollection<Files>();
             LoadProject();
             LoadIcon();
             LoadAction();
@@ -47,7 +55,13 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
+            Recherche = new RelayCommand(ActionRecherche);
+            RechercheDate = new RelayCommand(ActionRechercheDate);
+
+
         }
+
+        
 
         private void LoadIcon()
         {
@@ -93,6 +107,19 @@ namespace IHM.ModelView
                 }
             }
         }
+        private ObservableCollection<Files> _Results;
+        public ObservableCollection<Files> Results
+        {
+            get { return this._Results; }
+            set
+            {
+                if (!string.Equals(this._Results, value))
+                {
+                    this._Results = value;
+                    RaisePropertyChanged(nameof(Results));
+                }
+            }
+        }
 
         private Files _lstFiles;
         public Files lstFiles
@@ -104,6 +131,33 @@ namespace IHM.ModelView
                 {
                     this._lstFiles = value;
                     RaisePropertyChanged(nameof(lstFiles));
+                }
+            }
+        }
+        private string _Date;
+        public string Date
+        {
+            get { return this._Date; }
+            set
+            {
+                if (!string.Equals(this._Date, value))
+                {
+                    this._Date = value;
+                    RaisePropertyChanged(nameof(Date));
+                }
+            }
+        }
+
+        private string _Nom;
+        public string Nom
+        {
+            get { return this._Nom; }
+            set
+            {
+                if (!string.Equals(this._Nom, value))
+                {
+                    this._Nom = value;
+                    RaisePropertyChanged(nameof(Nom));
                 }
             }
         }
@@ -207,6 +261,10 @@ namespace IHM.ModelView
         }
 
         private string _BtnDownload;
+        private string Title;
+        private DateTime value;
+        private object datePickDebut;
+
         public string BtnDownload
         {
             get { return this._BtnDownload; }
@@ -219,6 +277,8 @@ namespace IHM.ModelView
                 }
             }
         }
+
+        public object myDatePicker { get; private set; }
 
         #endregion
 
@@ -333,6 +393,7 @@ namespace IHM.ModelView
          * Reload Grid
          * */
         private void ActionReloadDataGrid(object parameter)
+
         {
             try
             {
@@ -363,6 +424,68 @@ namespace IHM.ModelView
 
             }
         }
-        #endregion
-    }
+        // search Files
+        private void ActionRecherche(object par)
+        {
+            string nomRechercher = Nom;
+
+          Results =   new ObservableCollection<Files>();
+            bool trouve = false;
+           
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.Nom.Contains(nomRechercher))
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+                  
+                }
+
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+            }     
+           
+        }
+        private void ActionRechercheDate(object obj)
+        {
+            string rechercheDate = this.Date;
+            char[] delimiters = new char[] { '/', ' ' };
+            string[] words = rechercheDate.Split(delimiters);
+            int month = int.Parse( words[0]);
+            int day = int.Parse(words[1]);
+            int year = int.Parse(words[2]);
+
+            Results = new ObservableCollection<Files>();
+            bool trouve = false;
+
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.DateDeCreation.Year==year && item.DateDeCreation.Month==month && item.DateDeCreation.Day == day)
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("La date séléctioné  n’existe pas");
+            }
+
+        }
+        
+
 }
+
+}
+        #endregion
+    
