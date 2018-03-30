@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace IHM.ModelView
 {
@@ -47,6 +48,10 @@ namespace IHM.ModelView
         #endregion
 
         #region [Methods]
+
+        /**
+         * Récupère tous les projets dans la popUp
+         * */
         private void LoadProject()
         {
             if (file != null) { 
@@ -54,9 +59,14 @@ namespace IHM.ModelView
                 List<Projet> l = new List<Projet>();
                 foreach (Projet p in lst)
                 {
-                    if (p.LstFiles.Contains(file))
+                    Files isFIle = p.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
+                    if (isFIle != null)
                     {
                         p.Ischecked = true;
+                    }
+                    else
+                    {
+                        p.Ischecked = false;
                     }
                     l.Add(p);
                 }
@@ -68,18 +78,35 @@ namespace IHM.ModelView
             }
         }
 
+        /**
+         * Ajoute un fichier à un ou des projets
+         * Partage le fichier avec les utilisateurs liés au(x) projet(s)
+         * */
         public void setLstPChecked( string nomProjet)
         {
-            var projet = LstProjet.FirstOrDefault(n => n.Nom.Equals(nomProjet));
+    
+            var projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(n => n.Nom.Equals(nomProjet));
             lstPChecked.Add(projet); //liste des projets cochés
 
-            DoShare(projet, file);
-            projet.LstFiles.Add(file);
-
-            UpdateProject();
-
+            if (app.IsActive)
+            {
+                Files isFIle = projet.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
+                if (isFIle == null)
+                { 
+                    DoShare(projet, file);
+                    projet.LstFiles.Add(file);
+                    UpdateProject();
+                }
+                else
+                {
+                    MessageBox.Show("Le projet possède déjà ce fichier.");
+                }
+            }
         }
 
+        /**
+         * Mets a jour le projet dans le fichier JSON
+         * */
         private void UpdateProject()
         {
             using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
@@ -104,6 +131,7 @@ namespace IHM.ModelView
         {
             //
         }
+        
         #endregion
     }
 }
