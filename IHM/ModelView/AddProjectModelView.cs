@@ -18,7 +18,7 @@ namespace IHM.ModelView
     public class AddProjectModelView : ObservableObject, IPageViewModel
     {
         ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
-        public string Name => throw new NotImplementedException();
+        //public string Name => throw new NotImplementedException();
         public ICommand  Save{ get; set; }
         
         public AddProjectModelView()
@@ -75,6 +75,14 @@ namespace IHM.ModelView
             get
             {
                 return _selectedUsers;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion

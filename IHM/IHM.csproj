@@ -61,10 +61,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\DropboxBase.cs" />
+    <Compile Include="Helpers\IListItemConverter.cs" />
+    <Compile Include="Helpers\MultiSelectorBehaviours.cs" />
     <Compile Include="Helpers\Singleton.cs" />
+    <Compile Include="Helpers\TwoListSynchronizer.cs" />
     <Compile Include="IPageViewModel.cs" />
     <Compile Include="ModelView\AddFolderModelView.cs" />
     <Compile Include="ModelView\AddProjectModelView.cs" />
+    <Compile Include="ModelView\AddUserModelView.cs" />
     <Compile Include="ModelView\AdminModelView.cs" />
     <Compile Include="ModelView\HomeModelView.cs" />
     <Compile Include="ModelView\ListModelView.cs" />
@@ -124,6 +128,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\AddUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AdminView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -172,10 +180,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="projets.json" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="utilisateur.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

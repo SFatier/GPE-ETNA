@@ -15,9 +15,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Dropbox.Api.Common;
-using Dropbox.Api.Files;
 using Microsoft.Win32;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Globalization;
+
 namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
@@ -30,16 +32,17 @@ namespace IHM.ModelView
         public ICommand CreateFolder { get; set; }
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
-        public ICommand recherche { get; set; } //nom de ton binding
-        public ICommand Download { get; set; }
-        public ICommand Open { get; set; }
-        
+        public ICommand Recherche { get; set; } //nom de ton binding
+        public ICommand RechercheDate { get; set; }
+        public string Mot => "Recherche";
+   
 
         //constructeur
         public ListModelView()
         {
             _DgFiles = new ObservableCollection<Files>();
-
+            
+            //dgFiles = new ObservableCollection<Files>();
             LoadProject();
             LoadIcon();
             LoadAction();
@@ -52,9 +55,13 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
-            Download = new RelayCommand(ActionDownload);
-            Open = new RelayCommand(ActionOpen);
+            Recherche = new RelayCommand(ActionRecherche);
+            RechercheDate = new RelayCommand(ActionRechercheDate);
+
+
         }
+
+        
 
         private void LoadIcon()
         {
@@ -100,6 +107,19 @@ namespace IHM.ModelView
                 }
             }
         }
+        private ObservableCollection<Files> _Results;
+        public ObservableCollection<Files> Results
+        {
+            get { return this._Results; }
+            set
+            {
+                if (!string.Equals(this._Results, value))
+                {
+                    this._Results = value;
+                    RaisePropertyChanged(nameof(Results));
+                }
+            }
+        }
 
         private Files _lstFiles;
         public Files lstFiles
@@ -114,16 +134,30 @@ namespace IHM.ModelView
                 }
             }
         }
-        private string _currentPath;
-        public string currentPath
+        private string _Date;
+        public string Date
         {
-            get { return this._currentPath; }
+            get { return this._Date; }
             set
             {
-                if (!string.Equals(this._currentPath, value))
+                if (!string.Equals(this._Date, value))
                 {
-                    this._currentPath = value;
-                    RaisePropertyChanged(nameof(currentPath));
+                    this._Date = value;
+                    RaisePropertyChanged(nameof(Date));
+                }
+            }
+        }
+
+        private string _Nom;
+        public string Nom
+        {
+            get { return this._Nom; }
+            set
+            {
+                if (!string.Equals(this._Nom, value))
+                {
+                    this._Nom = value;
+                    RaisePropertyChanged(nameof(Nom));
                 }
             }
         }
@@ -227,6 +261,10 @@ namespace IHM.ModelView
         }
 
         private string _BtnDownload;
+        private string Title;
+        private DateTime value;
+        private object datePickDebut;
+
         public string BtnDownload
         {
             get { return this._BtnDownload; }
@@ -239,6 +277,8 @@ namespace IHM.ModelView
                 }
             }
         }
+
+        public object myDatePicker { get; private set; }
 
         #endregion
 
@@ -353,6 +393,7 @@ namespace IHM.ModelView
          * Reload Grid
          * */
         private void ActionReloadDataGrid(object parameter)
+
         {
             try
             {
@@ -362,9 +403,7 @@ namespace IHM.ModelView
                 MessageBox.Show("Error:\"" + ex.Message);
             }
         }
-        /**
-         * Upload File
-         * */
+
         private void ActionUpload(object paramater)
         {
 
@@ -382,63 +421,71 @@ namespace IHM.ModelView
             {
                 SourceFilePath = openFileDialog.FileName;
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
-                ActionReloadDataGrid(paramater);
 
             }
         }
-        /**
-         * Download File
-         * */
-        private void ActionDownload(object paramater)
+        // search Files
+        private void ActionRecherche(object par)
         {
-            
-            if (lstFiles != null)
-            {
-                
-                string DropboxFolderPath = lstFiles.path;
-                string DropboxFileName =   lstFiles.Nom;
-                string DownloadFolderPath = "";
-                string DownloadFileName = "";
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = lstFiles.Nom;
+            string nomRechercher = Nom;
 
-                if ( saveFileDialog.ShowDialog ()== true)
+          Results =   new ObservableCollection<Files>();
+            bool trouve = false;
+           
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.Nom.Contains(nomRechercher))
                 {
-                    string test = lstFiles.path;
-                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
-                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName); 
-                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
-      
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+                  
                 }
-             
-                   
-                }
-            
-            else
-            {
-                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
-            }
-        }
 
-        private void ActionOpen(object paramater)
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+            }     
+           
+        }
+        private void ActionRechercheDate(object obj)
         {
-            if (lstFiles != null)
+            string rechercheDate = this.Date;
+            char[] delimiters = new char[] { '/', ' ' };
+            string[] words = rechercheDate.Split(delimiters);
+            int month = int.Parse( words[0]);
+            int day = int.Parse(words[1]);
+            int year = int.Parse(words[2]);
+
+            Results = new ObservableCollection<Files>();
+            bool trouve = false;
+
+            foreach (Files item in DgFiles)
             {
 
-                string DropboxFileName = lstFiles.Nom;
-                string DropboxFolderPath = lstFiles.path;
-                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
-                Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
-                System.Diagnostics.Process.Start(fileName);
+                if (item.DateDeCreation.Year==year && item.DateDeCreation.Month==month && item.DateDeCreation.Day == day)
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
             }
-            else
+            if (trouve == false)
             {
-                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+                MessageBox.Show("La date séléctioné  n’existe pas");
             }
 
-            
         }
+        
 
-        #endregion
-    }
 }
+
+}
+        #endregion
+    
