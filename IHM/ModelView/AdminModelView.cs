@@ -20,20 +20,16 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"]; //a modifier par rapport à votre ordinateur
 
         public ICommand AddProject { get; set; }
-        public ICommand AddUser { get; set; }
 
         #region [Constructor]
         public AdminModelView()
         {
-            LstProject = Singleton.GetInstance().GetAllProject();
-            
+            LstProject = Singleton.GetInstance().GetAllProject(); ;
             LoadAction();
         }
-
         #endregion
 
-        #region [Binding] 
-
+        #region [Binding]        
         private List<Projet> lstProject;
         public List<Projet> LstProject
         {
@@ -73,12 +69,6 @@ namespace IHM.ModelView
         public void LoadAction()
         {
             AddProject = new RelayCommand(ActionAddProject);
-            AddUser = new RelayCommand(ActionAddUser);
-        }
-
-        private void ActionAddUser(object parameter)
-        {
-            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AddUserModelView();
         }
     }
 }
