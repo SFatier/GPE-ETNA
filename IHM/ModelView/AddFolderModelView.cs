@@ -36,15 +36,7 @@ namespace IHM.ModelView
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
+        public string Name => throw new NotImplementedException();
         #endregion
 
         private void ActionCreateFolder(object p)

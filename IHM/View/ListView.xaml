@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IHM.View"
              mc:Ignorable="d" 
-    d:DesignHeight="800" d:DesignWidth="1000">
+             d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -20,31 +20,16 @@
         <!--Row 3-->
         <DockPanel HorizontalAlignment="Left" Height="760" LastChildFill="False" Grid.Row="1" VerticalAlignment="Top"  >
             <Grid Width="233" Background="CadetBlue" Margin="0,0,0,7">
-
-
-
                 <TextBox  x:Name="Filter"  HorizontalAlignment="Left" Height="23" Margin="6,46,0,0" Text="{Binding Nom}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" />
-
-
-
                 <Button x:Name="button1" Content="Recherche" HorizontalAlignment="Left" Margin="137,43,0,0" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.133,0.45" Height="26"  Command="{Binding Recherche}"/>
                 <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-
-
-
                 <Button x:Name="button" Content="Recherche" HorizontalAlignment="Left" Margin="129,150,0,0" VerticalAlignment="Top" Width="98" Height="30" Command="{Binding RechercheDate}" RenderTransformOrigin="1.618,-5.077"/>
-
-
-
                 <TextBlock
                 Grid.Column="0"
                 Text="Date de cration" Margin="12,81,84,647" FontSize="16" />
                 <DatePicker SelectedDate="{Binding Date, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Margin="8,114,0,0" VerticalAlignment="Top" Width="203" FontSize="16" Cursor="Hand" Height="28"/>
-               
-
-
             </Grid>
-            <DataGrid Height="759" VerticalAlignment="Top" Width="767" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedItem="{Binding lstFiles}" ItemBindingGroup="{Binding lstFiles}" Margin="0,1,0,0" >
+            <DataGrid Height="760" VerticalAlignment="Top" Width="762" ItemsSource="{Binding DgFiles}" Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedItem="{Binding lstFiles}" ItemBindingGroup="{Binding lstFiles}" >
                 <DataGrid.Columns >
                     <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -76,7 +61,7 @@
         </Button>
 
         <Button HorizontalAlignment="Left" Margin="314,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Upload}">
-            <Image Source="{Binding btnUpload}"/>
+            <Image Source="{Binding BtnUpload}"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
@@ -85,7 +70,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40">
+        <Button HorizontalAlignment="Left" Margin="394,0,0,0" VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Download}">
             <Image Source="{Binding BtnDownload}"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -125,7 +110,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40">
+        <Button  HorizontalAlignment="Left" Margin="714,0,0,0"  VerticalAlignment="Top" Width="75" Height="40" Command="{Binding Open}">
             <Image Source="{Binding BtnOpen}" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>

@@ -246,7 +246,7 @@ namespace GPE
         {
             try
             {
-                var response = DBClient.Files.DownloadAsync(DropboxFolderPath + "/" + DropboxFileName);
+                var response = DBClient.Files.DownloadAsync(DropboxFolderPath + DropboxFileName);
                 var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
 
                 return true;
