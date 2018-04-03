@@ -28,7 +28,10 @@ namespace IHM.ModelView
         public ICommand CreateFolder { get; set; }
         public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
-        public ICommand recherche { get; set; } //nom de ton binding
+        public ICommand Recherche { get; set; } 
+        public ICommand RechercheDate { get; set; }
+        public ICommand Download { get; set; }
+        public ICommand Open { get; set; }
 
         //constructeur
         public ListModelView()
@@ -47,6 +50,10 @@ namespace IHM.ModelView
             CreateFolder = new RelayCommand(ActionCreateFolder);
             ReloadDataGrid = new RelayCommand(ActionReloadDataGrid);
             Upload = new RelayCommand(ActionUpload);
+            Download = new RelayCommand(ActionDownload);
+            Open = new RelayCommand(ActionOpen);
+            Recherche = new RelayCommand(ActionRecherche);
+            RechercheDate = new RelayCommand(ActionRechercheDate);
         }
 
         private void LoadIcon()
@@ -80,6 +87,20 @@ namespace IHM.ModelView
         }
 
         #region [Binding]
+        private ObservableCollection<Files> _Results;
+        public ObservableCollection<Files> Results
+        {
+            get { return this._Results; }
+            set
+            {
+                if (!string.Equals(this._Results, value))
+                {
+                    this._Results = value;
+                    RaisePropertyChanged(nameof(Results));
+                }
+            }
+        }
+
         private ObservableCollection<Files> _DgFiles;
         public ObservableCollection<Files> DgFiles
         {
@@ -90,6 +111,20 @@ namespace IHM.ModelView
                 {
                     this._DgFiles = value;
                     RaisePropertyChanged(nameof(DgFiles));
+                }
+            }
+        }
+
+        private string _Date;
+        public string Date
+        {
+            get { return this._Date; }
+            set
+            {
+                if (!string.Equals(this._Date, value))
+                {
+                    this._Date = value;
+                    RaisePropertyChanged(nameof(Date));
                 }
             }
         }
@@ -216,6 +251,20 @@ namespace IHM.ModelView
                 {
                     this._BtnDownload = value;
                     RaisePropertyChanged(nameof(BtnDownload));
+                }
+            }
+        }
+
+        private string _Nom;
+        public string Nom
+        {
+            get { return this._Nom; }
+            set
+            {
+                if (!string.Equals(this._Nom, value))
+                {
+                    this._Nom = value;
+                    RaisePropertyChanged(nameof(Nom));
                 }
             }
         }
@@ -363,6 +412,119 @@ namespace IHM.ModelView
 
             }
         }
+
+        /**
+   * Download File
+   * */
+        private void ActionDownload(object paramater)
+        {
+
+            if (lstFiles != null)
+            {
+
+                string DropboxFolderPath = lstFiles.path;
+                string DropboxFileName = lstFiles.Nom;
+                string DownloadFolderPath = "";
+                string DownloadFileName = "";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = lstFiles.Nom;
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string test = lstFiles.path;
+                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+
+                }
+
+
+            }
+
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+        }
+
+        private void ActionOpen(object paramater)
+        {
+            if (lstFiles != null)
+            {
+
+                string DropboxFileName = lstFiles.Nom;
+                string DropboxFolderPath = lstFiles.path;
+                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+                Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+                System.Diagnostics.Process.Start(fileName);
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+
+
+        }
+
+        // search Files
+        private void ActionRecherche(object par)
+        {
+            string nomRechercher = Nom;
+
+            Results = new ObservableCollection<Files>();
+            bool trouve = false;
+
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.Nom.Contains(nomRechercher))
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+            }
+
+        }
+        private void ActionRechercheDate(object obj)
+        {
+            string rechercheDate = this.Date;
+            char[] delimiters = new char[] { '/', ' ' };
+            string[] words = rechercheDate.Split(delimiters);
+            int month = int.Parse(words[0]);
+            int day = int.Parse(words[1]);
+            int year = int.Parse(words[2]);
+
+            Results = new ObservableCollection<Files>();
+            bool trouve = false;
+
+            foreach (Files item in DgFiles)
+            {
+
+                if (item.DateDeCreation.Year == year && item.DateDeCreation.Month == month && item.DateDeCreation.Day == day)
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
+            }
+            if (trouve == false)
+            {
+                MessageBox.Show("La date séléctioné  n’existe pas");
+            }
+
+        }
+
         #endregion
     }
 }
