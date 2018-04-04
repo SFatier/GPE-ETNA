@@ -24,16 +24,13 @@
         <!--Menu-->
         <Button Content="Home" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" Command="{Binding BtnHome}"  BorderBrush="White" Background="White"/>
         <Button Content="Administration" Grid.Row="1" HorizontalAlignment="Left" Margin="68,10,0,0" VerticalAlignment="Top" Width="97" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="White" Background="White"></Button>
-        <Button Content="{Binding strDP}" Grid.Row="1" HorizontalAlignment="Left" Margin="168,10,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterDP}"  BorderBrush="White" Background="White"/>
-
-        <!--Recherche-->
-        <Button Content="o-" Grid.Row="1" HorizontalAlignment="Left" Margin="894,15,0,0" VerticalAlignment="Top" Width="74"/>
-        <TextBox HorizontalAlignment="Left" Grid.Row="1" Height="20" Margin="755,15,0,0" TextWrapping="Wrap" Text="Rechercher" VerticalAlignment="Top" Width="139"/>
+        <Button Content="Espace  perso&#xD;&#xA;" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="109" Grid.Row="1" Height="22" BorderBrush="White" Background="White" Command="{Binding PagePerso}"/>
+        <Button Content="gestion utilisateurs" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="109" Grid.Row="1" Height="22" BorderBrush="White" Background="White" Command="{Binding PageUser}" Grid.Column="1"/>
 
         <!--Row 2-->
         <ContentControl Content="{Binding CurrentContentViewModel}" Grid.Row="2" Grid.ColumnSpan="2"/>
         <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="40" Stroke="Black" VerticalAlignment="Top" Width="1000" Grid.ColumnSpan="2"/>
-        <Button Content="{Binding IsConnect}" HorizontalAlignment="Left" Margin="876,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown" Grid.ColumnSpan="2"/>
+        <Button Content="{Binding IsConnect}" HorizontalAlignment="Left" Margin="876,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown" Grid.ColumnSpan="2" Command="{Binding Disconnect}"/>
         <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="30" RenderTransformOrigin="-4.092,-0.5"/>
     </Grid>
 </UserControl>

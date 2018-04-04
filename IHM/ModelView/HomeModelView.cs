@@ -17,26 +17,26 @@ namespace IHM.ModelView
 {
     public class HomeModelView : ObservableObject, IPageViewModel
     {
+        #region [ Fields ]   
         private Utilisateur curentUtilisateur;
         private ListModelView lMVM = new ListModelView();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
-        private List<IPageViewModel> _contentViewModels;
-        private string strAppKey = "wvay6mx0i0a2gbo";
-        public string strAppSecret = "1qgfe6zpe62mqp3";
-        private string strAccessToken = string.Empty;
-        private string strAuthenticationURL = string.Empty;
+        private List<IPageViewModel> _contentViewModels;        
         private DropBoxBase DBB;
 
-        public ICommand ConnecterDP { get; set; }
         public ICommand PageAdmin { get; set; }
         public ICommand BtnHome { get; set; }
+        public ICommand PagePerso { get; set; }
+        public ICommand PageUser { get; set; }
+        public ICommand Disconnect { get; set; }
+        #endregion
 
+        #region [Constructor]
         public HomeModelView(Utilisateur u)
         {
             curentUtilisateur = u;
-
-            DBB = new DropBoxBase(strAppKey, "PTM_Centralized");
+            DBB = new DropBoxBase(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
 
             if (curentUtilisateur.Token != null)
@@ -50,77 +50,6 @@ namespace IHM.ModelView
 
             LoadAction();
             Singleton.GetInstance().SetHomeModelView(this);
-        }
-
-        #region Dropbox        
-        /**
-         * Ouvre une nouvelle fenêtre qui demande l'autorasition de se connecter à dropbox
-         * */
-        private void ActionConnecterDropbox(object parameter)
-        {
-            if (curentUtilisateur.Token == null)
-            {
-                try
-                {
-                    if (string.IsNullOrEmpty(strAppKey))
-                    {
-                        MessageBox.Show("Please enter valid App Key !");
-                        return;
-                    }
-                    if (DBB != null)
-                    {
-                        strAuthenticationURL = DBB.GeneratedAuthenticationURL();
-                        strAccessToken = DBB.GenerateAccessToken();
-                        var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => curentUtilisateur.Equals(user));
-                        if (uUpdate != null)
-                            uUpdate.Token = strAccessToken;
-                        UpdateUtilisateur();
-                        GetFiles();
-                    }
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Impossible d'autoriser l'application à se connecter à l'application");
-                }
-            }
-        }
-
-        /**
-         * Récupère les fichiers correspondant au dropbox connecté
-         * */
-        public void GetFiles()
-        {
-            strDP = "Dropbox connecté";
-            lMVM.DgFiles = DBB.getEntries(lMVM);
-        }
-
-        /**
-         * Met à jour l'utilisateur
-         * */
-        private void UpdateUtilisateur()
-        {
-            StreamWriter file;
-            using (file = File.CreateText(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-            }
-        }
-
-        /**
-         * Retourne la page Administration
-         * */
-        private void ActionPageAdmin(object parameter)
-        {
-            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-        }
-       
-        /**
-         * Retourne sur la page Home
-         * */
-        private void ActionPageHome(object parameter)
-        {
-            CurrentContentViewModel = lMVM;
         }
         #endregion
 
@@ -180,27 +109,53 @@ namespace IHM.ModelView
                 }
             }
         }
-
-        private string _strDP = " Connecter Droppbox";
-        public string strDP
-        {
-            get { return this._strDP; }
-            set
-            {
-                if (!string.Equals(this._strDP, value))
-                {
-                    this._strDP = value;
-                    RaisePropertyChanged(nameof(strDP));
-                }
-            }
-        }
         #endregion
 
+        #region [Actions]
         public void LoadAction()
-        {
-            ConnecterDP = new RelayCommand(ActionConnecterDropbox);
+        {       
             PageAdmin = new RelayCommand(ActionPageAdmin);
             BtnHome = new RelayCommand(ActionPageHome);
+            PagePerso = new RelayCommand(ActionPagePerso);
+            PageUser = new RelayCommand(ActionPageUtilisateurs);
+            Disconnect = new RelayCommand(ActionDisconnect);
         }
+        
+        public void GetFiles()
+        {
+            lMVM.DgFiles = DBB.getEntries(lMVM);
+        }
+
+        /**
+       * Retourne la page Administration
+       * */
+        private void ActionPageAdmin(object parameter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+        }
+
+        /**
+         * Retourne sur la page Home
+         * */
+        private void ActionPageHome(object parameter)
+        {
+            CurrentContentViewModel = lMVM;
+        }
+
+        private void ActionPagePerso(object paramter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new PersonalModelView();
+        }
+
+        private void ActionPageUtilisateurs(object paramter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new UserslModelView();
+        }
+
+         private void ActionDisconnect(object paramter)
+        {
+            Singleton.GetInstance().GetMainWindowViewModel().App.Close();
+        }
+        #endregion
     }
 }

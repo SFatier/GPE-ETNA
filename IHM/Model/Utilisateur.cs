@@ -9,11 +9,25 @@ namespace IHM.Model
 {
     public class Utilisateur : ObservableObject
     {
+        private string image;
         private string token;
         private string login;
         private string email;
         private string mdp;
         private string role;
+
+        public string Image
+        {
+            get { return this.image; }
+            set
+            {
+                if (!string.Equals(this.image, value))
+                {
+                    this.image = value;
+                    RaisePropertyChanged(nameof(Image));
+                }
+            }
+        }
 
         public string Login
         {
