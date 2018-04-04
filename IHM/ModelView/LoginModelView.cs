@@ -89,7 +89,6 @@ namespace IHM.ModelView
         }
 
         #region [Action]
-
         /**
          * Renvoie le mot de passe à l'utilisateur
          * */
@@ -108,6 +107,7 @@ namespace IHM.ModelView
             Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
             if (u != null)
             {
+                Singleton.GetInstance().SetUtilisateur(u);
                 HomeModelView HMV = new HomeModelView(u);
                 HMV.IsConnect = "Se deconnecter";
                 Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;

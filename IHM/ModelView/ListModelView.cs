@@ -15,12 +15,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
 namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  //a modifier par rapport à votre ordinateur
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  
         public string Name => "Liste des documents du cloud dropbox";
 
         public ICommand LinkProject { get; set; }
@@ -337,7 +336,7 @@ namespace IHM.ModelView
         {
             if (lstFiles != null)
             {
-                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer le film " + lstFiles.Nom + "?", "Infos", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer  " + lstFiles.Nom + "?", "Infos", MessageBoxButton.YesNo);
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
@@ -435,12 +434,8 @@ namespace IHM.ModelView
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
                     Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
-
                 }
-
-
             }
-
             else
             {
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");

@@ -27,6 +27,12 @@
         <DataTemplate DataType="{x:Type local1:AddProjectModelView}">
             <local:AddProjectView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:UserslModelView}">
+            <local:UsersView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:PersonalModelView}">
+            <local:PersonalView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>         
