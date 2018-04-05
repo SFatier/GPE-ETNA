@@ -1,6 +1,7 @@
 ﻿using IHM.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,14 @@ namespace IHM.Model
 {
     public class Utilisateur : ObservableObject
     {
-        private string image;
+        private string image = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
         private string token;
         private string login;
         private string email;
         private string mdp;
         private string role;
+        private List<Projet> lstProjet;
+        private List<Files> lstFiles;
 
         public string Image
         {
@@ -25,6 +28,31 @@ namespace IHM.Model
                 {
                     this.image = value;
                     RaisePropertyChanged(nameof(Image));
+                }
+            }
+        }
+        public List<Projet> LstProjet
+        {
+            get { return this.lstProjet; }
+            set
+            {
+                if (!string.Equals(this.lstProjet, value))
+                {
+                    this.lstProjet = value;
+                    RaisePropertyChanged(nameof(LstProjet));
+                }
+            }
+        }
+
+        public List<Files> LstFiles
+        {
+            get { return this.lstFiles; }
+            set
+            {
+                if (!string.Equals(this.lstFiles, value))
+                {
+                    this.lstFiles = value;
+                    RaisePropertyChanged(nameof(LstFiles));
                 }
             }
         }
