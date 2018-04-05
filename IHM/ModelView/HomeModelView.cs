@@ -44,11 +44,12 @@ namespace IHM.ModelView
             BtnGestionUtilisateur = path_img + "GestionUtilisateur.png";
             BtnGestionProject = path_img + "project.png";
             BtnPerso = path_img + "perso.png";
+            Background = path_img + "background.jpg";
 
             if (curentUtilisateur.Token != null)
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                GetFiles();
+              //  GetFiles();
             }
 
             ContentViewModels.Add(lMVM);
@@ -168,6 +169,20 @@ namespace IHM.ModelView
                 {
                     this._BtnPerso = value;
                     RaisePropertyChanged(nameof(BtnPerso));
+                }
+            }
+        }
+
+        private string _Background;
+        public string Background
+        {
+            get { return this._Background; }
+            set
+            {
+                if (!string.Equals(this._Background, value))
+                {
+                    this._Background = value;
+                    RaisePropertyChanged(nameof(Background));
                 }
             }
         }
