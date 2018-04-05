@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:IHM.View"
              xmlns:ff="clr-namespace:IHM.Helpers"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1000">
+             d:DesignHeight="800" d:DesignWidth="1000" Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"></RowDefinition>
