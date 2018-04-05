@@ -55,8 +55,8 @@ namespace IHM.ModelView
             }
         }
 
-        private List<Utilisateur> _SearchUser;
-        public List<Utilisateur> SearchUser
+        private string _SearchUser;
+        public string SearchUser
         {
             get { return this._SearchUser; }
             set
@@ -103,7 +103,21 @@ namespace IHM.ModelView
         {
             if (SearchUser != null)
             {
+                List<Utilisateur> AllUser = Singleton.GetInstance().GetAllUtilisateur();
+                List<string> lstSearch = SearchUser.Split(',').ToList();
+                List<Utilisateur> lstRslt = new List<Utilisateur>();
 
+                foreach(String item in lstSearch)
+                {
+                    foreach(Utilisateur utilisateur in AllUser)
+                    {
+                        if (utilisateur.Login.Contains(item))
+                        {
+                            lstRslt.Add(utilisateur);
+                        }
+                    }
+                }
+                UsersList = lstRslt;
             }
         }
 
@@ -111,7 +125,7 @@ namespace IHM.ModelView
         {
             if (SearchUser != null)
             {
-
+                //
             }
         }
     }

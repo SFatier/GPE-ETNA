@@ -3,6 +3,7 @@ using IHM.Model;
 using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,7 @@ namespace IHM.ModelView.Gestion_Utilisateurs
         public UtilisateurViewModel(Utilisateur _u)
         {
             _u.LstProjet = GetProjets(_u);
-            //_u.LstFiles = GetUs();
-            
+            ImgUser = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
             Utilisateur = _u;
         }
 
@@ -48,6 +48,20 @@ namespace IHM.ModelView.Gestion_Utilisateurs
                 {
                     this._utilisateur = value;
                     RaisePropertyChanged(nameof(Utilisateur));
+                }
+            }
+        }
+
+        private string _ImgUser;
+        public string ImgUser
+        {
+            get { return this._ImgUser; }
+            set
+            {
+                if (!string.Equals(this._ImgUser, value))
+                {
+                    this._ImgUser = value;
+                    RaisePropertyChanged(nameof(ImgUser));
                 }
             }
         }
