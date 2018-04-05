@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace IHM.View
 {
     /// <summary>
-    /// Logique d'interaction pour UsersView.xaml
+    /// Logique d'interaction pour ListUsersView.xaml
     /// </summary>
-    public partial class UsersView : UserControl
+    public partial class ListUsersView : UserControl
     {
-        public UsersView()
+        public ListUsersView()
         {
             InitializeComponent();
         }

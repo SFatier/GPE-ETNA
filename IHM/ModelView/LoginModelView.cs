@@ -109,7 +109,7 @@ namespace IHM.ModelView
             {
                 Singleton.GetInstance().SetUtilisateur(u);
                 HomeModelView HMV = new HomeModelView(u);
-                HMV.IsConnect = "Se deconnecter";
+                //HMV.IsConnect = "Se deconnecter";
                 Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
             }
             else
