@@ -2,12 +2,15 @@
 using IHM.Model;
 using IHM.ModelView.Gestion_Utilisateurs;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IHM.ModelView
@@ -101,7 +104,7 @@ namespace IHM.ModelView
         
         private void ActionSearchUserBar(object obj)
         {
-            if (SearchUser != null)
+            if (SearchUser != null && SearchUser != "")
             {
                 List<Utilisateur> AllUser = Singleton.GetInstance().GetAllUtilisateur();
                 List<string> lstSearch = SearchUser.Split(',').ToList();
@@ -111,7 +114,7 @@ namespace IHM.ModelView
                 {
                     foreach(Utilisateur utilisateur in AllUser)
                     {
-                        if (utilisateur.Login.Contains(item))
+                        if (utilisateur.Login.ToLower().Contains(item.ToLower()))
                         {
                             lstRslt.Add(utilisateur);
                         }
@@ -119,13 +122,38 @@ namespace IHM.ModelView
                 }
                 UsersList = lstRslt;
             }
+            else
+            {
+                UsersList = Singleton.GetInstance().GetAllUtilisateur();
+            }
         }
 
         private void ActionDeleteUser(object obj)
         {
-            if (SearchUser != null)
+            if (UserSelected != null)
             {
-                //
+                Utilisateur utilisateurSuppr = Singleton.GetInstance().GetAllUtilisateur().SingleOrDefault(x => x.Email.Equals(UserSelected.Email));
+                if (utilisateurSuppr != null)
+                {
+                    Singleton.GetInstance().GetAllUtilisateur().Remove(utilisateurSuppr);
+
+                    #region [Ecriture de l'utilisateur dans le fichier .JSON]
+                    try
+                    {
+                        string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                        using (StreamWriter file = File.CreateText(@test))
+                        {
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                            UsersList = Singleton.GetInstance().GetAllUtilisateur();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error :\" " + ex.Message);
+                    }
+                    #endregion
+                }
             }
         }
     }

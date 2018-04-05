@@ -26,6 +26,20 @@ namespace IHM.ModelView
         #endregion
 
         #region [Binding]
+        private string _Background;
+        public string Background
+        {
+            get { return this._Background; }
+            set
+            {
+                if (!string.Equals(this._Background, value))
+                {
+                    this._Background = value;
+                    RaisePropertyChanged(nameof(Background));
+                }
+            }
+        }
+
         private string _Login;
         public string Login
         {
@@ -76,6 +90,7 @@ namespace IHM.ModelView
 
             Singleton.GetInstance().SetListUtilisateur(items);
 
+            Background = ConfigurationSettings.AppSettings["FolderIMG"] + "background - Login.jpg";
             Login = "fatier_s";
             Mdp = "pass";
         }

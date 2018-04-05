@@ -33,7 +33,7 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Fiche de l'utilisateur" Command="{Binding FicheUtilisateur}"/>
-                    <MenuItem Header="Supprimer" Command="{Binding SupprimerUtilisateur}"/>
+                    <MenuItem Header="Supprimer" Command="{Binding DeleteUtilisateur}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
