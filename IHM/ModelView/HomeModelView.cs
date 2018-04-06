@@ -52,7 +52,7 @@ namespace IHM.ModelView
             if (curentUtilisateur.Token != null)
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                //GetFiles();
+                GetFiles();
             }
 
             ContentViewModels.Add(new HomePageModelView());
