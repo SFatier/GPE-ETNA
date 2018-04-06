@@ -7,24 +7,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="77*" />
+            <RowDefinition Height="23*" />
+        </Grid.RowDefinitions>
 
-        <Label Content="Se connecter" HorizontalAlignment="Left" Margin="436,201,0,0" VerticalAlignment="Top" Width="158" FontSize="24"/>
-        
-        <Label Content="Login  :" HorizontalAlignment="Left" Margin="301,277,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="450,277,0,0" TextWrapping="Wrap" Text="{Binding Login}" VerticalAlignment="Top" Width="232"/>
-        
-        <Label Content="Mot de passe :" HorizontalAlignment="Left" Margin="300,335,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="449,336,0,0" TextWrapping="Wrap" Text="{Binding Mdp}" VerticalAlignment="Top" Width="232"/>
+        <!--<Image Source="{Binding Background}" Margin="0,0,10,0"/>-->
 
-        <Button Content="Mot de passe oublié ? " HorizontalAlignment="Left" Margin="555,383,0,0" VerticalAlignment="Top" Width="127" Height="23" Foreground="Blue" Background="White" BorderBrush="White" Command="{Binding ForgetPsswd}"/>
+        <Label Content="Se connecter" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="158" FontSize="24" Grid.Row="1" Margin="422,24,0,0" Height="42"/>
 
-        <Button Content="Se Connecter" HorizontalAlignment="Left" Margin="612,450,0,0" VerticalAlignment="Top" Width="75" Background="White" Command="{Binding LogIn}"/>
-        <Button Content="S'inscrire" HorizontalAlignment="Left" Margin="505,450,0,0" VerticalAlignment="Top" Width="75"  Background="White" Command="{Binding Register}"/>
-        
-        <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="91" Margin="1,1,-1,0" Stroke="Black" VerticalAlignment="Top" Width="1000" />
-        <Rectangle Fill="CadetBlue" HorizontalAlignment="Left" Height="91" Margin="0,711,0,-2" Stroke="Black" VerticalAlignment="Top" Width="1000"/>
-        <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="36" Foreground="Brown"/>
+        <Label Content="Login  :" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="7.143,4.808" Margin="360,153,0,0" Height="26" Width="49"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Login}" VerticalAlignment="Top" Width="232" Margin="471,156,0,0"/>
+
+        <Label Content="Mot de passe :" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Margin="360,241,0,0" Height="26" Width="87"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Mdp}" VerticalAlignment="Top" Width="232" Margin="471,244,0,0"/>
+
+        <Button Content="Mot de passe oublié ? " HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="127" Height="23" Foreground="Blue" Background="White" BorderBrush="White" Command="{Binding ForgetPsswd}" Margin="576,326,0,0"/>
+
+        <Button Content="Se Connecter" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="82" Background="White" Command="{Binding LogIn}" Margin="621,404,0,0" Height="22"/>
+        <Button Content="S'inscrire" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="75"  Background="White" Command="{Binding Register}" Margin="527,404,0,0" Height="22" RenderTransformOrigin="0.533,3.545"/>
+
+        <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="30,21,0,0" VerticalAlignment="Top" FontSize="36" Foreground="Brown" Height="58" Width="175" RenderTransformOrigin="0.583,-1.138"/>
     </Grid>
-    
-    
+
+
 </UserControl>

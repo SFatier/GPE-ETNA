@@ -2,12 +2,15 @@
 using IHM.Model;
 using IHM.ModelView.Gestion_Utilisateurs;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IHM.ModelView
@@ -18,11 +21,13 @@ namespace IHM.ModelView
         public ICommand SearchUserBar { get; set; }
         public ICommand FicheUtilisateur { get; set; }
         public ICommand DeleteUtilisateur { get; set; }
+        public ICommand AddUtilisateur { get; set; }
 
         public ListUsersModelView()
         {
             UsersList = Singleton.GetInstance().GetAllUtilisateur();
             BtnSearch = ConfigurationSettings.AppSettings["FolderIMG"] +"search.png";
+            ImgAddUtilisateur = ConfigurationSettings.AppSettings["FolderIMG"] + "add.png";
             LoadAction();
         }
 
@@ -37,6 +42,20 @@ namespace IHM.ModelView
                 {
                     this._BtnSearch = value;
                     RaisePropertyChanged(nameof(BtnSearch));
+                }
+            }
+        }
+
+        private string _ImgAddUtilisateur;
+        public string ImgAddUtilisateur
+        {
+            get { return this._ImgAddUtilisateur; }
+            set
+            {
+                if (!string.Equals(this._ImgAddUtilisateur, value))
+                {
+                    this._ImgAddUtilisateur = value;
+                    RaisePropertyChanged(nameof(ImgAddUtilisateur));
                 }
             }
         }
@@ -89,6 +108,12 @@ namespace IHM.ModelView
             SearchUserBar = new RelayCommand(ActionSearchUserBar);
             FicheUtilisateur = new RelayCommand(ActionFiche);
             DeleteUtilisateur = new RelayCommand(ActionDeleteUser);
+            AddUtilisateur = new RelayCommand(ActionAddUtilisateur);
+        }
+
+        private void ActionAddUtilisateur(object obj)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new RegisterViewModel();
         }
 
         private void ActionFiche(object obj)
@@ -101,7 +126,7 @@ namespace IHM.ModelView
         
         private void ActionSearchUserBar(object obj)
         {
-            if (SearchUser != null)
+            if (SearchUser != null && SearchUser != "")
             {
                 List<Utilisateur> AllUser = Singleton.GetInstance().GetAllUtilisateur();
                 List<string> lstSearch = SearchUser.Split(',').ToList();
@@ -111,7 +136,7 @@ namespace IHM.ModelView
                 {
                     foreach(Utilisateur utilisateur in AllUser)
                     {
-                        if (utilisateur.Login.Contains(item))
+                        if (utilisateur.Login.ToLower().Contains(item.ToLower()))
                         {
                             lstRslt.Add(utilisateur);
                         }
@@ -119,13 +144,38 @@ namespace IHM.ModelView
                 }
                 UsersList = lstRslt;
             }
+            else
+            {
+                UsersList = Singleton.GetInstance().GetAllUtilisateur();
+            }
         }
 
         private void ActionDeleteUser(object obj)
         {
-            if (SearchUser != null)
+            if (UserSelected != null)
             {
-                //
+                Utilisateur utilisateurSuppr = Singleton.GetInstance().GetAllUtilisateur().SingleOrDefault(x => x.Email.Equals(UserSelected.Email));
+                if (utilisateurSuppr != null)
+                {
+                    Singleton.GetInstance().GetAllUtilisateur().Remove(utilisateurSuppr);
+
+                    #region [Ecriture de l'utilisateur dans le fichier .JSON]
+                    try
+                    {
+                        string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                        using (StreamWriter file = File.CreateText(@test))
+                        {
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                            UsersList = Singleton.GetInstance().GetAllUtilisateur();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error :\" " + ex.Message);
+                    }
+                    #endregion
+                }
             }
         }
     }
