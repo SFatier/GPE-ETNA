@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IHM.Model
 {
-    public class Utilisateur : ObservableObject
+    public class Utilisateur : Base
     {
         private string image = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
         private string token;
@@ -17,7 +17,6 @@ namespace IHM.Model
         private string mdp;
         private string role;
         private List<Projet> lstProjet;
-        private List<Files> lstFiles;
 
         public string Image
         {
@@ -31,6 +30,7 @@ namespace IHM.Model
                 }
             }
         }
+
         public List<Projet> LstProjet
         {
             get { return this.lstProjet; }
@@ -40,19 +40,6 @@ namespace IHM.Model
                 {
                     this.lstProjet = value;
                     RaisePropertyChanged(nameof(LstProjet));
-                }
-            }
-        }
-
-        public List<Files> LstFiles
-        {
-            get { return this.lstFiles; }
-            set
-            {
-                if (!string.Equals(this.lstFiles, value))
-                {
-                    this.lstFiles = value;
-                    RaisePropertyChanged(nameof(LstFiles));
                 }
             }
         }

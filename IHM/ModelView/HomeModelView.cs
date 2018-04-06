@@ -1,6 +1,7 @@
 ﻿using GPE;
 using IHM.Helpers;
 using IHM.Model;
+using IHM.ModelView.HomePage;
 using IHM.ViewModel;
 using Newtonsoft.Json;
 using System;
@@ -31,6 +32,7 @@ namespace IHM.ModelView
         public ICommand PagePerso { get; set; }
         public ICommand PageUser { get; set; }
         public ICommand Disconnect { get; set; }
+        public ICommand PageFichiers { get; set; }
         #endregion
 
         #region [Constructor]
@@ -45,6 +47,7 @@ namespace IHM.ModelView
             BtnGestionProject = path_img + "project.png";
             BtnPerso = path_img + "perso.png";
             Background = path_img + "background.jpg";
+            BtnGestionFichiers = path_img + "GestionFichiers.png";
 
             if (curentUtilisateur.Token != null)
             {
@@ -52,7 +55,7 @@ namespace IHM.ModelView
                 //GetFiles();
             }
 
-            ContentViewModels.Add(lMVM);
+            ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
@@ -173,6 +176,20 @@ namespace IHM.ModelView
             }
         }
 
+        private string _BtnGestionFichiers;
+        public string BtnGestionFichiers
+        {
+            get { return this._BtnGestionFichiers; }
+            set
+            {
+                if (!string.Equals(this._BtnGestionFichiers, value))
+                {
+                    this._BtnGestionFichiers = value;
+                    RaisePropertyChanged(nameof(BtnGestionFichiers));
+                }
+            }
+        }
+
         private string _Background;
         public string Background
         {
@@ -195,12 +212,23 @@ namespace IHM.ModelView
             PageHome = new RelayCommand(ActionPageHome);
             PagePerso = new RelayCommand(ActionPagePerso);
             PageUser = new RelayCommand(ActionPageUtilisateurs);
+            PageFichiers = new RelayCommand(ActionPageFichiers);
             Disconnect = new RelayCommand(ActionDisconnect);
         }
-        
+
+        private void ActionPageFichiers(object obj)
+        {
+            CurrentContentViewModel = lMVM;
+        }
+
         public void GetFiles()
         {
             lMVM.DgFiles = DBB.getEntries(lMVM);
+        }
+
+        public void GetProjets()
+        {
+            lMVM.LoadProject();
         }
 
         /**
@@ -216,7 +244,7 @@ namespace IHM.ModelView
          * */
         private void ActionPageHome(object parameter)
         {
-            CurrentContentViewModel = lMVM;
+            CurrentContentViewModel = new HomePageModelView();
         }
 
         private void ActionPagePerso(object paramter)
@@ -233,6 +261,7 @@ namespace IHM.ModelView
         {
             Singleton.GetInstance().GetMainWindowViewModel().App.Close();
         }
+        
         #endregion
     }
 }
