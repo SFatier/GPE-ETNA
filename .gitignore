@@ -1,4 +1,2 @@
-
-*.dll
-*.pdb
-*.exe
+IHM/bin/*
+IHM/obj/Debug/*
