@@ -27,7 +27,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  Grid.Row="1" HorizontalAlignment="Left" Margin="273,10,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="Transparent" Background="Transparent" Height="59">
+        <Button  Grid.Row="1" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="Transparent" Background="Transparent" Height="59">
             <Image Source="{Binding BtnGestionProject}"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -37,7 +37,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="80" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PagePerso}" >
+        <Button  HorizontalAlignment="Left" Margin="98,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PagePerso}" >
             <Image Source="{Binding BtnPerso}"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -47,8 +47,19 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="185,10,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageUser}" >
+        <Button  HorizontalAlignment="Left" Margin="182,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageUser}" >
             <Image Source="{Binding BtnGestionUtilisateur}"/>
+            <Button.ToolTip>
+                <ToolTip>
+                    <StackPanel>
+                        <TextBlock>Gestion des utilisateurs.</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+
+        <Button  HorizontalAlignment="Left" Margin="348,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageFichiers}" >
+            <Image Source="{Binding BtnGestionFichiers}"/>
             <Button.ToolTip>
                 <ToolTip>
                     <StackPanel>
