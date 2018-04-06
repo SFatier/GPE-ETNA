@@ -1,24 +1,32 @@
 ﻿using IHM.Helpers;
 using IHM.Model;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace IHM.ModelView.Gestion_Utilisateurs
 {
     public class UtilisateurViewModel : ObservableObject, IPageViewModel
     {
         public string Name => throw new NotImplementedException();
-    
+        public ICommand ModifierUtilisateur { get; set; }
+        private Utilisateur utilisateur_ = new Utilisateur();
+
         public UtilisateurViewModel(Utilisateur _u)
         {
             _u.LstProjet = GetProjets(_u);
             ImgUser = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
             Utilisateur = _u;
+            utilisateur_ = _u; //garde les traces de l'utilisateurs
+            LoadAction();
         }
 
         private List<Projet> GetProjets(Utilisateur u)
@@ -68,7 +76,37 @@ namespace IHM.ModelView.Gestion_Utilisateurs
 
         public void LoadAction()
         {
-            throw new NotImplementedException();
+            ModifierUtilisateur = new RelayCommand(ActionModifierUtilisateur);
+        }
+
+        private void ActionModifierUtilisateur(object obj)
+        {
+            List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
+            Utilisateur _u = lst.FirstOrDefault(item => item.Login.Equals(utilisateur_.Login));
+
+            _u.Login = Utilisateur.Login;
+            _u.Email = Utilisateur.Email;
+            _u.Role = Utilisateur.Role;
+
+            #region [Ecriture de l'utilisateur dans le fichier .JSON]
+            try
+            {
+                string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                using (StreamWriter file = File.CreateText(@test))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                }
+                Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new ListUsersModelView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+            #endregion
+
+            MessageBox.Show("L'utilisateur a été mise à jour");
+
         }
     }
 }

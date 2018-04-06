@@ -21,11 +21,13 @@ namespace IHM.ModelView
         public ICommand SearchUserBar { get; set; }
         public ICommand FicheUtilisateur { get; set; }
         public ICommand DeleteUtilisateur { get; set; }
+        public ICommand AddUtilisateur { get; set; }
 
         public ListUsersModelView()
         {
             UsersList = Singleton.GetInstance().GetAllUtilisateur();
             BtnSearch = ConfigurationSettings.AppSettings["FolderIMG"] +"search.png";
+            ImgAddUtilisateur = ConfigurationSettings.AppSettings["FolderIMG"] + "add.png";
             LoadAction();
         }
 
@@ -40,6 +42,20 @@ namespace IHM.ModelView
                 {
                     this._BtnSearch = value;
                     RaisePropertyChanged(nameof(BtnSearch));
+                }
+            }
+        }
+
+        private string _ImgAddUtilisateur;
+        public string ImgAddUtilisateur
+        {
+            get { return this._ImgAddUtilisateur; }
+            set
+            {
+                if (!string.Equals(this._ImgAddUtilisateur, value))
+                {
+                    this._ImgAddUtilisateur = value;
+                    RaisePropertyChanged(nameof(ImgAddUtilisateur));
                 }
             }
         }
@@ -92,6 +108,12 @@ namespace IHM.ModelView
             SearchUserBar = new RelayCommand(ActionSearchUserBar);
             FicheUtilisateur = new RelayCommand(ActionFiche);
             DeleteUtilisateur = new RelayCommand(ActionDeleteUser);
+            AddUtilisateur = new RelayCommand(ActionAddUtilisateur);
+        }
+
+        private void ActionAddUtilisateur(object obj)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new RegisterViewModel();
         }
 
         private void ActionFiche(object obj)
