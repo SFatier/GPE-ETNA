@@ -7,6 +7,8 @@
         xmlns:local1="clr-namespace:IHM.ModelView"
         xmlns:local2="clr-namespace:IHM.View.Gestion_Utilisateurs"
         xmlns:local3="clr-namespace:IHM.ModelView.Gestion_Utilisateurs"
+       xmlns:local4="clr-namespace:IHM.View.HomePage"
+        xmlns:local5="clr-namespace:IHM.ModelView.HomePage"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000" WindowState="Normal" ResizeMode="NoResize" Background="White">
 
@@ -39,6 +41,10 @@
         
         <DataTemplate DataType="{x:Type local3:UtilisateurViewModel}">
             <local2:UtilisateurView />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type local5:HomePageModelView}">
+            <local4:HomePageView />
         </DataTemplate>
     </Window.Resources>
 
