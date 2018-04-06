@@ -261,12 +261,12 @@ namespace GPE
         /**
          * Récupère la liste des fichiers et dossiers du compte dropbox connecté
          * */
-        public ObservableCollection<Files> getEntries(ListModelView lMVM)
+        public List<Files> getEntries(ListModelView lMVM)
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
             var Entries = liste.Result.Entries;
-            ObservableCollection<Files> lstFiles = new ObservableCollection<Files>();
+            List<Files> lstFiles = new List<Files>();
 
             // folder
             List<String> lstFolder = new List<string>();
