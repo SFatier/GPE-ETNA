@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"  Height="800" Width="1000">
+        mc:Ignorable="d"  Height="800" Width="1000" Background="White">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -60,12 +60,16 @@
                             
                             <!--List Utilisateur-->
                                 <Label Grid.Column="2" Grid.Row="1">Utilisateurs</Label>
-                                <ListView Grid.Column="2" Grid.Row="1" Margin="30">
-                                <ListViewItem>J. Dupont</ListViewItem>
-                                <ListViewItem >J. Parmantier</ListViewItem>
-                                <ListViewItem>C. Pizzaro</ListViewItem>
-                            </ListView>
-                            <!--List Utilisateur-->
+                                <ListView ItemsSource="{Binding LstUser}" Grid.Column="2" Grid.Row="1" Margin="30" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <WrapPanel>
+                                                <TextBlock Text="{Binding Login}" />
+                                            </WrapPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <!--List Utilisateur-->
                         </Grid>
                     </Expander>
                     </Grid>

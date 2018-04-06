@@ -17,32 +17,39 @@ namespace IHM.ModelView
 {
     public class HomeModelView : ObservableObject, IPageViewModel
     {
+        #region [ Fields ]   
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
         private ListModelView lMVM = new ListModelView();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
-        private List<IPageViewModel> _contentViewModels;
-        private string strAppKey = "wvay6mx0i0a2gbo";
-        public string strAppSecret = "1qgfe6zpe62mqp3";
-        private string strAccessToken = string.Empty;
-        private string strAuthenticationURL = string.Empty;
+        private List<IPageViewModel> _contentViewModels;        
         private DropBoxBase DBB;
 
-        public ICommand ConnecterDP { get; set; }
         public ICommand PageAdmin { get; set; }
-        public ICommand BtnHome { get; set; }
+        public ICommand PageHome { get; set; }
+        public ICommand PagePerso { get; set; }
+        public ICommand PageUser { get; set; }
+        public ICommand Disconnect { get; set; }
+        #endregion
 
+        #region [Constructor]
         public HomeModelView(Utilisateur u)
         {
             curentUtilisateur = u;
-
-            DBB = new DropBoxBase(strAppKey, "PTM_Centralized");
+            DBB = new DropBoxBase(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
+
+            BtnHome = path_img + "home.png";
+            BtnGestionUtilisateur = path_img + "GestionUtilisateur.png";
+            BtnGestionProject = path_img + "project.png";
+            BtnPerso = path_img + "perso.png";
+            Background = path_img + "background.jpg";
 
             if (curentUtilisateur.Token != null)
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                GetFiles();
+                //GetFiles();
             }
 
             ContentViewModels.Add(lMVM);
@@ -50,77 +57,6 @@ namespace IHM.ModelView
 
             LoadAction();
             Singleton.GetInstance().SetHomeModelView(this);
-        }
-
-        #region Dropbox        
-        /**
-         * Ouvre une nouvelle fenêtre qui demande l'autorasition de se connecter à dropbox
-         * */
-        private void ActionConnecterDropbox(object parameter)
-        {
-            if (curentUtilisateur.Token == null)
-            {
-                try
-                {
-                    if (string.IsNullOrEmpty(strAppKey))
-                    {
-                        MessageBox.Show("Please enter valid App Key !");
-                        return;
-                    }
-                    if (DBB != null)
-                    {
-                        strAuthenticationURL = DBB.GeneratedAuthenticationURL();
-                        strAccessToken = DBB.GenerateAccessToken();
-                        var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => curentUtilisateur.Equals(user));
-                        if (uUpdate != null)
-                            uUpdate.Token = strAccessToken;
-                        UpdateUtilisateur();
-                        GetFiles();
-                    }
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Impossible d'autoriser l'application à se connecter à l'application");
-                }
-            }
-        }
-
-        /**
-         * Récupère les fichiers correspondant au dropbox connecté
-         * */
-        public void GetFiles()
-        {
-            strDP = "Dropbox connecté";
-            lMVM.DgFiles = DBB.getEntries(lMVM);
-        }
-
-        /**
-         * Met à jour l'utilisateur
-         * */
-        private void UpdateUtilisateur()
-        {
-            StreamWriter file;
-            using (file = File.CreateText(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-            }
-        }
-
-        /**
-         * Retourne la page Administration
-         * */
-        private void ActionPageAdmin(object parameter)
-        {
-            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-        }
-       
-        /**
-         * Retourne sur la page Home
-         * */
-        private void ActionPageHome(object parameter)
-        {
-            CurrentContentViewModel = lMVM;
         }
         #endregion
 
@@ -181,26 +117,122 @@ namespace IHM.ModelView
             }
         }
 
-        private string _strDP = " Connecter Droppbox";
-        public string strDP
+        private string _BtnHome;
+        public string BtnHome
         {
-            get { return this._strDP; }
+            get { return this._BtnHome; }
             set
             {
-                if (!string.Equals(this._strDP, value))
+                if (!string.Equals(this._BtnHome, value))
                 {
-                    this._strDP = value;
-                    RaisePropertyChanged(nameof(strDP));
+                    this._BtnHome = value;
+                    RaisePropertyChanged(nameof(BtnHome));
+                }
+            }
+        }
+
+        private string _BtnGestionUtilisateur;
+        public string BtnGestionUtilisateur
+        {
+            get { return this._BtnGestionUtilisateur; }
+            set
+            {
+                if (!string.Equals(this._BtnGestionUtilisateur, value))
+                {
+                    this._BtnGestionUtilisateur = value;
+                    RaisePropertyChanged(nameof(BtnGestionUtilisateur));
+                }
+            }
+        }
+
+        private string _BtnGestionProject;
+        public string BtnGestionProject
+        {
+            get { return this._BtnGestionProject; }
+            set
+            {
+                if (!string.Equals(this._BtnGestionProject, value))
+                {
+                    this._BtnGestionProject = value;
+                    RaisePropertyChanged(nameof(BtnGestionProject));
+                }
+            }
+        }
+
+        private string _BtnPerso;
+        public string BtnPerso
+        {
+            get { return this._BtnPerso; }
+            set
+            {
+                if (!string.Equals(this._BtnPerso, value))
+                {
+                    this._BtnPerso = value;
+                    RaisePropertyChanged(nameof(BtnPerso));
+                }
+            }
+        }
+
+        private string _Background;
+        public string Background
+        {
+            get { return this._Background; }
+            set
+            {
+                if (!string.Equals(this._Background, value))
+                {
+                    this._Background = value;
+                    RaisePropertyChanged(nameof(Background));
                 }
             }
         }
         #endregion
 
+        #region [Actions]
         public void LoadAction()
-        {
-            ConnecterDP = new RelayCommand(ActionConnecterDropbox);
+        {       
             PageAdmin = new RelayCommand(ActionPageAdmin);
-            BtnHome = new RelayCommand(ActionPageHome);
+            PageHome = new RelayCommand(ActionPageHome);
+            PagePerso = new RelayCommand(ActionPagePerso);
+            PageUser = new RelayCommand(ActionPageUtilisateurs);
+            Disconnect = new RelayCommand(ActionDisconnect);
         }
+        
+        public void GetFiles()
+        {
+            lMVM.DgFiles = DBB.getEntries(lMVM);
+        }
+
+        /**
+       * Retourne la page Administration
+       * */
+        private void ActionPageAdmin(object parameter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+        }
+
+        /**
+         * Retourne sur la page Home
+         * */
+        private void ActionPageHome(object parameter)
+        {
+            CurrentContentViewModel = lMVM;
+        }
+
+        private void ActionPagePerso(object paramter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new PersonalModelView();
+        }
+
+        private void ActionPageUtilisateurs(object paramter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new ListUsersModelView();
+        }
+
+         private void ActionDisconnect(object paramter)
+        {
+            Singleton.GetInstance().GetMainWindowViewModel().App.Close();
+        }
+        #endregion
     }
 }

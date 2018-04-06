@@ -18,10 +18,12 @@ namespace IHM.ViewModel
         #region Fields       
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
+        public MainWindow App = null;
         #endregion
 
-        public MainModelView()
+        public MainModelView(MainWindow _app)
         {
+            App = _app;
             PageViewModels.Add(new LoginModelView());
             CurrentPageViewModel = PageViewModels[0];
 

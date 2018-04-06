@@ -19,7 +19,7 @@ namespace IHM
             base.OnStartup(e);
 
             MainWindow app = new MainWindow();
-            MainModelView context = new MainModelView();
+            MainModelView context = new MainModelView(app);
             app.DataContext = context;
             app.Show();
         }
