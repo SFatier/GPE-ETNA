@@ -187,8 +187,8 @@ namespace IHM.ModelView
         {
             List<string> lst = new List<string>();
             lst.Add("Sélectionnez un rôle...");
-            lst.Add("Administrateur");
-            lst.Add("Utilisateur GED");
+            lst.Add("Secrétaire");
+            lst.Add("Chef de projet");
             lst.Add("Gestionnaire de cloud");
             return lst;
         }
