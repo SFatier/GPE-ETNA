@@ -247,21 +247,23 @@ namespace GPE
             try
             {
                 var response = DBClient.Files.DownloadAsync(DropboxFolderPath + DropboxFileName);
-                var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
-
+                using (var fileStream = File.Create(DownloadFolderPath))
+                {
+                    response.Result.GetContentAsStreamAsync().Result.CopyTo(fileStream); //Added to wait for the result from Async method  
+                }
                 return true;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
                 return false;
             }
-
         }
 
-        /**
-         * Récupère la liste des fichiers et dossiers du compte dropbox connecté
-         * */
-        public List<Files> getEntries(ListModelView lMVM)
+
+            /**
+             * Récupère la liste des fichiers et dossiers du compte dropbox connecté
+             * */
+            public List<Files> getEntries(ListModelView lMVM)
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
