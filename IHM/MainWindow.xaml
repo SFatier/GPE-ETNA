@@ -39,6 +39,10 @@
             <local:ListUsersView />
         </DataTemplate>
         
+        <DataTemplate DataType="{x:Type local1:RolesModelView}">
+            <local:RolesView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type local3:UtilisateurViewModel}">
             <local2:UtilisateurView />
         </DataTemplate>
