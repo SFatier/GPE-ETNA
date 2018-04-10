@@ -26,6 +26,20 @@ namespace IHM.ModelView
         #endregion
 
         #region [Binding]
+        private string _Background;
+        public string Background
+        {
+            get { return this._Background; }
+            set
+            {
+                if (!string.Equals(this._Background, value))
+                {
+                    this._Background = value;
+                    RaisePropertyChanged(nameof(Background));
+                }
+            }
+        }
+
         private string _Login;
         public string Login
         {
@@ -76,6 +90,7 @@ namespace IHM.ModelView
 
             Singleton.GetInstance().SetListUtilisateur(items);
 
+            Background = ConfigurationSettings.AppSettings["FolderIMG"] + "background - Login.jpg";
             Login = "fatier_s";
             Mdp = "pass";
         }
@@ -89,7 +104,6 @@ namespace IHM.ModelView
         }
 
         #region [Action]
-
         /**
          * Renvoie le mot de passe à l'utilisateur
          * */
@@ -108,8 +122,9 @@ namespace IHM.ModelView
             Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
             if (u != null)
             {
+                Singleton.GetInstance().SetUtilisateur(u);
                 HomeModelView HMV = new HomeModelView(u);
-                HMV.IsConnect = "Se deconnecter";
+                //HMV.IsConnect = "Se deconnecter";
                 Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
             }
             else

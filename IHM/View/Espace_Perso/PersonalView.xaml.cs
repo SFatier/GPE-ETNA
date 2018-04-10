@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace IHM.View
 {
     /// <summary>
-    /// Logique d'interaction pour ListView.xaml
+    /// Logique d'interaction pour PersonalView.xaml
     /// </summary>
-    public partial class ListView : UserControl
+    public partial class PersonalView : UserControl
     {
-        public ListView()
+        public PersonalView()
         {
             InitializeComponent();
         }
-
     }
 }

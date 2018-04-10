@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace IHM.Model
 {
-    public class Projet : ObservableObject
+    public class Projet :  Base
     {
-        public string Nom { get; set; }
         public string Description { get; set; }
         private List<Files> lstFiles;
         private List<Utilisateur> lstUser;
         private bool isChecked = false;
-
+        
         public bool Ischecked
         {
             get { return this.isChecked; }
@@ -29,20 +28,7 @@ namespace IHM.Model
                 }
             }
         }
-
-        public List<Files> LstFiles
-        {
-            get { return this.lstFiles; }
-            set
-            {
-                if (!string.Equals(this.lstFiles, value))
-                {
-                    this.lstFiles = value;
-                    RaisePropertyChanged(nameof(LstFiles));
-                }
-            }
-        }
-
+           
         public List<Utilisateur> LstUser
         {
             get { return this.lstUser; }
@@ -54,6 +40,6 @@ namespace IHM.Model
                     RaisePropertyChanged(nameof(LstUser));
                 }
             }
-        }        
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace IHM.ModelView
         public AddProjectModelView()
         {
             LoadAction();
-            lstUser = Singleton.GetInstance().GetAllUtilisateur().Where(user => user.Role != "Admin").Select(u => u.Login).ToList() ;
+            LstUser = Singleton.GetInstance().GetAllUtilisateur().Where(user => user.Email != Singleton.GetInstance().GetUtilisateur().Email).Select(u => u.Login).ToList() ;
         }
 
         #region [Binding]
@@ -57,7 +57,7 @@ namespace IHM.ModelView
         }
 
         private List<string> _lstUser;
-        public List<string> lstUser
+        public List<string> LstUser
         {
             get { return _lstUser; }
             set
@@ -65,7 +65,7 @@ namespace IHM.ModelView
                 if (!string.Equals(this._lstUser, value))
                 {
                     this._lstUser = value;
-                    RaisePropertyChanged(nameof(lstUser));
+                    RaisePropertyChanged(nameof(LstUser));
                 }
             }
         }
@@ -90,7 +90,8 @@ namespace IHM.ModelView
                 p.Description = DescriptionProjet;
                 p.LstFiles = new List<Files>();
                 p.LstUser = new List<Utilisateur>();
-                p.LstUser = GetUserProject();               
+                p.LstUser = GetUserProject();
+                p.DateDeCreation = DateTime.Now;
                 Singleton.GetInstance().addProject(p);
             
                 #region [Ecriture de l'utilisateur dans le fichier .JSON]
@@ -102,7 +103,9 @@ namespace IHM.ModelView
                         serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
                     }
 
+                    Singleton.GetInstance().GetHomeModelView().GetProjets();
                     Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+
                 }
                 catch (Exception ex)
                 {

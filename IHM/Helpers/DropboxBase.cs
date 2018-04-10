@@ -247,26 +247,27 @@ namespace GPE
             try
             {
                 var response = DBClient.Files.DownloadAsync(DropboxFolderPath + DropboxFileName);
-                var result = response.Result.GetContentAsStreamAsync(); //Added to wait for the result from Async method  
-
+                using (var fileStream = File.Create(DownloadFolderPath))
+                {
+                    response.Result.GetContentAsStreamAsync().Result.CopyTo(fileStream); //Added to wait for the result from Async method  
+                }
                 return true;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
                 return false;
             }
-
         }
 
         /**
          * Récupère la liste des fichiers et dossiers du compte dropbox connecté
          * */
-        public ObservableCollection<Files> getEntries(ListModelView lMVM)
+        public List<Files> getEntries(ListModelView lMVM)
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
             var Entries = liste.Result.Entries;
-            ObservableCollection<Files> lstFiles = new ObservableCollection<Files>();
+            List<Files> lstFiles = new List<Files>();
 
             // folder
             List<String> lstFolder = new List<string>();
@@ -278,7 +279,7 @@ namespace GPE
                 string IMG = lMVM.GetIcoByType("dossier");
                 DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
                 DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
-                int taille = 0; // Convert.ToInt32(item.AsFile.Size);
+                string taille = ""; // Convert.ToInt32(item.AsFile.Size);
                 string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
                 f.path = path;
@@ -294,7 +295,7 @@ namespace GPE
                 string IMG = lMVM.GetIcoByType(type); 
                 DateTime dateDeCreation = item.AsFile.ClientModified;
                 DateTime ModifieLe = item.AsFile.ServerModified;
-                int taille = Convert.ToInt32(item.AsFile.Size);
+                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
                 string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
                 f.path = path;

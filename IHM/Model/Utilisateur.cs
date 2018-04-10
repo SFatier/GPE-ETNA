@@ -1,19 +1,48 @@
 ﻿using IHM.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace IHM.Model
 {
-    public class Utilisateur : ObservableObject
+    public class Utilisateur : Base
     {
+        private string image = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
         private string token;
         private string login;
         private string email;
         private string mdp;
         private string role;
+        private List<Projet> lstProjet;
+
+        public string Image
+        {
+            get { return this.image; }
+            set
+            {
+                if (!string.Equals(this.image, value))
+                {
+                    this.image = value;
+                    RaisePropertyChanged(nameof(Image));
+                }
+            }
+        }
+
+        public List<Projet> LstProjet
+        {
+            get { return this.lstProjet; }
+            set
+            {
+                if (!string.Equals(this.lstProjet, value))
+                {
+                    this.lstProjet = value;
+                    RaisePropertyChanged(nameof(LstProjet));
+                }
+            }
+        }
 
         public string Login
         {

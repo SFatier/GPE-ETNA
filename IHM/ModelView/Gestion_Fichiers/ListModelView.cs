@@ -15,12 +15,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
 namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  //a modifier par rapport à votre ordinateur
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  
         public string Name => "Liste des documents du cloud dropbox";
 
         public ICommand LinkProject { get; set; }
@@ -36,7 +35,7 @@ namespace IHM.ModelView
         //constructeur
         public ListModelView()
         {
-            _DgFiles = new ObservableCollection<Files>();
+            _DgFiles = new List<Files>();
 
             LoadProject();
             LoadIcon();
@@ -68,8 +67,8 @@ namespace IHM.ModelView
             BtnProject = path_img + "link.png";
         }
 
-        private void LoadProject()
-        {
+        public void LoadProject()
+        {           
             List<Projet> items;
             try
             {
@@ -78,17 +77,54 @@ namespace IHM.ModelView
                 {
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
+                    LstProjets = items.OrderByDescending(x => x.DateDeCreation).Select(x=>x.Nom).ToList(); 
                 }
             } catch (Exception)
             {
                 items = new List<Projet>();
+                LstProjets = new List<string>();
             }
             Singleton.GetInstance().SetListProject(items);
         }
 
         #region [Binding]
-        private ObservableCollection<Files> _Results;
-        public ObservableCollection<Files> Results
+        private List<string> lstProjets;
+        public List<string> LstProjets
+        {
+            get { return lstProjets; }
+            set {
+                lstProjets = value;
+                RaisePropertyChanged(nameof(LstProjets));
+            }
+        }
+
+        private string _ProjetFiltre;
+        public string ProjetFiltre
+        {
+            get { return this._ProjetFiltre; }
+            set
+            {
+                if (!string.Equals(this._ProjetFiltre, value))
+                {
+                    if (value != _ProjetFiltre)
+                    {
+                        var lst = Singleton.GetInstance().GetAllProject().SingleOrDefault(x => x.Nom.Equals(value)).LstFiles;
+                        if (lst.Count() > 0) {
+                            DgFiles = lst;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Aucun fichier associé.");
+                        }
+                    }
+                    this._ProjetFiltre = value;
+                    RaisePropertyChanged(nameof(ProjetFiltre));
+                }
+            }
+        }
+
+        private List<Files> _Results;
+        public List<Files> Results
         {
             get { return this._Results; }
             set
@@ -101,8 +137,8 @@ namespace IHM.ModelView
             }
         }
 
-        private ObservableCollection<Files> _DgFiles;
-        public ObservableCollection<Files> DgFiles
+        private List<Files> _DgFiles;
+        public List<Files> DgFiles
         {
             get { return this._DgFiles; }
             set
@@ -129,16 +165,16 @@ namespace IHM.ModelView
             }
         }
 
-        private Files _lstFiles;
-        public Files lstFiles
+        private Files _filesSelected;
+        public Files filesSelected
         {
-            get { return this._lstFiles; }
+            get { return this._filesSelected; }
             set
             {
-                if (!string.Equals(this._lstFiles, value))
+                if (!string.Equals(this._filesSelected, value))
                 {
-                    this._lstFiles = value;
-                    RaisePropertyChanged(nameof(lstFiles));
+                    this._filesSelected = value;
+                    RaisePropertyChanged(nameof(filesSelected));
                 }
             }
         }
@@ -316,10 +352,10 @@ namespace IHM.ModelView
          * */
         private void ActionLinkProject(object parameter)
         {
-            if (lstFiles != null)
+            if (filesSelected != null)
             {
                 PopUp app = new PopUp();
-                PopUpModelView context = new PopUpModelView(app, lstFiles);
+                PopUpModelView context = new PopUpModelView(app, filesSelected);
                 Singleton.GetInstance().SetPopUp(context);
                 app.DataContext = context;
                 app.Show();
@@ -335,14 +371,14 @@ namespace IHM.ModelView
          * */
         private void ActionSupprimer(object parameter)
         {
-            if (lstFiles != null)
+            if (filesSelected != null)
             {
-                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer le film " + lstFiles.Nom + "?", "Infos", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer  " + filesSelected.Nom + "?", "Infos", MessageBoxButton.YesNo);
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        string test = lstFiles.path;
-                        Singleton.GetInstance().GetDBB().Delete(lstFiles.path);
+                        string test = filesSelected.path;
+                        Singleton.GetInstance().GetDBB().Delete(filesSelected.path);
                         //notification 
                         break;
                     case MessageBoxResult.No:
@@ -419,28 +455,24 @@ namespace IHM.ModelView
         private void ActionDownload(object paramater)
         {
 
-            if (lstFiles != null)
+            if (filesSelected != null)
             {
 
-                string DropboxFolderPath = lstFiles.path;
-                string DropboxFileName = lstFiles.Nom;
+                string DropboxFolderPath = filesSelected.path;
+                string DropboxFileName = filesSelected.Nom;
                 string DownloadFolderPath = "";
                 string DownloadFileName = "";
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = lstFiles.Nom;
+                saveFileDialog.FileName = filesSelected.Nom;
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    string test = lstFiles.path;
+                    string test = filesSelected.path;
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
                     Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
-
                 }
-
-
             }
-
             else
             {
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");
@@ -449,11 +481,10 @@ namespace IHM.ModelView
 
         private void ActionOpen(object paramater)
         {
-            if (lstFiles != null)
+            if (filesSelected != null)
             {
-
-                string DropboxFileName = lstFiles.Nom;
-                string DropboxFolderPath = lstFiles.path;
+                string DropboxFileName = filesSelected.Nom;
+                string DropboxFolderPath = filesSelected.path;
                 string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
                 Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
                 System.Diagnostics.Process.Start(fileName);
@@ -462,8 +493,6 @@ namespace IHM.ModelView
             {
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");
             }
-
-
         }
 
         // search Files
@@ -471,7 +500,7 @@ namespace IHM.ModelView
         {
             string nomRechercher = Nom;
 
-            Results = new ObservableCollection<Files>();
+            Results = new List<Files>();
             bool trouve = false;
 
             foreach (Files item in DgFiles)
@@ -493,6 +522,7 @@ namespace IHM.ModelView
             }
 
         }
+
         private void ActionRechercheDate(object obj)
         {
             string rechercheDate = this.Date;
@@ -502,7 +532,7 @@ namespace IHM.ModelView
             int day = int.Parse(words[1]);
             int year = int.Parse(words[2]);
 
-            Results = new ObservableCollection<Files>();
+            Results = new List<Files>();
             bool trouve = false;
 
             foreach (Files item in DgFiles)
