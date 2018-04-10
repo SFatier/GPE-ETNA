@@ -10,9 +10,24 @@ namespace IHM.Model
     public class Base : ObservableObject
     {
         private string nom;
-        private DateTime dateDeCreation;
+        private DateTime dateDeCreation = DateTime.Now;
         private List<Files> lstFiles;
+        private bool isChecked = false;
 
+        public bool Ischecked
+        {
+            get { return this.isChecked; }
+            set
+            {
+                if (!string.Equals(this.isChecked, value))
+                {
+                    this.isChecked = value;
+                    RaisePropertyChanged(nameof(Ischecked));
+                    if (Singleton.GetInstance().GetPopUp() != null)
+                        Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
+                }
+            }
+        }
         public DateTime DateDeCreation
         {
             get { return this.dateDeCreation; }

@@ -10,24 +10,8 @@ namespace IHM.Model
     public class Projet :  Base
     {
         public string Description { get; set; }
-        private List<Files> lstFiles;
         private List<Utilisateur> lstUser;
-        private bool isChecked = false;
-        
-        public bool Ischecked
-        {
-            get { return this.isChecked; }
-            set
-            {
-                if (!string.Equals(this.isChecked, value))
-                {
-                    this.isChecked = value;
-                    RaisePropertyChanged(nameof(Ischecked));
-                    if (Singleton.GetInstance().GetPopUp() != null)
-                        Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
-                }
-            }
-        }
+       
            
         public List<Utilisateur> LstUser
         {

@@ -14,6 +14,7 @@ namespace IHM.Helpers
     {
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         List<Projet> lstProject = new List<Projet>();
+        List<Roles> lstRoles = new List<Roles>();
         DropBoxBase DBB;
         MainModelView cMain;
         HomeModelView cContent;
@@ -118,6 +119,21 @@ namespace IHM.Helpers
         }
 
         /********/
+
+        public void addRole(Roles p)
+        {
+            lstRoles.Add(p);
+        }
+        public List<Roles> GetAllRole()
+        {
+            return lstRoles;
+        }
+
+        public void SetListRole(List<Roles> _lstRole)
+        {
+            lstRoles.Clear();
+            lstRoles = _lstRole;
+        }
     }
 }
 
