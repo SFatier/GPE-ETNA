@@ -330,9 +330,17 @@ namespace GPE
         /**
          * Récupère l'espace utilisé
          * */
-        public void getSpace()
+        public bool getSpace()
         {
-             espace_utilise = (long) DBClient.Users.GetSpaceUsageAsync().Result.Used;
+            if (DBClient != null)
+            {
+                espace_utilise = (long)DBClient.Users.GetSpaceUsageAsync().Result.Used;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /**

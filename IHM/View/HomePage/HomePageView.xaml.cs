@@ -27,12 +27,14 @@ namespace IHM.View.HomePage
         public HomePageView()
         {
             InitializeComponent();
-            long espace_utilise_long = Singleton.GetInstance().GetDBB().espace_utilise;
+            if (Singleton.GetInstance().GetDBB().DBClient != null)
+            {
+                long espace_utilise_long = Singleton.GetInstance().GetDBB().espace_utilise;
 
-            double espace_utilise_Megabyte = ConvertBytesToMegabytes(espace_utilise_long);
-            double espace_utilise_Gegabyte = ConvertMegabytesToGigabytes(espace_utilise_Megabyte);
+                double espace_utilise_Megabyte = ConvertBytesToMegabytes(espace_utilise_long);
+                double espace_utilise_Gegabyte = ConvertMegabytesToGigabytes(espace_utilise_Megabyte);
 
-            SeriesCollection = new SeriesCollection
+                SeriesCollection = new SeriesCollection
             {
                 new PieSeries
                 {
@@ -52,8 +54,8 @@ namespace IHM.View.HomePage
                 }
             };
 
-            Chart.LegendLocation = LegendLocation.Bottom;
-
+                Chart.LegendLocation = LegendLocation.Bottom;
+            }
             DataContext = this;
         }
 
