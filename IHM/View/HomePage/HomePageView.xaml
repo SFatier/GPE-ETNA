@@ -19,13 +19,9 @@
         <Label Content="Derniers utilisateurs ajoutées" Margin="748,46,10,31"/>
         <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\IMG\users.png"  Width="60" Margin="563,10,147,10" />
 
-        <lvc:PieChart LegendLocation="Bottom" DataClick="Chart_OnDataClick" Hoverable="False" DataTooltip="{x:Null}" Grid.Row ="1" Margin="80,30,81,150">
-            <lvc:PieChart.Series>
-                <lvc:PieSeries Title="Espace Disponible" Values="90" DataLabels="True"
-                               LabelPoint="{Binding PointLabel}"/>
-                <lvc:PieSeries Title="Espace Indisponible" Values="10" DataLabels="True" 
-                               LabelPoint="{Binding PointLabel}"/>
-            </lvc:PieChart.Series>
-        </lvc:PieChart>
+            <lvc:PieChart Name="Chart" Grid.Row="1" Series="{Binding SeriesCollection}" 
+                      LegendLocation="Right" InnerRadius="10" >
+          
+            </lvc:PieChart>
     </Grid>
 </UserControl>
