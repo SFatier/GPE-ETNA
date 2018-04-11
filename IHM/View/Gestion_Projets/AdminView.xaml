@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"  Height="800" Width="1000" Background="White">
+        mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="800"  Background="White">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,9 +13,9 @@
         </Grid.RowDefinitions>
 
         <Label Margin="14,10,10,10">Gestion des Projets </Label>
-        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}"> </Button>
+        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="1250,10,10,10" Command="{Binding AddProject}"> </Button>
 
-        <ScrollViewer HorizontalAlignment="Left" Height="523"  Width="983" VerticalAlignment="Top"  Grid.Row="2" >
+        <ScrollViewer HorizontalAlignment="Left" Height="468"  Width="1365" VerticalAlignment="Top"  Grid.Row="2" >
             <StackPanel >
                 <ItemsControl
                 Name="ItemsList" ItemsSource="{Binding LstProject}" Background="WhiteSmoke"   >

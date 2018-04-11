@@ -38,7 +38,7 @@
             </ListBox.ContextMenu>
         </ListBox>
 
-        <Button  HorizontalAlignment="Left" Margin="945,9,0,0" VerticalAlignment="Top" Width="30" Height="30" Foreground="Transparent" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddUtilisateur}">
+        <Button  HorizontalAlignment="Left" Margin="1020,9,0,0" VerticalAlignment="Top" Width="150" Height="30" Foreground="Transparent" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddUtilisateur}">
             <Image Source="{Binding ImgAddUtilisateur}" Width="40"/>
         </Button>
     </Grid>
