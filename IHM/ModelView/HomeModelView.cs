@@ -33,6 +33,7 @@ namespace IHM.ModelView
         public ICommand PageUser { get; set; }
         public ICommand Disconnect { get; set; }
         public ICommand PageFichiers { get; set; }
+        public ICommand PageRoles { get; set; }
         #endregion
 
         #region [Constructor]
@@ -48,6 +49,7 @@ namespace IHM.ModelView
             BtnPerso = path_img + "perso.png";
             Background = path_img + "background.jpg";
             BtnGestionFichiers = path_img + "GestionFichiers.png";
+            BtnGestionRoles = path_img + "";
 
             if (curentUtilisateur.Token != null)
             {
@@ -190,6 +192,21 @@ namespace IHM.ModelView
             }
         }
 
+        private string _BtnGestionRoles;
+        public string BtnGestionRoles
+        {
+            get { return this._BtnGestionRoles; }
+            set
+            {
+                if (!string.Equals(this._BtnGestionRoles, value))
+                {
+                    this._BtnGestionRoles = value;
+                    RaisePropertyChanged(nameof(BtnGestionRoles));
+                }
+            }
+        }
+        
+
         private string _Background;
         public string Background
         {
@@ -213,6 +230,7 @@ namespace IHM.ModelView
             PagePerso = new RelayCommand(ActionPagePerso);
             PageUser = new RelayCommand(ActionPageUtilisateurs);
             PageFichiers = new RelayCommand(ActionPageFichiers);
+            PageRoles = new RelayCommand(ActionPageRoles);
             Disconnect = new RelayCommand(ActionDisconnect);
         }
 
@@ -229,6 +247,11 @@ namespace IHM.ModelView
         public void GetProjets()
         {
             lMVM.LoadProject();
+        }
+                
+        private void ActionPageRoles(object param)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new RolesModelView();
         }
 
         /**

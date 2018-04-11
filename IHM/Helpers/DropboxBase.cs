@@ -280,7 +280,7 @@ namespace GPE
                 string IMG = lMVM.GetIcoByType("dossier");
                 DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
                 DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
-                int taille = 0; // Convert.ToInt32(item.AsFile.Size);
+                string taille = ""; // Convert.ToInt32(item.AsFile.Size);
                 string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
                 f.path = path;
@@ -296,7 +296,7 @@ namespace GPE
                 string IMG = lMVM.GetIcoByType(type); 
                 DateTime dateDeCreation = item.AsFile.ClientModified;
                 DateTime ModifieLe = item.AsFile.ServerModified;
-                int taille = Convert.ToInt32(item.AsFile.Size);
+                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
                 string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
                 f.path = path;

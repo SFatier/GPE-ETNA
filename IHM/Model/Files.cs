@@ -16,7 +16,7 @@ namespace IHM.Model
         public string Type{ get; set; }
         public DateTime DateDeCreation{ get; set; }
         public DateTime ModifieLe { get; set; }
-        public int Taille{ get; set; }
+        public string Taille{ get; set; }
         public bool IsFile { get; set; }
         public string path;
         
@@ -25,7 +25,7 @@ namespace IHM.Model
 
         }
 
-        public Files(int _Id, string _IdDropbox, string _IMG, string _Nom, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, int _Taille, bool _IsFile)
+        public Files(int _Id, string _IdDropbox, string _IMG, string _Nom, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, string _Taille, bool _IsFile)
         {
             Id = _Id;
             IdDropbox = _IdDropbox;
@@ -38,7 +38,7 @@ namespace IHM.Model
             IsFile = _IsFile;
         }
 
-        public Files(string _IdDropbox, string _Nom, string _IMG, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, int _Taille, bool _IsFile)
+        public Files(string _IdDropbox, string _Nom, string _IMG, string _Type, DateTime _DateDeCreation, DateTime _ModifieLe, string _Taille, bool _IsFile)
         {
             IdDropbox = _IdDropbox;
             Nom = _Nom;
