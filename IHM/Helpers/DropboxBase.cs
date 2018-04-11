@@ -20,8 +20,10 @@ namespace GPE
     {
         #region Variables  
         public DropboxClient DBClient;
+        public long espace_utilise;
         private string oauth2State;
-        private const string RedirectUri = "https://localhost/authorize"; // Same as we have configured Under [Application] -> settings -> redirect URIs.  
+
+         private const string RedirectUri = "https://localhost/authorize"; // Same as we have configured Under [Application] -> settings -> redirect URIs.  
         #endregion
 
         #region Constructor  
@@ -323,6 +325,23 @@ namespace GPE
                 return false;
             }
         }
+
+        /**
+         * Récupère l'espace utilisé
+         * */
+        public void getSpace()
+        {
+             espace_utilise = (long) DBClient.Users.GetSpaceUsageAsync().Result.Used;
+        }
+
+        /**
+         * Récupère les fichiers d'un dossier
+         * */
+        public List<Metadata> GetItems(string folderPath)
+        {
+            return new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
+        }
+
         #endregion
 
         #region Validation Methods  

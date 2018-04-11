@@ -17,9 +17,11 @@ namespace IHM.ModelView
     {
         public RolesModelView()
         {
+          
+            Singleton.GetInstance().SetPopUp(null); 
             LoadRoles();
-
             LoadAction();
+            Singleton.GetInstance().SetRolesModelView(this);
         }
 
         private void LoadRoles()
@@ -40,6 +42,27 @@ namespace IHM.ModelView
             }
             Singleton.GetInstance().SetListRole(items);
             LstRoles = items;
+        }
+
+        public void setLstPChecked(string nomFonctionnalite, bool isChecked)
+        {
+            Singleton.GetInstance().GetRoleByNom(roleSelected.Nom).lstFontionnalites.FirstOrDefault(x => x.Nom.Equals(nomFonctionnalite)).Ischecked = isChecked;
+            
+            #region [Ecriture de l'utilisateur dans le fichier .JSON]
+            try
+            {
+                string test = ConfigurationSettings.AppSettings["RoleJSON"];
+                using (StreamWriter file = File.CreateText(@test))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, Singleton.GetInstance().GetAllRole());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+            #endregion
         }
 
         #region [Binding]

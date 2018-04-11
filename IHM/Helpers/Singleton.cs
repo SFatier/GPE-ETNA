@@ -19,6 +19,7 @@ namespace IHM.Helpers
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
+        RolesModelView rolesModelView;
         PopUpModelView popUp;
 
         static Singleton _instance;
@@ -73,6 +74,16 @@ namespace IHM.Helpers
             return popUp;
         }
 
+        /********/
+
+        public void SetRolesModelView(RolesModelView _rolesModelView)
+        {
+            rolesModelView = _rolesModelView;
+        }
+        public RolesModelView GetRolesModelView()
+        {
+            return rolesModelView;
+        }
         /********/
 
         public void addUtilisateur(Utilisateur u)
@@ -133,6 +144,18 @@ namespace IHM.Helpers
         {
             lstRoles.Clear();
             lstRoles = _lstRole;
+        }
+
+        public Roles GetRoleByNom(string nom)
+        {
+            if (lstRoles != null && lstRoles.Count > 0)
+            {
+                return lstRoles.FirstOrDefault(x => x.Nom.Equals(nom));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
