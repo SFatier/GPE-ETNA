@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
+using LiveCharts.Defaults;
+using IHM.Helpers;
 
 namespace IHM.View.HomePage
 {
@@ -25,24 +27,49 @@ namespace IHM.View.HomePage
         public HomePageView()
         {
             InitializeComponent();
-            PointLabel = chartPoint =>
-               string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            if (Singleton.GetInstance().GetDBB().DBClient != null)
+            {
+                long espace_utilise_long = Singleton.GetInstance().GetDBB().espace_utilise;
 
+                double espace_utilise_Megabyte = ConvertBytesToMegabytes(espace_utilise_long);
+                double espace_utilise_Gegabyte = ConvertMegabytesToGigabytes(espace_utilise_Megabyte);
+
+                SeriesCollection = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Espace Indisponible",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue((100- espace_utilise_Gegabyte)) },
+                    DataLabels = true,
+                    ToolTip="Espace Indisponible " + (100- espace_utilise_Gegabyte),
+                    Fill = System.Windows.Media.Brushes.Blue
+                },
+                new PieSeries
+                {
+                    Title = "Espace disponible",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(espace_utilise_Gegabyte) },
+                    DataLabels = true,
+                   ToolTip="Espace disponible " + (100- espace_utilise_Gegabyte),
+                   Fill = System.Windows.Media.Brushes.DarkCyan
+                }
+            };
+
+                Chart.LegendLocation = LegendLocation.Bottom;
+            }
             DataContext = this;
         }
 
-       public Func<ChartPoint, string> PointLabel { get; set; }
-
-        private void Chart_OnDataClick(object sender, ChartPoint chartpoint)
+        static double ConvertBytesToMegabytes(long bytes)
         {
-            var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
-
-            //clear selected slice.
-            foreach (PieSeries series in chart.Series)
-                series.PushOut = 0;
-
-            var selectedSeries = (PieSeries)chartpoint.SeriesView;
-            selectedSeries.PushOut = 8;
+            return (bytes / 1024f) / 1024f;
         }
+
+        static double ConvertMegabytesToGigabytes(double megabytes) // SMALLER
+        {
+            // 1024 megabyte in a gigabyte
+            return megabytes / 1024.0;
+        }
+
+        public SeriesCollection SeriesCollection { get; set; }
     }
 }

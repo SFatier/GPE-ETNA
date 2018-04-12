@@ -7,10 +7,10 @@
         xmlns:local1="clr-namespace:IHM.ModelView"
         xmlns:local2="clr-namespace:IHM.View.Gestion_Utilisateurs"
         xmlns:local3="clr-namespace:IHM.ModelView.Gestion_Utilisateurs"
-       xmlns:local4="clr-namespace:IHM.View.HomePage"
+        xmlns:local4="clr-namespace:IHM.View.HomePage"
         xmlns:local5="clr-namespace:IHM.ModelView.HomePage"
         mc:Ignorable="d"
-        Title="" Height="800" Width="1000" WindowState="Normal" ResizeMode="NoResize" Background="White">
+        Title="" Height="800" Width="1000"  ResizeMode="CanResize" Background="White">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type local1:ListModelView}">

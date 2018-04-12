@@ -37,6 +37,12 @@
     <Reference Include="Dropbox.Api, Version=4.0.0.0, Culture=neutral, PublicKeyToken=310f0e82fbb45d01, processorArchitecture=MSIL">
       <HintPath>..\packages\Dropbox.Api.4.7.0\lib\net45\Dropbox.Api.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -66,44 +72,66 @@
     <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="Helpers\TwoListSynchronizer.cs" />
     <Compile Include="IPageViewModel.cs" />
-    <Compile Include="ModelView\AddFolderModelView.cs" />
-    <Compile Include="ModelView\AddProjectModelView.cs" />
-    <Compile Include="ModelView\AdminModelView.cs" />
+    <Compile Include="ModelView\Espace_Perso\PersonalModelView.cs" />
+    <Compile Include="ModelView\Gestions_Roles\RolesModelView.cs" />
+    <Compile Include="ModelView\Gestion_Fichiers\AddFolderModelView.cs" />
+    <Compile Include="ModelView\Gestion_Fichiers\ListModelView.cs" />
+    <Compile Include="ModelView\Gestion_Fichiers\PopUpModelView.cs" />
+    <Compile Include="ModelView\Gestion_Projets\AddProjectModelView.cs" />
+    <Compile Include="ModelView\Gestion_Projets\AdminModelView.cs" />
+    <Compile Include="ModelView\Gestion_Utilisateurs\ListUsersModelView.cs" />
+    <Compile Include="ModelView\Gestion_Utilisateurs\UtilisateurViewModel.cs" />
     <Compile Include="ModelView\HomeModelView.cs" />
-    <Compile Include="ModelView\ListModelView.cs" />
-    <Compile Include="ModelView\LoginModelView.cs" />
+    <Compile Include="ModelView\HomePage\HomePageModelView.cs" />
+    <Compile Include="ModelView\Inscription_Login\LoginModelView.cs" />
+    <Compile Include="ModelView\Inscription_Login\RegisterViewModel.cs" />
     <Compile Include="ModelView\MainModelView.cs" />
-    <Compile Include="ModelView\PopUpModelView.cs" />
+    <Compile Include="Model\Base.cs" />
     <Compile Include="Model\Projet.cs" />
+    <Compile Include="Model\Roles.cs" />
     <Compile Include="Model\Utilisateur.cs" />
-    <Compile Include="View\AddFolderView.xaml.cs">
+    <Compile Include="View\Dropbox\LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Espace_Perso\PersonalView.xaml.cs">
+      <DependentUpon>PersonalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestion_Fichiers\AddFolderView.xaml.cs">
       <DependentUpon>AddFolderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AddProjectView.xaml.cs">
+    <Compile Include="View\Gestion_Fichiers\ListView.xaml.cs">
+      <DependentUpon>ListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestion_Fichiers\PopUp.xaml.cs">
+      <DependentUpon>PopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestion_Projets\AddProjectView.xaml.cs">
       <DependentUpon>AddProjectView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AdminView.xaml.cs">
+    <Compile Include="View\Gestion_Projets\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestion_Utilisateurs\ListUsersView.xaml.cs">
+      <DependentUpon>ListUsersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestion_Utilisateurs\UtilisateurView.xaml.cs">
+      <DependentUpon>UtilisateurView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePage\HomePageView.xaml.cs">
+      <DependentUpon>HomePageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PopUp.xaml.cs">
-      <DependentUpon>PopUp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\RegisterView.xaml.cs">
-      <DependentUpon>RegisterView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ModelView\RegisterViewModel.cs" />
     <Compile Include="Model\Files.cs" />
-    <Compile Include="View\ListView.xaml.cs">
-      <DependentUpon>ListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\LoginView.xaml.cs">
+    <Compile Include="View\Inscription_Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LogWindow.xaml.cs">
-      <DependentUpon>LogWindow.xaml</DependentUpon>
+    <Compile Include="View\Inscription_Login\RegisterView.xaml.cs">
+      <DependentUpon>RegisterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gestions_Roles\RolesView.xaml.cs">
+      <DependentUpon>RolesView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -119,41 +147,61 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\AddFolderView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Dropbox\LogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\AddProjectView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Espace_Perso\PersonalView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\AdminView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Gestion_Fichiers\AddFolderView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Fichiers\ListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Fichiers\PopUp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Projets\AddProjectView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Projets\AdminView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Utilisateurs\ListUsersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Gestion_Utilisateurs\UtilisateurView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\HomePage\HomePageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PopUp.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Inscription_Login\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\RegisterView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Inscription_Login\RegisterView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ListView.xaml">
+    <Page Include="View\Gestions_Roles\RolesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\LogWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -175,10 +223,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="projets.json" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="roles.json" />
+    <None Include="utilisateurs.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -233,6 +284,26 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="IMG\link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\user.png" />
+    <Resource Include="IMG\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\perso.png" />
+    <Resource Include="IMG\project.png" />
+    <Resource Include="IMG\projet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\GestionFichiers.png" />
+    <Resource Include="IMG\GestionUtilisateur.png" />
+    <Resource Include="IMG\home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\role.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

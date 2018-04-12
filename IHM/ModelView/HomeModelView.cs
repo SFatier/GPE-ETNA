@@ -49,12 +49,12 @@ namespace IHM.ModelView
             BtnPerso = path_img + "perso.png";
             Background = path_img + "background.jpg";
             BtnGestionFichiers = path_img + "GestionFichiers.png";
-            BtnGestionRoles = path_img + "";
+            BtnGestionRoles = path_img + "role.png";
 
             if (curentUtilisateur.Token != null)
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                GetFiles();
+                //GetFiles();
             }
 
             ContentViewModels.Add(new HomePageModelView());

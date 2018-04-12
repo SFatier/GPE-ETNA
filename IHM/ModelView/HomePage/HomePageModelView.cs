@@ -1,5 +1,8 @@
 ﻿using IHM.Helpers;
 using IHM.ViewModel;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,37 +18,8 @@ namespace IHM.ModelView.HomePage
 
         public HomePageModelView()
         {
-          //  EspaceDisponible = "90";
-          //  EspaceIndisponible = "10";
+            Singleton.GetInstance().GetDBB().getSpace() ;            
         }
-
-        //private string _EspaceDisponible ;
-        //public string EspaceDisponible
-        //{
-        //    get { return this._EspaceDisponible; }
-        //    set
-        //    {
-        //        if (!string.Equals(this._EspaceDisponible, value))
-        //        {
-        //            this._EspaceDisponible = value;
-        //            RaisePropertyChanged(nameof(EspaceDisponible));
-        //        }
-        //    }
-        //}
-
-        //private string _EspaceIndisponible;
-        //public string EspaceIndisponible
-        //{
-        //    get { return this._EspaceIndisponible; }
-        //    set
-        //    {
-        //        if (!string.Equals(this._EspaceIndisponible, value))
-        //        {
-        //            this._EspaceIndisponible = value;
-        //            RaisePropertyChanged(nameof(EspaceIndisponible));
-        //        }
-        //    }
-        //}
 
         public void LoadAction()
         {

@@ -14,10 +14,12 @@ namespace IHM.Helpers
     {
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         List<Projet> lstProject = new List<Projet>();
+        List<Roles> lstRoles = new List<Roles>();
         DropBoxBase DBB;
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
+        RolesModelView rolesModelView;
         PopUpModelView popUp;
 
         static Singleton _instance;
@@ -74,6 +76,16 @@ namespace IHM.Helpers
 
         /********/
 
+        public void SetRolesModelView(RolesModelView _rolesModelView)
+        {
+            rolesModelView = _rolesModelView;
+        }
+        public RolesModelView GetRolesModelView()
+        {
+            return rolesModelView;
+        }
+        /********/
+
         public void addUtilisateur(Utilisateur u)
         {
             lstUtilisateur.Add(u);
@@ -118,6 +130,33 @@ namespace IHM.Helpers
         }
 
         /********/
+
+        public void addRole(Roles p)
+        {
+            lstRoles.Add(p);
+        }
+        public List<Roles> GetAllRole()
+        {
+            return lstRoles;
+        }
+
+        public void SetListRole(List<Roles> _lstRole)
+        {
+            lstRoles.Clear();
+            lstRoles = _lstRole;
+        }
+
+        public Roles GetRoleByNom(string nom)
+        {
+            if (lstRoles != null && lstRoles.Count > 0)
+            {
+                return lstRoles.FirstOrDefault(x => x.Nom.Equals(nom));
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
 
