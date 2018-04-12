@@ -30,6 +30,7 @@ namespace IHM.ModelView
         public ICommand Upload { get; set; }
         public ICommand Recherche { get; set; } 
         public ICommand RechercheDate { get; set; }
+        public ICommand RecherchePeriode { get; set; }
         public ICommand Download { get; set; }
         public ICommand Open { get; set; }
 
@@ -305,6 +306,33 @@ namespace IHM.ModelView
                 }
             }
         }
+                
+        private string _startDate;
+        public string startDate
+        {
+            get { return this._startDate; }
+            set
+            {
+                if (!string.Equals(this._startDate, value))
+                {
+                    this._startDate = value;
+                    RaisePropertyChanged(nameof(startDate));
+                }
+            }
+        }
+        private string _endDate;
+        public string endDate
+        {
+            get { return this._endDate; }
+            set
+            {
+                if (!string.Equals(this._endDate, value))
+                {
+                    this._endDate = value;
+                    RaisePropertyChanged(nameof(endDate));
+                }
+            }
+        }
 
         #endregion
 
@@ -520,6 +548,35 @@ namespace IHM.ModelView
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+            }
+
+        }
+
+
+        private void ActionRecherchePeriode(object obj)
+        {
+
+            string recherchePeriode = this.Date;
+
+
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = startDate.AddDays(20);
+            Results = new List<Files>();
+            if (endDate < startDate)
+            {
+                throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
+            }
+
+            foreach (Files item in DgFiles)
+            {
+                if (item.DateDeCreation > endDate && item.DateDeCreation > startDate)
+                {
+                    startDate = startDate.AddDays(1);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+
+                }
+
             }
 
         }
