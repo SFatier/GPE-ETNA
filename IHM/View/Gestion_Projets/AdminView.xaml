@@ -13,17 +13,53 @@
         </Grid.RowDefinitions>
 
         <Label Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,10,0,0"/>
-        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}"> </Button>
+        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"> </Button>
 
-
-        <ScrollViewer HorizontalAlignment="Left" Height="468"  Width="1365" VerticalAlignment="Top"  Grid.Row="2" >
+        <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="982" VerticalAlignment="Top"  Grid.Row="2" >
             <StackPanel >
                 <ItemsControl
-                Name="ItemsList" ItemsSource="{Binding LstProject}" Background="WhiteSmoke"   >
+                Name="ItemsList" ItemsSource="{Binding LstProject}" Background="White" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Expander Header="{Binding Nom}" Margin="10,10,10,10" Background="WhiteSmoke"  >
+                                <Expander Margin="10,10,10,10" >
+                                    <Expander.Header >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="500"></ColumnDefinition>
+                                                <ColumnDefinition Width="500"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <StackPanel Orientation="Horizontal" Grid.Column="0">                                            
+                                            <!--Nom des projets-->
+                                            <Label></Label>
+                                            <TextBlock Text="{Binding Nom}" Margin="0,10"></TextBlock>
+                                            <Label></Label>
+                                                <Image Source="{Binding IcoArchived}" Width="15">
+                                                <Image.ToolTip>
+                                                    <Label Content="{Binding IcoToolTip}"></Label>
+                                                </Image.ToolTip>
+                                            </Image>                                                                                      
+                                        </StackPanel>
+                                        
+                                        <!-- Select projet en cours ou fini-->
+                                            <StackPanel Orientation="Horizontal"  Grid.Column="1" Margin="240,0,0,0">
+                                                <RadioButton Margin="0,5" Name="projetEncours" IsChecked="{Binding IsprojetEncours}">
+                                                    <WrapPanel>
+                                                            <Image Source="{Binding RbEncours}" Width="16" Height="16" Margin="0,0,5,0" />
+                                                            <Label>En cours</Label>
+                                                    </WrapPanel>
+                                                 </RadioButton>
+                                                <RadioButton Margin="15,5"  Name="ProjetFin"   IsChecked="{Binding IsprojetFin}">
+                                                    <WrapPanel>
+                                                        <Image Source="{Binding RbFini}" Width="16" Height="16" Margin="0,0,5,0" />
+                                                        <Label>Fini</Label>
+                                                    </WrapPanel>
+                                                </RadioButton>
+                                        </StackPanel>
+                                        </Grid>
+                                    </Expander.Header>
+
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="10"></RowDefinition>

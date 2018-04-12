@@ -21,7 +21,7 @@ namespace IHM.ModelView
         #region [ Fields ]   
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
-        private ListModelView lMVM = new ListModelView();
+        public ListModelView lMVM = new ListModelView();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;        
@@ -39,6 +39,8 @@ namespace IHM.ModelView
         #region [Constructor]
         public HomeModelView(Utilisateur u)
         {
+            Singleton.GetInstance().SetHomeModelView(this);
+
             curentUtilisateur = u;
             DBB = new DropBoxBase(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
@@ -54,14 +56,27 @@ namespace IHM.ModelView
             if (curentUtilisateur.Token != null)
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                //GetFiles();
+                GetFiles();
+                GetFilesShared();
             }
 
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
-            Singleton.GetInstance().SetHomeModelView(this);
+        }
+
+        public void GetFilesShared()
+        {
+            List<Files> lst = DBB.GetFilesShared();
+            lMVM.FilesShared = lst;
+            if (lMVM.FilesShared.Count > 0)
+            {
+                foreach (Files f in lMVM.FilesShared)
+                {
+                    lMVM.DgFiles.Add(f);
+                }
+            }
         }
         #endregion
 
@@ -241,7 +256,7 @@ namespace IHM.ModelView
 
         public void GetFiles()
         {
-            lMVM.DgFiles = DBB.getEntries(lMVM);
+            lMVM.DgFiles = DBB.getItemsDropbox(lMVM);
         }
 
         public void GetProjets()

@@ -23,10 +23,40 @@ namespace IHM.ModelView
 
         #region [Constructor]
         public AdminModelView()
-        {
-            LstProject = Singleton.GetInstance().GetAllProject(); ;
+        {           
+            LoadProject();
             LoadAction();
         }
+
+        private void LoadProject()
+        {
+            if (LstProject != null)
+                LstProject.Clear();
+
+             List<Projet> lstProject = Singleton.GetInstance().GetAllProject();
+            foreach (Projet p in lstProject)
+            {
+                string img = p.IcoIsArchived;
+                p.IcoArchived = path_img + img;
+                if (img != "validate.png")
+                {
+                    p.IcoToolTip = "Projet fini";
+                    p.IsprojetEncours = true;
+                    p.IsprojetFin = false;
+                }
+                else
+                {
+                    p.IcoToolTip = "Projet en cours";
+                    p.IsprojetEncours = false;
+                    p.IsprojetFin = true;
+                }
+                p.RbEncours = path_img + "notvalidate.png";
+                p.RbFini = path_img + "validate.png";
+            }
+
+            LstProject = lstProject;
+        }
+
         #endregion
 
         #region [Binding]        
@@ -57,6 +87,7 @@ namespace IHM.ModelView
                 }
             }
         }
+              
         #endregion
 
         #region [Action]

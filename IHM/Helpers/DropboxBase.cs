@@ -255,7 +255,7 @@ namespace GPE
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return false;
             }
@@ -265,49 +265,12 @@ namespace GPE
             /**
              * Récupère la liste des fichiers et dossiers du compte dropbox connecté
              * */
-            public List<Files> getEntries(ListModelView lMVM)
+            public List<Files> getItemsDropbox(ListModelView lMVM)
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
             var Entries = liste.Result.Entries;
-            List<Files> lstFiles = new List<Files>();
-
-            // folder
-            List<String> lstFolder = new List<string>();
-            foreach (var item in Entries.Where(i => i.IsFolder))
-            {
-                string IdFile = item.AsFolder.Id;
-                string nom = item.Name;
-                string type = "dossier de fichiers";
-                string IMG = lMVM.GetIcoByType("dossier");
-                DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
-                DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
-                string taille = ""; // Convert.ToInt32(item.AsFile.Size);
-                string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
-                f.path = path;
-                lstFiles.Add(f);
-            }
-
-            //Files
-            foreach (var item in Entries.Where(i => i.IsFile))
-            {
-                string IdFile = item.AsFile.Id;
-                string nom = item.Name;
-                var type = Path.GetExtension(item.Name);
-                string IMG = lMVM.GetIcoByType(type); 
-                DateTime dateDeCreation = item.AsFile.ClientModified;
-                DateTime ModifieLe = item.AsFile.ServerModified;
-                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
-                string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
-                f.path = path;
-                lstFiles.Add(f);
-            }
-
-            //var rst = new  { lstFolder, lstFiles};
-            //return rst;
-            return lstFiles;
+            return GetFolderAndFiles(Entries.ToList());
         }
 
         /**
@@ -319,6 +282,7 @@ namespace GPE
             {
                 var members = new[] { new MemberSelector.Email(utilisateur.Email) };
                 DBClient.Sharing.AddFileMemberAsync(fichier.path, members);
+
                 return true;
             }
             catch (Exception)
@@ -327,10 +291,38 @@ namespace GPE
             }
         }
 
-        /**
-         * Récupère l'espace utilisé
-         * */
-        public bool getSpace()
+        public List<Files> GetFilesShared()
+        {
+            List<Files> lstFiles;
+            try
+            {
+                lstFiles = new List<Files>();               
+                var ListReceivedFiles = DBClient.Sharing.ListReceivedFilesAsync( 100,  null).Result.Entries;
+
+                foreach (var metadata in ListReceivedFiles)
+                {
+                    var type = Path.GetExtension(metadata.Name);
+                    string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                    
+                    Files f = new Files(string.Empty, metadata.Name, IMG, type, null, null, string.Empty, true);
+                    f.PreviewUrl = metadata.PreviewUrl;
+                    f.DateInvitation = metadata.TimeInvited;
+                    f.IdDropbox = metadata.Id;
+
+                    lstFiles.Add(f);
+                }
+                return lstFiles;
+            }
+            catch (Exception)
+            {
+                return lstFiles = new List<Files>();
+            }
+        }
+    
+     /**
+     * Récupère l'espace utilisé
+     * */
+    public bool getSpace()
         {
             if (DBClient != null)
             {
@@ -346,9 +338,50 @@ namespace GPE
         /**
          * Récupère les fichiers d'un dossier
          * */
-        public List<Metadata> GetItems(string folderPath)
+        public List<Files> GetItemsFolder(string folderPath)
         {
-            return new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
+            List < Metadata > Entries =  new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
+            return GetFolderAndFiles (Entries);
+        }
+
+        /**
+         * Récupération des dossiers et des fichiers
+         * */
+        public List<Files> GetFolderAndFiles(List<Metadata> Entries)
+        {
+            List<Files> lstFiles = new List<Files>();
+
+            // folder
+            List<String> lstFolder = new List<string>();
+            foreach (var item in Entries.Where(i => i.IsFolder))
+            {
+                string IdFile = item.AsFolder.Id;
+                string nom = item.Name;
+                string type = "dossier de fichiers";
+                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
+                string taille = "";
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, DateTime.MinValue, DateTime.MinValue, taille, false);
+                f.path = path;
+                lstFiles.Add(f);
+            }
+
+            //Files
+            foreach (var item in Entries.Where(i => i.IsFile))
+            {
+                string IdFile = item.AsFile.Id;
+                string nom = item.Name;
+                var type = Path.GetExtension(item.Name);
+                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                DateTime dateDeCreation = item.AsFile.ClientModified;
+                DateTime ModifieLe = item.AsFile.ServerModified;
+                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, true);
+                f.path = path;
+                lstFiles.Add(f);
+            }
+            return lstFiles;
         }
 
         #endregion

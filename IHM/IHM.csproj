@@ -305,5 +305,11 @@
   <ItemGroup>
     <Resource Include="IMG\role.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\validate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\notvalidate.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
