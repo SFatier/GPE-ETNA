@@ -26,7 +26,7 @@ namespace IHM.ModelView
         public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-        public ICommand ReloadDataGrid { get; set; }
+        public ICommand ReloadDataGrid { get; set; } 
         public ICommand Upload { get; set; }
         public ICommand Recherche { get; set; } 
         public ICommand RechercheDate { get; set; }
@@ -337,6 +337,15 @@ namespace IHM.ModelView
         #endregion
 
         #region [Methods]
+
+        public void GetFolder()
+        {
+            if (filesSelected != null && filesSelected.IsFile == false)
+            {
+                DgFiles =  Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
+            }
+        }
+
         /**
          * Récupère une ico en fonction du type de l'image
          * */
