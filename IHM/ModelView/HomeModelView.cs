@@ -57,12 +57,26 @@ namespace IHM.ModelView
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
                 GetFiles();
+                GetFilesShared();
             }
 
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
+        }
+
+        public void GetFilesShared()
+        {
+            List<Files> lst = DBB.GetFilesShared();
+            lMVM.FilesShared = lst;
+            if (lMVM.FilesShared.Count > 0)
+            {
+                foreach (Files f in lMVM.FilesShared)
+                {
+                    lMVM.DgFiles.Add(f);
+                }
+            }
         }
         #endregion
 

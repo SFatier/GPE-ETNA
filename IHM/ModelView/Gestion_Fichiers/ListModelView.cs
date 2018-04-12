@@ -22,6 +22,7 @@ namespace IHM.ModelView
     {
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  
         public string Name => "Liste des documents du cloud dropbox";
+        public List<Files> FilesShared { get; internal set; }
 
         public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
@@ -110,9 +111,32 @@ namespace IHM.ModelView
                 {
                     if (value != _ProjetFiltre)
                     {
+                        Singleton.GetInstance().GetHomeModelView().GetFiles();
+                        Singleton.GetInstance().GetHomeModelView().GetFilesShared();
+
+                        List<Files> rslt = new List<Files>();
                         var lst = Singleton.GetInstance().GetAllProject().SingleOrDefault(x => x.Nom.Equals(value)).LstFiles;
                         if (lst.Count() > 0) {
-                            DgFiles = lst;
+                            foreach( Files f in lst)
+                            {
+                                try {
+                                    var newDeck = f.path.Split('/');
+                                    newDeck = newDeck.Take(newDeck.Count() - 1).ToArray();
+
+                                    var lstItems = Singleton.GetInstance().GetDBB().GetItemsFolder(string.Join("/", newDeck));
+
+                                    if (lstItems.Count > 0)
+                                        rslt.Add(lstItems[0]);
+                                } catch (Exception )
+                                {
+                                    if(DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)) != null)
+                                     {
+                                        rslt.Add(DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)));
+                                    }
+                                }
+                            }
+
+                            DgFiles  = rslt;
                         }
                         else
                         {
@@ -334,6 +358,7 @@ namespace IHM.ModelView
             }
         }
 
+
         #endregion
 
         #region [Methods]
@@ -483,19 +508,16 @@ namespace IHM.ModelView
             {
                 SourceFilePath = openFileDialog.FileName;
                 Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
-
             }
         }
 
         /**
-   * Download File
-   * */
+       * Download File
+       * */
         private void ActionDownload(object paramater)
         {
-
             if (filesSelected != null)
             {
-
                 string DropboxFolderPath = filesSelected.path;
                 string DropboxFileName = filesSelected.Nom;
                 string DownloadFolderPath = "";
@@ -521,11 +543,18 @@ namespace IHM.ModelView
         {
             if (filesSelected != null)
             {
-                string DropboxFileName = filesSelected.Nom;
-                string DropboxFolderPath = filesSelected.path;
-                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
-                Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
-                System.Diagnostics.Process.Start(fileName);
+                if (filesSelected.PreviewUrl == null)
+                {
+                    string DropboxFileName = filesSelected.Nom;
+                    string DropboxFolderPath = filesSelected.path;
+                    string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+                    System.Diagnostics.Process.Start(fileName);
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(filesSelected.PreviewUrl);
+                }
             }
             else
             {
@@ -537,7 +566,6 @@ namespace IHM.ModelView
         private void ActionRecherche(object par)
         {
             string nomRechercher = Nom;
-
             Results = new List<Files>();
             bool trouve = false;
 
@@ -550,24 +578,17 @@ namespace IHM.ModelView
                     Results.Add(item);
                     Console.WriteLine(Results);
                     DgFiles = Results;
-
                 }
-
             }
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
-
         }
-
 
         private void ActionRecherchePeriode(object obj)
         {
-
             string recherchePeriode = this.Date;
-
-
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddDays(20);
             Results = new List<Files>();
@@ -583,11 +604,8 @@ namespace IHM.ModelView
                     startDate = startDate.AddDays(1);
                     Console.WriteLine(Results);
                     DgFiles = Results;
-
                 }
-
             }
-
         }
 
         private void ActionRechercheDate(object obj)
@@ -604,22 +622,26 @@ namespace IHM.ModelView
 
             foreach (Files item in DgFiles)
             {
-
-                if (item.DateDeCreation.Year == year && item.DateDeCreation.Month == month && item.DateDeCreation.Day == day)
+                if (item.DateDeCreation.Value.Year == year && item.DateDeCreation.Value.Month == month && item.DateDeCreation.Value.Day == day)
                 {
                     trouve = true;
                     Results.Add(item);
                     Console.WriteLine(Results);
                     DgFiles = Results;
-
                 }
 
+                if (item.DateInvitation.Value.Year == year && item.DateInvitation.Value.Month == month && item.DateInvitation.Value.Day == day)
+                {
+                    trouve = true;
+                    Results.Add(item);
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
+                }
             }
             if (trouve == false)
             {
                 MessageBox.Show("La date séléctioné  n’existe pas");
             }
-
         }
 
         #endregion

@@ -13,8 +13,7 @@
         </Grid.RowDefinitions>
 
         <Label Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,10,0,0"/>
-        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}"> </Button>
-
+        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"> </Button>
 
         <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="982" VerticalAlignment="Top"  Grid.Row="2" >
             <StackPanel >

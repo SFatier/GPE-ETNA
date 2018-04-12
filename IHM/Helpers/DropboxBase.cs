@@ -282,6 +282,7 @@ namespace GPE
             {
                 var members = new[] { new MemberSelector.Email(utilisateur.Email) };
                 DBClient.Sharing.AddFileMemberAsync(fichier.path, members);
+
                 return true;
             }
             catch (Exception)
@@ -290,10 +291,38 @@ namespace GPE
             }
         }
 
-        /**
-         * Récupère l'espace utilisé
-         * */
-        public bool getSpace()
+        public List<Files> GetFilesShared()
+        {
+            List<Files> lstFiles;
+            try
+            {
+                lstFiles = new List<Files>();               
+                var ListReceivedFiles = DBClient.Sharing.ListReceivedFilesAsync( 100,  null).Result.Entries;
+
+                foreach (var metadata in ListReceivedFiles)
+                {
+                    var type = Path.GetExtension(metadata.Name);
+                    string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                    
+                    Files f = new Files(string.Empty, metadata.Name, IMG, type, null, null, string.Empty, true);
+                    f.PreviewUrl = metadata.PreviewUrl;
+                    f.DateInvitation = metadata.TimeInvited;
+                    f.IdDropbox = metadata.Id;
+
+                    lstFiles.Add(f);
+                }
+                return lstFiles;
+            }
+            catch (Exception)
+            {
+                return lstFiles = new List<Files>();
+            }
+        }
+    
+     /**
+     * Récupère l'espace utilisé
+     * */
+    public bool getSpace()
         {
             if (DBClient != null)
             {
@@ -330,11 +359,9 @@ namespace GPE
                 string nom = item.Name;
                 string type = "dossier de fichiers";
                 string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
-                DateTime dateDeCreation = DateTime.Now;
-                DateTime ModifieLe = DateTime.Now;
                 string taille = "";
                 string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
+                Files f = new Files(IdFile, nom, IMG, type, DateTime.MinValue, DateTime.MinValue, taille, false);
                 f.path = path;
                 lstFiles.Add(f);
             }

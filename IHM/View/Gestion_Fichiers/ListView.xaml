@@ -134,9 +134,11 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" />
+                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
                 <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
-                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" />
+                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />                
                 <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>

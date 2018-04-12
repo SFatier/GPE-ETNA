@@ -12,7 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Content="Gestion des rôles" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="200" FontSize="24" Height="45" Margin="3,5,0,0"/>
+        <Label Content="Gestion des utilisateurs" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,5,0,0"/>
         
         <TextBox Text="{Binding SearchUser}" Margin="5" Width="250" Name="tbxSearchUser"></TextBox>
         <Button  Margin="290,5,0,6" Width="40" Command="{Binding SearchUserBar}">
@@ -40,8 +40,11 @@
             </ListBox.ContextMenu>
         </ListBox>
 
-        <Button  HorizontalAlignment="Left" Margin="1020,9,0,0" VerticalAlignment="Top" Width="150" Height="30" Foreground="Transparent" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddUtilisateur}">
-            <Image Source="{Binding ImgAddUtilisateur}" Width="40"/>
+        <Button  HorizontalAlignment="Left" Margin="800,9,0,0" VerticalAlignment="Top" Width="170" Height="30" Foreground="Transparent" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddUtilisateur}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding ImgAddUtilisateur}" Width="40"/>
+                <Label Content="Ajouter un utilisateur"></Label>
+            </StackPanel>
         </Button>
     </Grid>
 </UserControl>
