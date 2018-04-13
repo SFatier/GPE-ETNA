@@ -5,6 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="800"  Background="White">
 
+    <UserControl.Resources>
+        <Style  TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="WhiteSmoke"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="White"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,11 +28,10 @@
         <Label Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,10,0,0"/>
         <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"> </Button>
 
-        <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="982" VerticalAlignment="Top"  Grid.Row="2" >
+        <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="auto" VerticalAlignment="Top"  Grid.Row="2" >
             <StackPanel >
-                <ItemsControl
-                Name="ItemsList" ItemsSource="{Binding LstProject}" Background="White" >
-                    <ItemsControl.ItemTemplate>
+                <ListBox    Name="ItemsList" ItemsSource="{Binding LstProject}"  BorderBrush="White" >
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Expander Margin="10,10,10,10" >
@@ -29,7 +41,6 @@
                                                 <ColumnDefinition Width="500"></ColumnDefinition>
                                                 <ColumnDefinition Width="500"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            
                                             <StackPanel Orientation="Horizontal" Grid.Column="0">                                            
                                             <!--Nom des projets-->
                                             <Label></Label>
@@ -41,8 +52,7 @@
                                                 </Image.ToolTip>
                                             </Image>                                                                                      
                                         </StackPanel>
-                                        
-                                        <!-- Select projet en cours ou fini-->
+                                            <!-- Select projet en cours ou fini-->
                                             <StackPanel Orientation="Horizontal"  Grid.Column="1" Margin="240,0,0,0">
                                                 <RadioButton Margin="0,5" Name="projetEncours" IsChecked="{Binding IsprojetEncours}">
                                                     <WrapPanel>
@@ -59,60 +69,64 @@
                                         </StackPanel>
                                         </Grid>
                                     </Expander.Header>
-
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="10"></RowDefinition>
+                                            <RowDefinition Height="40"></RowDefinition>
                                             <RowDefinition Height="Auto"></RowDefinition>
                                         </Grid.RowDefinitions>
-                                        
                                         <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Grid.Column="0" Grid.Row="1">Liste des fichiers</Label>
-                                    <TreeView Grid.Column="0" Grid.Row="1" Margin="30" BorderBrush="White" >
-                                        <TreeViewItem Header="Level 1" IsExpanded="True">
-                                            <TreeViewItem Header="Level 2.1" />
-                                            <TreeViewItem Header="Level 2.2" IsExpanded="True">
-                                                <TreeViewItem Header="Level 3.1" />
-                                                <TreeViewItem Header="Level 3.2" />
-                                            </TreeViewItem>
-                                            <TreeViewItem Header="Level 2.3" />
-                                        </TreeViewItem>
-                                    </TreeView>
-                        
-                                    <Label Grid.Column="1" Grid.Row="1" >Tâches</Label>
-                                    <TabControl TabStripPlacement="Top" Grid.Column="1" Grid.Row="1"  Margin="30">
-                                        <TabItem Header="A faire">
-                                            <Label Content="Content goes here..." />
-                                        </TabItem>
-                                        <TabItem Header="Fait" />
-                                        <TabItem Header="Validées" />
-                                    </TabControl>
-                                  
-                                    <Label Grid.Column="2" Grid.Row="1">Utilisateurs</Label>
-                                    <ListView ItemsSource="{Binding LstUser}" Grid.Column="2" Grid.Row="1" Margin="30" >
+                                        <TextBlock Text="{Binding Description}" Margin="15,5" Width=" auto">                                            
+                                        </TextBlock>
+
+                                        <Label Grid.Column="0" Grid.Row="1" Margin="10,5">Liste des fichiers</Label>
+                                        <ListView ItemsSource="{Binding LstFiles}" Grid.Column="0" Grid.Row="1" Margin="30"  Width="400" BorderBrush="White" AlternationCount="2">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <Label Content="-"> </Label>
+                                                            <TextBlock Text="{Binding Nom}" Margin=" 4" />
+                                                        </WrapPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+
+                                        <Label Grid.Column="1" Grid.Row="1" Margin="10,5">Utilisateurs</Label>
+                                        <ListView ItemsSource="{Binding LstUser}" Grid.Column="1" Grid.Row="1" Margin="30" Width="400" BorderBrush="White"  AlternationCount="2">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <WrapPanel>
-                                                    <TextBlock Text="{Binding Login}" />
-                                                </WrapPanel>
+                                                        <TextBlock Text="{Binding Login}" Margin=" 4" />
+                                                        <Label Content="-"></Label>
+                                                        <TextBlock Text="{Binding Email}" Margin=" 4"  />
+                                                    </WrapPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
-                              
                                 </Grid>
                                 </Expander>
-                            </Grid>
+                            </Grid>                        
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Modier le projet" Command="{Binding ModifierProjet}">
+                                <MenuItem.Icon>
+                                    <Image Source="/IMG/edit.png" Width="20" Height="20" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Supprimer le projet" Command="{Binding SupprimerProjet}">
+                                <MenuItem.Icon>
+                                    <Image Source="/IMG/trash.png" Width="20" Height="20"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
             </StackPanel>
         </ScrollViewer>
-        
-      
     </Grid>
 </UserControl>

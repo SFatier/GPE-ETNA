@@ -34,8 +34,16 @@
             </ListBox.ItemTemplate>
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Fiche de l'utilisateur" Command="{Binding FicheUtilisateur}"/>
-                    <MenuItem Header="Supprimer" Command="{Binding DeleteUtilisateur}"/>
+                    <MenuItem Header="Fiche de l'utilisateur" Command="{Binding FicheUtilisateur}">
+                        <MenuItem.Icon>
+                            <Image Source="/IMG/edit.png" Width="20" Height="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Supprimer" Command="{Binding DeleteUtilisateur}">
+                        <MenuItem.Icon>
+                            <Image Source="/IMG/trash.png" Width="20" Height="20"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

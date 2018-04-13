@@ -13,11 +13,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\IMG\projet.png" Width="97" Margin="0,10,623,19"  />
+        <Image Source="/IMG/projet.png" Width="97" Margin="0,10,623,19"  />
         <Label Content="2 projet restans" Width="160" Margin="100,46,458,31"/>
 
         <Label Content="Derniers utilisateurs ajoutées" Margin="748,46,10,31"/>
-        <Image Source="C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\IMG\users.png"  Width="60" Margin="563,10,147,10" />
+        <Image Source="/IMG/users.png"  Width="60" Margin="563,10,147,10" />
 
             <lvc:PieChart Name="Chart" Grid.Row="1" Series="{Binding SeriesCollection}" 
                       LegendLocation="Right" InnerRadius="10" >
