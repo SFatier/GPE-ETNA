@@ -91,6 +91,9 @@ namespace IHM.ModelView
                 p.LstFiles = new List<Files>();
                 p.LstUser = new List<Utilisateur>();
                 p.LstUser = GetUserProject();
+                p.IcoIsArchived = "notvalidate.png";
+                p.IsprojetFin = false;
+                p.IsprojetEncours = true;
                 p.DateDeCreation = DateTime.Now;
                 Singleton.GetInstance().addProject(p);
             

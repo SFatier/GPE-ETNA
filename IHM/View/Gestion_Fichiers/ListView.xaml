@@ -123,7 +123,7 @@
         </Button>
        
         <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
-                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Margin="0,0,1,0" Grid.Row="1" Height="auto" >
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Margin="0,0,1,0" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
             <DataGrid.Columns >
                 <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -134,9 +134,11 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" />
+                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
                 <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
-                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" />
+                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />                
                 <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
