@@ -39,7 +39,7 @@ namespace IHM.View.HomePage
                 new PieSeries
                 {
                     Title = "Espace Indisponible",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue((100- espace_utilise_Gegabyte)) },
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(Math.Round( (100- espace_utilise_Gegabyte),2)) },
                     DataLabels = true,
                     ToolTip="Espace Indisponible " + (100- espace_utilise_Gegabyte),
                     Fill = System.Windows.Media.Brushes.Blue
@@ -47,7 +47,7 @@ namespace IHM.View.HomePage
                 new PieSeries
                 {
                     Title = "Espace disponible",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(espace_utilise_Gegabyte) },
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(Math.Round( ( espace_utilise_Gegabyte),2)) },
                     DataLabels = true,
                    ToolTip="Espace disponible " + (100- espace_utilise_Gegabyte),
                    Fill = System.Windows.Media.Brushes.DarkCyan

@@ -15,19 +15,28 @@ using System.Windows.Input;
 
 namespace IHM.ModelView
 {
-    public class AddProjectModelView : ObservableObject, IPageViewModel
+    public class UpdateProjectModelView : ObservableObject, IPageViewModel
     {
-        ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
-        public ICommand  Save{ get; set; }
-        
-        public AddProjectModelView()
+        private  Projet Projet { get; set; }
+        public ICommand Save { get; set; }
+
+        public UpdateProjectModelView(Projet project)
         {
-            TitrePage = "Ajouter un projet";
+            try
+            {
+                Projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(user => user.Nom.Equals(project.Nom));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+
+            TitrePage = "Modifier un projet";
+            LoadInformation();
             LoadAction();
-            LstUser = Singleton.GetInstance().GetAllUtilisateur().Where(user => user.Email != Singleton.GetInstance().GetUtilisateur().Email).Select(u => u.Login).ToList() ;
         }
 
-        #region [Binding]
+        #region [Binding]        
         private string titrePage;
         public string TitrePage
         {
@@ -84,6 +93,7 @@ namespace IHM.ModelView
             }
         }
 
+        private ObservableCollection<string> _selectedUsers;
         public ObservableCollection<string> SelectedUsers
         {
             get
@@ -93,54 +103,53 @@ namespace IHM.ModelView
         }
         #endregion
 
-        #region [Action]
-
-        private void ActionAddProject(object parameter)
+        private void LoadInformation()
         {
-            if (NomProjet != "" && DescriptionProjet != "")
-            {
-                Projet p = new Projet();
-                p.Nom = NomProjet;
-                p.Description = DescriptionProjet;
-                p.LstFiles = new List<Files>();
-                p.LstUser = new List<Utilisateur>();
-                p.LstUser = GetUserProject();
-                p.IcoIsArchived = "notvalidate.png";
-                p.IsprojetFin = false;
-                p.IsprojetEncours = true;
-                p.DateDeCreation = DateTime.Now;
-                Singleton.GetInstance().addProject(p);
-            
-                #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                try
-                {
-                    using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
-                    }
+            NomProjet = Projet.Nom;
+            DescriptionProjet = Projet.Description;
+            List<Utilisateur> lstUtilisateur = Singleton.GetInstance().GetAllUtilisateur();
+            LstUser = new List<string>();
 
-                    Singleton.GetInstance().GetHomeModelView().GetProjets();
-                    Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error :\" " + ex.Message);
-                }
-                #endregion
-            }
-            else
+            foreach (Utilisateur u in lstUtilisateur)
             {
-                MessageBox.Show("Veuillez renseigner tous les champs obligatoires");
+                Utilisateur utilisateur = Projet.LstUser.FirstOrDefault(user => user.Login.Equals(u.Login));
+                if( utilisateur != null)
+                {
+                    LstUser.Add(utilisateur.Login);
+                }
             }
         }
 
-        #endregion
-
         public void LoadAction()
         {
-            Save = new RelayCommand(ActionAddProject);
+            Save = new RelayCommand(ActionUpdateProject);
+        }
+
+        private void ActionUpdateProject(object obj)
+        {
+            List<Projet> lst = Singleton.GetInstance().GetAllProject();
+            Projet = lst.FirstOrDefault(item => item.Nom.Equals(Projet.Nom));
+
+            Projet.Nom = nomProjet;
+            Projet.Description = DescriptionProjet;
+    
+            #region [Ecriture de l'utilisateur dans le fichier .JSON]
+            try
+            {
+                using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
+                }
+
+                Singleton.GetInstance().GetHomeModelView().GetProjets();
+                Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
+            #endregion
         }
 
         private List<Utilisateur> GetUserProject()
@@ -160,6 +169,6 @@ namespace IHM.ModelView
                 }
             }
             return lst;
-        }        
+        }
     }
 }
