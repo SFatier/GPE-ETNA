@@ -82,7 +82,7 @@
         
         <!--Row 2-->
         <ContentControl Content="{Binding CurrentContentViewModel}" Grid.Row="2" Width="auto"/>
-        <Button Content="Se déconnecter" HorizontalAlignment="Left" Margin="876,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown"  Command="{Binding Disconnect}" Height="6"/>
+        <Button Content="Se déconnecter" HorizontalAlignment="Left" Margin="876,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown"  Command="{Binding Disconnect}" Height="30"/>
         <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="43" RenderTransformOrigin="-4.092,-0.5" FontSize="24" Width="152" FontFamily="Stencil" Foreground="#FFE6E1DC" />
     </Grid>
 </UserControl>

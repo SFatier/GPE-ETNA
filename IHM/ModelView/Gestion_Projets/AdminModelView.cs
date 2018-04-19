@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IHM.ModelView
@@ -20,6 +21,8 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"]; //a modifier par rapport à votre ordinateur
 
         public ICommand AddProject { get; set; }
+        public ICommand ModifierProjet { get; set; }
+        public ICommand SupprimerProjet { get; set; }
 
         #region [Constructor]
         public AdminModelView()
@@ -74,20 +77,19 @@ namespace IHM.ModelView
             }
         }
 
-        private string _btnTrash;
-        public string BtnTrash
+        private Projet selectedProject;
+        public Projet SelectedProject
         {
-            get { return this._btnTrash; }
+            get { return this.selectedProject; }
             set
             {
-                if (!string.Equals(this._btnTrash, value))
+                if (!string.Equals(this.selectedProject, value))
                 {
-                    this._btnTrash = value;
-                    RaisePropertyChanged(nameof(BtnTrash));
+                    this.selectedProject = value;
+                    RaisePropertyChanged(nameof(SelectedProject));
                 }
             }
         }
-              
         #endregion
 
         #region [Action]
@@ -95,11 +97,58 @@ namespace IHM.ModelView
         {
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AddProjectModelView();
         }
+
+        private void ActionModifierProject(object parameter)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new UpdateProjectModelView(SelectedProject);
+        }
+
+        private void ActionSupprimerProjet(object parameter)
+        {
+            if (SelectedProject != null)
+            {
+                try
+                {
+                    Singleton.GetInstance().GetAllProject().Remove(SelectedProject);
+
+                    #region [Ecriture de l'utilisateur dans le fichier .JSON]
+                    try
+                    {
+                        using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
+                        {
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
+                        }
+
+                        Singleton.GetInstance().GetHomeModelView().GetProjets();
+                        Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error :\" " + ex.Message);
+                    }
+                    #endregion
+
+                    LoadProject();
+                }
+                catch (Exception ex)
+                {
+                        MessageBox.Show("Error : " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Impossible de récupérer les informations du projet.");
+            }
+        }
         #endregion
 
         public void LoadAction()
         {
             AddProject = new RelayCommand(ActionAddProject);
+            ModifierProjet = new RelayCommand(ActionModifierProject);
+            SupprimerProjet = new RelayCommand(ActionSupprimerProjet);
         }
     }
 }
