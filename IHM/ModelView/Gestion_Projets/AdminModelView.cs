@@ -37,6 +37,23 @@ namespace IHM.ModelView
                 LstProject.Clear();
 
              List<Projet> lstProject = Singleton.GetInstance().GetAllProject();
+
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Admin")
+            {
+                List<Projet> lstTmp = new List<Projet>();
+                lstProject.ForEach(p =>
+                {
+                    p.LstUser.ForEach(u =>
+                    {
+                        if (u.Login.Equals(Singleton.GetInstance().GetUtilisateur().Login))
+                        {
+                            lstTmp.Add(p);
+                        }
+                    });
+                });
+                lstProject = lstTmp;
+            }
+
             foreach (Projet p in lstProject)
             {
                 string img = p.IcoIsArchived;

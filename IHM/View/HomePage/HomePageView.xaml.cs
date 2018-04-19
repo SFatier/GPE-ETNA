@@ -16,6 +16,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using LiveCharts.Defaults;
 using IHM.Helpers;
+using IHM.Model;
 
 namespace IHM.View.HomePage
 {
@@ -27,6 +28,7 @@ namespace IHM.View.HomePage
         public HomePageView()
         {
             InitializeComponent();
+
             if (Singleton.GetInstance().GetDBB().DBClient != null)
             {
                 long espace_utilise_long = Singleton.GetInstance().GetDBB().espace_utilise;
@@ -56,7 +58,35 @@ namespace IHM.View.HomePage
 
                 Chart.LegendLocation = LegendLocation.Bottom;
             }
+
+            GetNbProjetByUtilisateur();
+
             DataContext = this;
+        }
+
+        private void GetNbProjetByUtilisateur()
+        {
+            List<Projet> lstProject = Singleton.GetInstance().GetAllProject();
+
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Admin")
+            {
+                List<Projet> lstTmp = new List<Projet>();
+                lstProject.ForEach(p =>
+                {
+                    p.LstUser.ForEach(u =>
+                    {
+                        if (u.Login.Equals(Singleton.GetInstance().GetUtilisateur().Login))
+                        {
+                            lstTmp.Add(p);
+                        }
+                    });
+                });
+                lblNbProjet.Content = lstTmp.Count() + " projets restants";
+            }
+            else
+            {
+                lblNbProjet.Content = lstProject.Where(p => p.isprojetEncours.Equals(true)).Count() + " projets en cours";
+            }
         }
 
         static double ConvertBytesToMegabytes(long bytes)
