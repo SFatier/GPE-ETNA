@@ -79,6 +79,7 @@
     <Compile Include="ModelView\Gestion_Fichiers\PopUpModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AddProjectModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AdminModelView.cs" />
+    <Compile Include="ModelView\Gestion_Projets\UpdateProjectModelView.cs" />
     <Compile Include="ModelView\Gestion_Utilisateurs\ListUsersModelView.cs" />
     <Compile Include="ModelView\Gestion_Utilisateurs\UtilisateurViewModel.cs" />
     <Compile Include="ModelView\HomeModelView.cs" />

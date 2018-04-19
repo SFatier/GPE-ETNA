@@ -7,6 +7,7 @@ using IHM.ModelView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -361,7 +362,7 @@ namespace GPE
                 string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
                 string taille = "";
                 string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG, type, DateTime.MinValue, DateTime.MinValue, taille, false);
+                Files f = new Files(IdFile, nom, IMG, type, null, null, taille, false);
                 f.path = path;
                 lstFiles.Add(f);
             }
@@ -373,8 +374,8 @@ namespace GPE
                 string nom = item.Name;
                 var type = Path.GetExtension(item.Name);
                 string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
-                DateTime dateDeCreation = item.AsFile.ClientModified;
-                DateTime ModifieLe = item.AsFile.ServerModified;
+                DateTime dateDeCreation = Convert.ToDateTime(item.AsFile.ClientModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
+                DateTime ModifieLe = Convert.ToDateTime( item.AsFile.ServerModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
                 string path = item.PathDisplay;
                 Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, true);

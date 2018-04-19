@@ -28,30 +28,28 @@
         <DataTemplate DataType="{x:Type local1:AdminModelView}">
             <local:AdminView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:UpdateProjectModelView}">
+            <local:AddProjectView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type local1:AddProjectModelView}">
             <local:AddProjectView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type local1:PersonalModelView}">
             <local:PersonalView />
         </DataTemplate>
-        
         <DataTemplate DataType="{x:Type local1:ListUsersModelView}">
             <local:ListUsersView />
         </DataTemplate>
-        
         <DataTemplate DataType="{x:Type local1:RolesModelView}">
             <local:RolesView />
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type local3:UtilisateurViewModel}">
             <local2:UtilisateurView />
         </DataTemplate>
-        
         <DataTemplate DataType="{x:Type local5:HomePageModelView}">
             <local4:HomePageView />
         </DataTemplate>
     </Window.Resources>
-
     <Grid>         
         <ContentControl Content="{Binding CurrentPageViewModel}" Grid.Row="2" Grid.ColumnSpan="2" Width="auto"/>
     </Grid>

@@ -9,7 +9,7 @@
         <Style  TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" Value="WhiteSmoke"></Setter>
+                    <Setter Property="Background" Value="Transparent"></Setter>
                 </Trigger>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                     <Setter Property="Background" Value="White"></Setter>
@@ -25,12 +25,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Label Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,10,0,0"/>
-        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"> </Button>
+        <Label Name="lblPageProjets" Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="250" FontSize="24" Height="45" Margin="3,10,0,0"/>
+        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"  Name="btnAjouterProjet"> </Button>
 
-        <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="auto" VerticalAlignment="Top"  Grid.Row="2" >
+        <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="auto" VerticalAlignment="Top"  Grid.Row="2" HorizontalScrollBarVisibility="Hidden">
             <StackPanel >
-                <ListBox    Name="ItemsList" ItemsSource="{Binding LstProject}"  BorderBrush="White" >
+                <ListBox    Name="ItemsList" ItemsSource="{Binding LstProject}"  BorderBrush="LightGray" SelectedItem="{Binding SelectedProject}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -72,18 +72,46 @@
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="40"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                          <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="{Binding Description}" Margin="15,5" Width=" auto">                                            
-                                        </TextBlock>
+                                        <TextBlock Text="{Binding Description}" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Column="0"  Width="900" Height="auto" Margin="25,-10, 5, 5" TextWrapping="Wrap" Background="Transparent" > </TextBlock>
 
-                                        <Label Grid.Column="0" Grid.Row="1" Margin="10,5">Liste des fichiers</Label>
-                                        <ListView ItemsSource="{Binding LstFiles}" Grid.Column="0" Grid.Row="1" Margin="30"  Width="400" BorderBrush="White" AlternationCount="2">
+                                        <StackPanel HorizontalAlignment="Left" Margin="20,15"  Grid.Column="0" Grid.Row="2">
+                                            <Label>Liste des fichiers</Label>
+                                            <ListView ItemsSource="{Binding LstFiles}" BorderBrush="White" AlternationCount="2" Width="450" Height="auto">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <Label Content="-"></Label>
+                                                            <TextBlock Text="{Binding Nom}" Margin=" 4" />
+                                                        </WrapPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+
+                                        <StackPanel HorizontalAlignment="Left" Margin="0,15"  Grid.Column="1" Grid.Row="2">
+                                            <Label >Utilisateurs</Label>
+                                            <ListView ItemsSource="{Binding LstUser}" Width="400" BorderBrush="White" Margin="0,5" AlternationCount="2">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <TextBlock Text="{Binding Login}" Margin=" 4" />
+                                                            <Label Content="-"></Label>
+                                                            <TextBlock Text="{Binding Email}" Margin=" 4"  />
+                                                        </WrapPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+                                        <!--<Label Grid.Column="0" Grid.Row="2" Margin="10,5">Liste des fichiers</Label>
+                                        <ListView ItemsSource="{Binding LstFiles}" Grid.Column="0" Grid.Row="2"  Width="200" Margin="0,5" BorderBrush="White" AlternationCount="2">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <WrapPanel>
@@ -92,10 +120,10 @@
                                                         </WrapPanel>
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
-                                            </ListView>
-
-                                        <Label Grid.Column="1" Grid.Row="1" Margin="10,5">Utilisateurs</Label>
-                                        <ListView ItemsSource="{Binding LstUser}" Grid.Column="1" Grid.Row="1" Margin="30" Width="400" BorderBrush="White"  AlternationCount="2">
+                                            </ListView>-->
+                                        
+                                        <!--<Label Grid.Column="1" Grid.Row="2" Margin="10,5">Utilisateurs</Label>
+                                        <ListView ItemsSource="{Binding LstUser}" Grid.Column="1" Grid.Row="2" Margin="30" Width="400" BorderBrush="White"  AlternationCount="2">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <WrapPanel>
@@ -105,7 +133,7 @@
                                                     </WrapPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
-                                    </ListView>
+                                    </ListView>-->
                                 </Grid>
                                 </Expander>
                             </Grid>                        

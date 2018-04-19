@@ -116,10 +116,13 @@ namespace IHM.ModelView
 
                         List<Files> rslt = new List<Files>();
                         var lst = Singleton.GetInstance().GetAllProject().SingleOrDefault(x => x.Nom.Equals(value)).LstFiles;
-                        if (lst.Count() > 0) {
-                            foreach( Files f in lst)
+
+                        if (lst.Count() > 0)
+                        {
+                            foreach (Files f in lst)
                             {
-                                try {
+                                try
+                                {
                                     var newDeck = f.path.Split('/');
                                     newDeck = newDeck.Take(newDeck.Count() - 1).ToArray();
 
@@ -127,23 +130,25 @@ namespace IHM.ModelView
 
                                     if (lstItems.Count > 0)
                                         rslt.Add(lstItems[0]);
-                                } catch (Exception )
+
+                                    DgFiles = rslt;
+                                    this._ProjetFiltre = value;
+                                }
+                                catch (Exception)
                                 {
-                                    if(DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)) != null)
-                                     {
+                                    if (DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)) != null)
+                                    {
                                         rslt.Add(DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)));
                                     }
                                 }
                             }
-
-                            DgFiles  = rslt;
                         }
                         else
                         {
-                            MessageBox.Show("Aucun fichier associé.");
+                            Singleton.GetInstance().GetHomeModelView().GetFiles();
+                            MessageBox.Show(lst.Count() == 0 ? "Aucun fichier associé." : "");
                         }
                     }
-                    this._ProjetFiltre = value;
                     RaisePropertyChanged(nameof(ProjetFiltre));
                 }
             }
@@ -484,7 +489,9 @@ namespace IHM.ModelView
         {
             try
             {
+                DgFiles.Clear();
                 Singleton.GetInstance().GetHomeModelView().GetFiles();
+                Singleton.GetInstance().GetHomeModelView().GetFilesShared();
             } catch (Exception ex)
             {
                 MessageBox.Show("Error:\"" + ex.Message);
