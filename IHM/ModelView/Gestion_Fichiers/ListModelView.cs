@@ -41,7 +41,6 @@ namespace IHM.ModelView
             _DgFiles = new List<Files>();
 
             LoadProject();
-            LoadIcon();
             LoadAction();
         }
 
@@ -56,20 +55,9 @@ namespace IHM.ModelView
             Open = new RelayCommand(ActionOpen);
             Recherche = new RelayCommand(ActionRecherche);
             RechercheDate = new RelayCommand(ActionRechercheDate);
+            RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
         }
-
-        private void LoadIcon()
-        {
-            BtnEdit = path_img + "edit.png";
-            BtnTrash = path_img + "trash.png";
-            BtnOpen = path_img + "open.png";
-            BtnAdd = path_img + "add.png";
-            BtnReload = path_img + "reload.png";
-            BtnUpload = path_img + "upload.png";
-            BtnDownload = path_img + "download.png";
-            BtnProject = path_img + "link.png";
-        }
-
+        
         public void LoadProject()
         {           
             List<Projet> items;
@@ -111,49 +99,13 @@ namespace IHM.ModelView
                 {
                     if (value != _ProjetFiltre)
                     {
-                        Singleton.GetInstance().GetHomeModelView().GetFiles();
-                        Singleton.GetInstance().GetHomeModelView().GetFilesShared();
-
-                        List<Files> rslt = new List<Files>();
-                        var lst = Singleton.GetInstance().GetAllProject().SingleOrDefault(x => x.Nom.Equals(value)).LstFiles;
-
-                        if (lst.Count() > 0)
-                        {
-                            foreach (Files f in lst)
-                            {
-                                try
-                                {
-                                    var newDeck = f.path.Split('/');
-                                    newDeck = newDeck.Take(newDeck.Count() - 1).ToArray();
-
-                                    var lstItems = Singleton.GetInstance().GetDBB().GetItemsFolder(string.Join("/", newDeck));
-
-                                    if (lstItems.Count > 0)
-                                        rslt.Add(lstItems[0]);
-
-                                    DgFiles = rslt;
-                                    this._ProjetFiltre = value;
-                                }
-                                catch (Exception)
-                                {
-                                    if (DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)) != null)
-                                    {
-                                        rslt.Add(DgFiles.FirstOrDefault(x => x.IdDropbox.Equals(f.IdDropbox)));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Singleton.GetInstance().GetHomeModelView().GetFiles();
-                            MessageBox.Show(lst.Count() == 0 ? "Aucun fichier associé." : "");
-                        }
+                        RechercheMetadataByProjet(value);
                     }
                     RaisePropertyChanged(nameof(ProjetFiltre));
                 }
             }
         }
-
+       
         private List<Files> _Results;
         public List<Files> Results
         {
@@ -210,118 +162,6 @@ namespace IHM.ModelView
             }
         }
 
-        private string _BtnEdit;
-        public string BtnEdit
-        {
-            get { return this._BtnEdit; }
-            set
-            {
-                if (!string.Equals(this._BtnEdit, value))
-                {
-                    this._BtnEdit = value;
-                    RaisePropertyChanged(nameof(BtnEdit));
-                }
-            }
-        }
-
-        private string _BtnProject;
-        public string BtnProject
-        {
-            get { return this._BtnProject; }
-            set
-            {
-                if (!string.Equals(this._BtnProject, value))
-                {
-                    this._BtnProject = value;
-                    RaisePropertyChanged(nameof(BtnProject));
-                }
-            }
-        }
-
-        private string _BtnTrash;
-        public string BtnTrash
-        {
-            get { return this._BtnTrash; }
-            set
-            {
-                if (!string.Equals(this._BtnTrash, value))
-                {
-                    this._BtnTrash = value;
-                    RaisePropertyChanged(nameof(BtnTrash));
-                }
-            }
-        }
-
-        private string _BtnOpen;
-        public string BtnOpen
-        {
-            get { return this._BtnOpen; }
-            set
-            {
-                if (!string.Equals(this._BtnOpen, value))
-                {
-                    this._BtnOpen = value;
-                    RaisePropertyChanged(nameof(BtnOpen));
-                }
-            }
-        }
-
-        private string _BtnAdd;
-        public string BtnAdd
-        {
-            get { return this._BtnAdd; }
-            set
-            {
-                if (!string.Equals(this._BtnAdd, value))
-                {
-                    this._BtnAdd = value;
-                    RaisePropertyChanged(nameof(BtnAdd));
-                }
-            }
-        }
-
-        private string _BtnReload;
-        public string BtnReload
-        {
-            get { return this._BtnReload; }
-            set
-            {
-                if (!string.Equals(this._BtnReload, value))
-                {
-                    this._BtnReload = value;
-                    RaisePropertyChanged(nameof(BtnReload));
-                }
-            }
-        }
-
-        private string _BtnUpload;
-        public string BtnUpload
-        {
-            get { return this._BtnUpload; }
-            set
-            {
-                if (!string.Equals(this._BtnUpload, value))
-                {
-                    this._BtnUpload = value;
-                    RaisePropertyChanged(nameof(BtnUpload));
-                }
-            }
-        }
-
-        private string _BtnDownload;
-        public string BtnDownload
-        {
-            get { return this._BtnDownload; }
-            set
-            {
-                if (!string.Equals(this._BtnDownload, value))
-                {
-                    this._BtnDownload = value;
-                    RaisePropertyChanged(nameof(BtnDownload));
-                }
-            }
-        }
-
         private string _Nom;
         public string Nom
         {
@@ -363,11 +203,13 @@ namespace IHM.ModelView
             }
         }
 
-
         #endregion
 
         #region [Methods]
 
+        /// <summary>
+        /// Récupère les items d'un dossier
+        /// </summary>
         public void GetFolder()
         {
             if (filesSelected != null && filesSelected.IsFile == false)
@@ -376,9 +218,76 @@ namespace IHM.ModelView
             }
         }
 
-        /**
-         * Récupère une ico en fonction du type de l'image
-         * */
+        /// <summary>
+        /// Recherche les fichiers d'un projet
+        /// </summary>
+        /// <param name="value"></param>
+        private void RechercheMetadataByProjet(string value)
+        {
+            Singleton.GetInstance().GetHomeModelView().GetFiles();
+            Singleton.GetInstance().GetHomeModelView().GetFilesShared();
+
+            Projet projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(x => x.Nom.Equals(value));
+
+            List<Files> lst = new List<Files>();
+
+            if (projet.LstFiles != null)
+            {
+                projet.LstFiles.ForEach(metadata =>
+                {
+
+                    if (metadata.IsFile == false)
+                    {
+                        var resultat = VerificationFichier(metadata.path);
+                        if (resultat.Count() > 0)
+                        {
+                            resultat.ForEach(item =>
+                            {
+                                lst.Add(item);
+                            });
+                        }
+                    }
+                    else
+                    {
+                        lst.Add(metadata);
+                    }
+                });
+            }
+            DgFiles = lst;
+        }
+
+        /// <summary>
+        /// Vérifie si un dossier possède des autres dossiers ainsi que ses fichiers
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="NomFichier"></param>
+        /// <returns></returns>
+        private List<Files> VerificationFichier(string path)
+        {
+            List<Files> rslt = new List<Files>();
+            List<Files> lst = Singleton.GetInstance().GetDBB().GetItemsFolder(path);
+            if (lst.Count() > 0)
+            {
+                lst.ForEach(doc =>
+                {
+                    if (doc.IsFile == false)
+                    {
+                        VerificationFichier(doc.path);
+                    }
+                    else
+                    {
+                        rslt.Add(doc);
+                    }
+                });
+            }
+            return rslt;
+        }
+        
+        /// <summary>
+        /// Récupère une ico en fonction du type de l'image
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public string GetIcoByType(string type)
         {
             string str = string.Empty;
@@ -489,9 +398,9 @@ namespace IHM.ModelView
         {
             try
             {
-                DgFiles.Clear();
+                //DgFiles.Clear();
                 Singleton.GetInstance().GetHomeModelView().GetFiles();
-                Singleton.GetInstance().GetHomeModelView().GetFilesShared();
+                //Singleton.GetInstance().GetHomeModelView().GetFilesShared();
             } catch (Exception ex)
             {
                 MessageBox.Show("Error:\"" + ex.Message);
@@ -599,20 +508,24 @@ namespace IHM.ModelView
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddDays(20);
             Results = new List<Files>();
+            var lstFilesDropbox = Singleton.GetInstance().GetDBB().getItemsDropbox();
+
             if (endDate < startDate)
             {
                 throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
             }
 
-            foreach (Files item in DgFiles)
+
+            foreach (Files item in lstFilesDropbox)
             {
-                if (item.DateDeCreation > endDate && item.DateDeCreation > startDate)
+                if ((item.DateDeCreation != null  && item.DateDeCreation > endDate && item.DateDeCreation > startDate) ||
+                                        ( item.DateInvitation != null  && item.DateInvitation > endDate && item.DateInvitation > startDate))
                 {
                     startDate = startDate.AddDays(1);
                     Console.WriteLine(Results);
-                    DgFiles = Results;
                 }
             }
+            DgFiles = Results;
         }
 
         private void ActionRechercheDate(object obj)
@@ -627,28 +540,38 @@ namespace IHM.ModelView
             Results = new List<Files>();
             bool trouve = false;
 
-            foreach (Files item in DgFiles)
+            var lstFilesDropbox = Singleton.GetInstance().GetDBB().getItemsDropbox();
+
+            foreach (Files item in lstFilesDropbox)
             {
-                if (item.DateDeCreation.Value.Year == year && item.DateDeCreation.Value.Month == month && item.DateDeCreation.Value.Day == day)
+                if (item.DateDeCreation != null)
                 {
-                    trouve = true;
-                    Results.Add(item);
-                    Console.WriteLine(Results);
-                    DgFiles = Results;
+                    if (item.DateDeCreation.Value.Year == year && item.DateDeCreation.Value.Month == month && item.DateDeCreation.Value.Day == day)
+                    {
+                        trouve = true;
+                        Results.Add(item);
+                        Console.WriteLine(Results);
+                    }
                 }
 
-                if (item.DateInvitation.Value.Year == year && item.DateInvitation.Value.Month == month && item.DateInvitation.Value.Day == day)
+                if (item.DateInvitation != null)
                 {
-                    trouve = true;
-                    Results.Add(item);
-                    Console.WriteLine(Results);
-                    DgFiles = Results;
+                    if (item.DateInvitation.Value.Year == year && item.DateInvitation.Value.Month == month && item.DateInvitation.Value.Day == day)
+                    {
+                        trouve = true;
+                        Results.Add(item);
+                        Console.WriteLine(Results);
+                       
+                    }
                 }
             }
             if (trouve == false)
             {
                 MessageBox.Show("La date séléctioné  n’existe pas");
             }
+
+            DgFiles = Results;
+
         }
 
         #endregion

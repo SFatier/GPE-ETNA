@@ -68,7 +68,7 @@ namespace IHM.View.HomePage
         {
             List<Projet> lstProject = Singleton.GetInstance().GetAllProject();
 
-            if (Singleton.GetInstance().GetUtilisateur().Role != "Admin")
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
             {
                 List<Projet> lstTmp = new List<Projet>();
                 lstProject.ForEach(p =>

@@ -25,7 +25,7 @@ namespace IHM.View
         {
             InitializeComponent();
 
-            if (Singleton.GetInstance().GetUtilisateur().Role != "Admin")
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
             {
                 BtnProject.Visibility = Visibility.Hidden;
             }
