@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IHM.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace IHM.View
         public HomeView()
         {
             InitializeComponent();
+
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
+            {
+                BtnGestionUtilisateur.Visibility = Visibility.Hidden;
+                BtnGestionRoles.Visibility =  Visibility.Hidden;
+            }
         }
     }
 }

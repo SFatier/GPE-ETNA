@@ -12,10 +12,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Content="Espace Perso" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="150" FontSize="24" Height="45" Margin="10,24,0,0"/>
+        <Label Content="Espace Personnalisé" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="250" FontSize="24" Height="45" Margin="10,24,0,0"/>
 
-        <Image HorizontalAlignment="Left" Height="100" Margin="117,100,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\IMG\user.png"/>
-        <Image HorizontalAlignment="Left" Height="40" Margin="90,240,0,0" Grid.Row="1" VerticalAlignment="Top" Width="27" Source="C:\Users\sigt_sf\Documents\GitHub\GPE-ETNA\IHM\IMG\dropbox.png"/>
+        <Image HorizontalAlignment="Left" Height="100" Margin="117,100,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="/IMG/user.png"/>
+        <Image HorizontalAlignment="Left" Height="40" Margin="90,240,0,0" Grid.Row="1" VerticalAlignment="Top" Width="27" Source="/IMG/dropbox.png"/>
         <Button Content="{Binding strDP}" Grid.Row="1" HorizontalAlignment="Left" Margin="117,241,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterDP}"  BorderBrush="White" Background="White"/>
 
         <Label Content="Login :" HorizontalAlignment="Left" Margin="399,100,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Grid.Row="1"/>

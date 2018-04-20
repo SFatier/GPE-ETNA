@@ -9,7 +9,7 @@
         <Style  TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" Value="WhiteSmoke"></Setter>
+                    <Setter Property="Background" Value="Transparent"></Setter>
                 </Trigger>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                     <Setter Property="Background" Value="White"></Setter>
@@ -25,8 +25,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Label Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="230" FontSize="24" Height="45" Margin="3,10,0,0"/>
-        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"> </Button>
+        <Label Name="lblPageProjets" Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="250" FontSize="24" Height="45" Margin="3,10,0,0"/>
+        <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"  Name="btnAjouterProjet"> </Button>
 
         <ScrollViewer HorizontalAlignment="Left" Height="515"  Width="auto" VerticalAlignment="Top"  Grid.Row="2" HorizontalScrollBarVisibility="Hidden">
             <StackPanel >
@@ -80,11 +80,11 @@
                                           <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="{Binding Description}" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Column="0"  Width="900" Height="auto" Margin="25,-10, 5, 5" TextWrapping="Wrap" Background="WhiteSmoke" > </TextBlock>
+                                        <TextBlock Text="{Binding Description}" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Column="0"  Width="900" Height="auto" Margin="25,-10, 5, 5" TextWrapping="Wrap" Background="Transparent" > </TextBlock>
 
                                         <StackPanel HorizontalAlignment="Left" Margin="20,15"  Grid.Column="0" Grid.Row="2">
                                             <Label>Liste des fichiers</Label>
-                                            <ListView ItemsSource="{Binding LstFiles}" BorderBrush="White" AlternationCount="2" Width="450" Height="200">
+                                            <ListView ItemsSource="{Binding LstFiles}" BorderBrush="White" AlternationCount="2" Width="450" Height="auto">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <WrapPanel>

@@ -74,10 +74,10 @@ namespace GPE
 
         #region UserDefined Methods  
 
-        /// <summary>  
-        /// This method is to generate Authentication URL to redirect user for login process in Dropbox.  
-        /// </summary>  
-        /// <returns></returns>  
+        /// <summary>
+        /// Génère l'url pour demander l'autorisation de connection à dropbox
+        /// </summary>
+        /// <returns></returns>
         public string GeneratedAuthenticationURL()
         {
             try
@@ -93,10 +93,10 @@ namespace GPE
             }
         }
 
-        /// <summary>  
-        /// This method is to generate Access Token required to access dropbox outside of the environment (in ANy application).  
-        /// </summary>  
-        /// <returns></returns>  
+        /// <summary>
+        /// Génère le token après autorisation 
+        /// </summary>
+        /// <returns></returns>
         public string GenerateAccessToken()
         {
             try
@@ -136,6 +136,10 @@ namespace GPE
             }
         }
 
+        /// <summary>
+        /// Récupère le Dbclient de dropbox
+        /// </summary>
+        /// <param name="AccessTocken"></param>
         public void GetDBClient(string AccessTocken)
         {
             DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
@@ -146,9 +150,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to create new folder on Dropbox  
+        /// Création d'un dossier dans dropbox 
         /// </summary>  
-        /// <param name="path"> path of the folder we want to create on Dropbox</param>  
         /// <returns></returns>  
         public bool CreateFolder(string path)
         {
@@ -166,9 +169,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method is to check that whether folder exists on Dropbox or not.  
+        ///  Vérifie l'existance d'un dossier
         /// </summary>  
-        /// <param name="path"> Path of the folder we want to check for existance.</param>  
         /// <returns></returns>  
         public bool FolderExists(string path)
         {
@@ -194,9 +196,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to delete file/folder from Dropbox  
-        /// </summary>  
-        /// <param name="path">path of file.folder to delete</param>  
+        /// Fonction qui supprime un dossier ou un fichier du dropbox connecté
+        /// </summary>   
         /// <returns></returns>  
         public bool Delete(string path)
         {
@@ -213,11 +214,11 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to upload files on Dropbox  
+        /// Fonction d'importation depuis dropbox
         /// </summary>  
-        /// <param name="UploadfolderPath"> Dropbox path where we want to upload files</param>  
-        /// <param name="UploadfileName"> File name to be created in Dropbox</param>  
-        /// <param name="SourceFilePath"> Local file path which we want to upload</param>  
+        /// <param name="UploadfolderPath">Chemin du fichier dans dropbox</param>  
+        /// <param name="UploadfileName">Nom du fichier lors de l'importation</param>  
+        /// <param name="SourceFilePath"> Chemin de destination du fichier sur le poste local</param>  
         /// <returns></returns>  
         public bool Upload(string UploadfolderPath, string UploadfileName, string SourceFilePath)
         {
@@ -238,12 +239,12 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to Download files from Dropbox  
+        /// Fonction de téléchargement de fichier depuis dropbox 
         /// </summary>  
-        /// <param name="DropboxFolderPath">Dropbox folder path which we want to download</param>  
-        /// <param name="DropboxFileName"> Dropbox File name availalbe in DropboxFolderPath to download</param>  
-        /// <param name="DownloadFolderPath"> Local folder path where we want to download file</param>  
-        /// <param name="DownloadFileName">File name to download Dropbox files in local drive</param>  
+        /// <param name="DropboxFolderPath">Dossier cible de dropbox</param>  
+        /// <param name="DropboxFileName">Nom du fichier qui sera dans dropbox</param>  
+        /// <param name="DownloadFolderPath">Dossier local qui possède le fichier</param>  
+        /// <param name="DownloadFileName">Nom du fichier en local</param>  
         /// <returns></returns>  
         public bool Download(string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName)
         {
@@ -262,11 +263,10 @@ namespace GPE
             }
         }
 
-
-            /**
-             * Récupère la liste des fichiers et dossiers du compte dropbox connecté
-             * */
-            public List<Files> getItemsDropbox(ListModelView lMVM)
+        /// <summary>
+        /// Récupère la liste des fichiers et dossiers du compte dropbox connecté
+        /// </summary>
+        public List<Files> getItemsDropbox()
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
@@ -274,9 +274,9 @@ namespace GPE
             return GetFolderAndFiles(Entries.ToList());
         }
 
-        /**
-         * Demande a consulté le fichier
-         * */
+        /// <summary>
+        /// Demande a consulté le fichier
+        /// </summary>
         public bool SharingFile (Files fichier, Utilisateur utilisateur)
         {
             try
@@ -292,6 +292,9 @@ namespace GPE
             }
         }
 
+        /// <summary>
+        /// Récupère les fichiers que l'on a partagé avec le compte connecté
+        ///</summary>
         public List<Files> GetFilesShared()
         {
             List<Files> lstFiles;
@@ -320,10 +323,10 @@ namespace GPE
             }
         }
     
-     /**
-     * Récupère l'espace utilisé
-     * */
-    public bool getSpace()
+        /// <summary>  
+        ///Récupère l'espace utilisé
+        /// </summary>  
+        public bool getSpace()
         {
             if (DBClient != null)
             {
@@ -336,18 +339,18 @@ namespace GPE
             }
         }
 
-        /**
-         * Récupère les fichiers d'un dossier
-         * */
+        /// <summary>  
+        /// Récupère les dossiers et fichiers d'un dossier 
+        /// </summary> 
         public List<Files> GetItemsFolder(string folderPath)
         {
             List < Metadata > Entries =  new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
             return GetFolderAndFiles (Entries);
         }
 
-        /**
-         * Récupération des dossiers et des fichiers
-         * */
+        /// <summary>  
+        /// Récupération des dossiers et des fichiers
+        /// <summary>  
         public List<Files> GetFolderAndFiles(List<Metadata> Entries)
         {
             List<Files> lstFiles = new List<Files>();
@@ -389,8 +392,7 @@ namespace GPE
 
         #region Validation Methods  
         /// <summary>  
-        /// Validation method to verify that AppKey and AppSecret is not blank.  
-        /// Mendatory to complete Authentication process successfully.  
+        /// Vérifie que la clé et l'id secret de drobox n'est pas vide.  
         /// </summary>  
         /// <returns></returns>  
         public bool CanAuthenticate()

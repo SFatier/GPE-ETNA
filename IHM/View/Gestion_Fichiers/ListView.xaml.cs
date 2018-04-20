@@ -23,7 +23,12 @@ namespace IHM.View
     {
         public ListView()
         {
-            InitializeComponent();       
+            InitializeComponent();
+
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
+            {
+                BtnProject.Visibility = Visibility.Hidden;
+            }
         }
 
         private void DgFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
