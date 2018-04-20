@@ -23,7 +23,7 @@ namespace IHM.View
         public AdminView()
         {
             InitializeComponent();
-            if (Singleton.GetInstance().GetUtilisateur().Role != "Admin")
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
             {
                 btnAjouterProjet.Visibility = Visibility.Hidden;
                 ItemsList.ContextMenu.IsEnabled = false;
