@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IHM.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,13 @@ namespace IHM.View
         public AdminView()
         {
             InitializeComponent();
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
+            {
+                btnAjouterProjet.Visibility = Visibility.Hidden;
+                ItemsList.ContextMenu.IsEnabled = false;
+                ItemsList.ContextMenu.Visibility = Visibility.Hidden;
+                lblPageProjets.Content = "Mes projets attribués";
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace IHM.ModelView
         #region [ Fields ]   
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
-        private ListModelView lMVM = new ListModelView();
+        public ListModelView lMVM = new ListModelView();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;        
@@ -39,29 +39,36 @@ namespace IHM.ModelView
         #region [Constructor]
         public HomeModelView(Utilisateur u)
         {
+            Singleton.GetInstance().SetHomeModelView(this);
+                        
             curentUtilisateur = u;
             DBB = new DropBoxBase(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
-
-            BtnHome = path_img + "home.png";
-            BtnGestionUtilisateur = path_img + "GestionUtilisateur.png";
-            BtnGestionProject = path_img + "project.png";
-            BtnPerso = path_img + "perso.png";
-            Background = path_img + "background.jpg";
-            BtnGestionFichiers = path_img + "GestionFichiers.png";
-            BtnGestionRoles = path_img + "role.png";
-
-            if (curentUtilisateur.Token != null)
+                        
+            if (curentUtilisateur.Token != null && curentUtilisateur.Token != "")
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
-                //GetFiles();
+                GetFiles();
+                GetFilesShared();
             }
 
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
-            Singleton.GetInstance().SetHomeModelView(this);
+        }
+
+        public void GetFilesShared()
+        {
+            List<Files> lst = DBB.GetFilesShared();
+            lMVM.FilesShared = lst;
+            if (lMVM.FilesShared.Count > 0)
+            {
+                foreach (Files f in lMVM.FilesShared)
+                {
+                    lMVM.DgFiles.Add(f);
+                }
+            }
         }
         #endregion
 
@@ -121,105 +128,8 @@ namespace IHM.ModelView
                 }
             }
         }
-
-        private string _BtnHome;
-        public string BtnHome
-        {
-            get { return this._BtnHome; }
-            set
-            {
-                if (!string.Equals(this._BtnHome, value))
-                {
-                    this._BtnHome = value;
-                    RaisePropertyChanged(nameof(BtnHome));
-                }
-            }
-        }
-
-        private string _BtnGestionUtilisateur;
-        public string BtnGestionUtilisateur
-        {
-            get { return this._BtnGestionUtilisateur; }
-            set
-            {
-                if (!string.Equals(this._BtnGestionUtilisateur, value))
-                {
-                    this._BtnGestionUtilisateur = value;
-                    RaisePropertyChanged(nameof(BtnGestionUtilisateur));
-                }
-            }
-        }
-
-        private string _BtnGestionProject;
-        public string BtnGestionProject
-        {
-            get { return this._BtnGestionProject; }
-            set
-            {
-                if (!string.Equals(this._BtnGestionProject, value))
-                {
-                    this._BtnGestionProject = value;
-                    RaisePropertyChanged(nameof(BtnGestionProject));
-                }
-            }
-        }
-
-        private string _BtnPerso;
-        public string BtnPerso
-        {
-            get { return this._BtnPerso; }
-            set
-            {
-                if (!string.Equals(this._BtnPerso, value))
-                {
-                    this._BtnPerso = value;
-                    RaisePropertyChanged(nameof(BtnPerso));
-                }
-            }
-        }
-
-        private string _BtnGestionFichiers;
-        public string BtnGestionFichiers
-        {
-            get { return this._BtnGestionFichiers; }
-            set
-            {
-                if (!string.Equals(this._BtnGestionFichiers, value))
-                {
-                    this._BtnGestionFichiers = value;
-                    RaisePropertyChanged(nameof(BtnGestionFichiers));
-                }
-            }
-        }
-
-        private string _BtnGestionRoles;
-        public string BtnGestionRoles
-        {
-            get { return this._BtnGestionRoles; }
-            set
-            {
-                if (!string.Equals(this._BtnGestionRoles, value))
-                {
-                    this._BtnGestionRoles = value;
-                    RaisePropertyChanged(nameof(BtnGestionRoles));
-                }
-            }
-        }
+           
         
-
-        private string _Background;
-        public string Background
-        {
-            get { return this._Background; }
-            set
-            {
-                if (!string.Equals(this._Background, value))
-                {
-                    this._Background = value;
-                    RaisePropertyChanged(nameof(Background));
-                }
-            }
-        }
         #endregion
 
         #region [Actions]
@@ -241,7 +151,7 @@ namespace IHM.ModelView
 
         public void GetFiles()
         {
-            lMVM.DgFiles = DBB.getEntries(lMVM);
+            lMVM.DgFiles = DBB.getItemsDropbox();
         }
 
         public void GetProjets()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IHM.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,16 @@ namespace IHM.View
         public ListView()
         {
             InitializeComponent();
+
+            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
+            {
+                BtnProject.Visibility = Visibility.Hidden;
+            }
         }
-        
+
+        private void DgFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Singleton.GetInstance().GetHomeModelView().lMVM.GetFolder();
+        }        
     }
 }

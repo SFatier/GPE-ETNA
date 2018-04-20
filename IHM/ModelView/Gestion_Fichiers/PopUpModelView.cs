@@ -59,14 +59,15 @@ namespace IHM.ModelView
                 List<Projet> l = new List<Projet>();
                 foreach (Projet p in lst)
                 {
-                    Files isFIle = p.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
-                    if (isFIle != null)
+                    p.Ischecked = false;
+
+                    if (p.LstFiles != null)
                     {
-                        p.Ischecked = true;
-                    }
-                    else
-                    {
-                        p.Ischecked = false;
+                        Files isFIle = p.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
+                        if (isFIle != null)
+                        {
+                            p.Ischecked = true;
+                        }
                     }
                     l.Add(p);
                 }

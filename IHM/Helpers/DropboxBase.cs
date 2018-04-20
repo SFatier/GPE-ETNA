@@ -7,6 +7,7 @@ using IHM.ModelView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -73,10 +74,10 @@ namespace GPE
 
         #region UserDefined Methods  
 
-        /// <summary>  
-        /// This method is to generate Authentication URL to redirect user for login process in Dropbox.  
-        /// </summary>  
-        /// <returns></returns>  
+        /// <summary>
+        /// Génère l'url pour demander l'autorisation de connection à dropbox
+        /// </summary>
+        /// <returns></returns>
         public string GeneratedAuthenticationURL()
         {
             try
@@ -92,10 +93,10 @@ namespace GPE
             }
         }
 
-        /// <summary>  
-        /// This method is to generate Access Token required to access dropbox outside of the environment (in ANy application).  
-        /// </summary>  
-        /// <returns></returns>  
+        /// <summary>
+        /// Génère le token après autorisation 
+        /// </summary>
+        /// <returns></returns>
         public string GenerateAccessToken()
         {
             try
@@ -135,6 +136,10 @@ namespace GPE
             }
         }
 
+        /// <summary>
+        /// Récupère le Dbclient de dropbox
+        /// </summary>
+        /// <param name="AccessTocken"></param>
         public void GetDBClient(string AccessTocken)
         {
             DropboxClientConfig CC = new DropboxClientConfig(AppName, 1);
@@ -145,9 +150,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to create new folder on Dropbox  
+        /// Création d'un dossier dans dropbox 
         /// </summary>  
-        /// <param name="path"> path of the folder we want to create on Dropbox</param>  
         /// <returns></returns>  
         public bool CreateFolder(string path)
         {
@@ -165,9 +169,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method is to check that whether folder exists on Dropbox or not.  
+        ///  Vérifie l'existance d'un dossier
         /// </summary>  
-        /// <param name="path"> Path of the folder we want to check for existance.</param>  
         /// <returns></returns>  
         public bool FolderExists(string path)
         {
@@ -193,9 +196,8 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to delete file/folder from Dropbox  
-        /// </summary>  
-        /// <param name="path">path of file.folder to delete</param>  
+        /// Fonction qui supprime un dossier ou un fichier du dropbox connecté
+        /// </summary>   
         /// <returns></returns>  
         public bool Delete(string path)
         {
@@ -212,11 +214,11 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to upload files on Dropbox  
+        /// Fonction d'importation depuis dropbox
         /// </summary>  
-        /// <param name="UploadfolderPath"> Dropbox path where we want to upload files</param>  
-        /// <param name="UploadfileName"> File name to be created in Dropbox</param>  
-        /// <param name="SourceFilePath"> Local file path which we want to upload</param>  
+        /// <param name="UploadfolderPath">Chemin du fichier dans dropbox</param>  
+        /// <param name="UploadfileName">Nom du fichier lors de l'importation</param>  
+        /// <param name="SourceFilePath"> Chemin de destination du fichier sur le poste local</param>  
         /// <returns></returns>  
         public bool Upload(string UploadfolderPath, string UploadfileName, string SourceFilePath)
         {
@@ -237,12 +239,12 @@ namespace GPE
         }
 
         /// <summary>  
-        /// Method to Download files from Dropbox  
+        /// Fonction de téléchargement de fichier depuis dropbox 
         /// </summary>  
-        /// <param name="DropboxFolderPath">Dropbox folder path which we want to download</param>  
-        /// <param name="DropboxFileName"> Dropbox File name availalbe in DropboxFolderPath to download</param>  
-        /// <param name="DownloadFolderPath"> Local folder path where we want to download file</param>  
-        /// <param name="DownloadFileName">File name to download Dropbox files in local drive</param>  
+        /// <param name="DropboxFolderPath">Dossier cible de dropbox</param>  
+        /// <param name="DropboxFileName">Nom du fichier qui sera dans dropbox</param>  
+        /// <param name="DownloadFolderPath">Dossier local qui possède le fichier</param>  
+        /// <param name="DownloadFileName">Nom du fichier en local</param>  
         /// <returns></returns>  
         public bool Download(string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName)
         {
@@ -255,70 +257,33 @@ namespace GPE
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return false;
             }
         }
 
-
-            /**
-             * Récupère la liste des fichiers et dossiers du compte dropbox connecté
-             * */
-            public List<Files> getEntries(ListModelView lMVM)
+        /// <summary>
+        /// Récupère la liste des fichiers et dossiers du compte dropbox connecté
+        /// </summary>
+        public List<Files> getItemsDropbox()
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
             var Entries = liste.Result.Entries;
-            List<Files> lstFiles = new List<Files>();
-
-            // folder
-            List<String> lstFolder = new List<string>();
-            foreach (var item in Entries.Where(i => i.IsFolder))
-            {
-                string IdFile = item.AsFolder.Id;
-                string nom = item.Name;
-                string type = "dossier de fichiers";
-                string IMG = lMVM.GetIcoByType("dossier");
-                DateTime dateDeCreation = DateTime.Now ; // item.AsFile.ClientModified;
-                DateTime ModifieLe = DateTime.Now; // item.AsFile.ServerModified;
-                string taille = ""; // Convert.ToInt32(item.AsFile.Size);
-                string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, false);
-                f.path = path;
-                lstFiles.Add(f);
-            }
-
-            //Files
-            foreach (var item in Entries.Where(i => i.IsFile))
-            {
-                string IdFile = item.AsFile.Id;
-                string nom = item.Name;
-                var type = Path.GetExtension(item.Name);
-                string IMG = lMVM.GetIcoByType(type); 
-                DateTime dateDeCreation = item.AsFile.ClientModified;
-                DateTime ModifieLe = item.AsFile.ServerModified;
-                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
-                string path = item.PathDisplay;
-                Files f = new Files(IdFile, nom, IMG,  type, dateDeCreation, ModifieLe, taille, true);
-                f.path = path;
-                lstFiles.Add(f);
-            }
-
-            //var rst = new  { lstFolder, lstFiles};
-            //return rst;
-            return lstFiles;
+            return GetFolderAndFiles(Entries.ToList());
         }
 
-        /**
-         * Demande a consulté le fichier
-         * */
+        /// <summary>
+        /// Demande a consulté le fichier
+        /// </summary>
         public bool SharingFile (Files fichier, Utilisateur utilisateur)
         {
             try
             {
                 var members = new[] { new MemberSelector.Email(utilisateur.Email) };
                 DBClient.Sharing.AddFileMemberAsync(fichier.path, members);
+
                 return true;
             }
             catch (Exception)
@@ -327,9 +292,40 @@ namespace GPE
             }
         }
 
-        /**
-         * Récupère l'espace utilisé
-         * */
+        /// <summary>
+        /// Récupère les fichiers que l'on a partagé avec le compte connecté
+        ///</summary>
+        public List<Files> GetFilesShared()
+        {
+            List<Files> lstFiles;
+            try
+            {
+                lstFiles = new List<Files>();               
+                var ListReceivedFiles = DBClient.Sharing.ListReceivedFilesAsync( 100,  null).Result.Entries;
+
+                foreach (var metadata in ListReceivedFiles)
+                {
+                    var type = Path.GetExtension(metadata.Name);
+                    string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                    
+                    Files f = new Files(string.Empty, metadata.Name, IMG, type, null, null, string.Empty, true);
+                    f.PreviewUrl = metadata.PreviewUrl;
+                    f.DateInvitation = metadata.TimeInvited;
+                    f.IdDropbox = metadata.Id;
+
+                    lstFiles.Add(f);
+                }
+                return lstFiles;
+            }
+            catch (Exception)
+            {
+                return lstFiles = new List<Files>();
+            }
+        }
+    
+        /// <summary>  
+        ///Récupère l'espace utilisé
+        /// </summary>  
         public bool getSpace()
         {
             if (DBClient != null)
@@ -343,20 +339,60 @@ namespace GPE
             }
         }
 
-        /**
-         * Récupère les fichiers d'un dossier
-         * */
-        public List<Metadata> GetItems(string folderPath)
+        /// <summary>  
+        /// Récupère les dossiers et fichiers d'un dossier 
+        /// </summary> 
+        public List<Files> GetItemsFolder(string folderPath)
         {
-            return new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
+            List < Metadata > Entries =  new List<Metadata>(DBClient.Files.ListFolderAsync(folderPath).Result.Entries);
+            return GetFolderAndFiles (Entries);
+        }
+
+        /// <summary>  
+        /// Récupération des dossiers et des fichiers
+        /// <summary>  
+        public List<Files> GetFolderAndFiles(List<Metadata> Entries)
+        {
+            List<Files> lstFiles = new List<Files>();
+
+            // folder
+            List<String> lstFolder = new List<string>();
+            foreach (var item in Entries.Where(i => i.IsFolder))
+            {
+                string IdFile = item.AsFolder.Id;
+                string nom = item.Name;
+                string type = "dossier de fichiers";
+                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
+                string taille = "";
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, null, null, taille, false);
+                f.path = path;
+                lstFiles.Add(f);
+            }
+
+            //Files
+            foreach (var item in Entries.Where(i => i.IsFile))
+            {
+                string IdFile = item.AsFile.Id;
+                string nom = item.Name;
+                var type = Path.GetExtension(item.Name);
+                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                DateTime dateDeCreation = Convert.ToDateTime(item.AsFile.ClientModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
+                DateTime ModifieLe = Convert.ToDateTime( item.AsFile.ServerModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
+                string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
+                string path = item.PathDisplay;
+                Files f = new Files(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, true);
+                f.path = path;
+                lstFiles.Add(f);
+            }
+            return lstFiles;
         }
 
         #endregion
 
         #region Validation Methods  
         /// <summary>  
-        /// Validation method to verify that AppKey and AppSecret is not blank.  
-        /// Mendatory to complete Authentication process successfully.  
+        /// Vérifie que la clé et l'id secret de drobox n'est pas vide.  
         /// </summary>  
         /// <returns></returns>  
         public bool CanAuthenticate()
