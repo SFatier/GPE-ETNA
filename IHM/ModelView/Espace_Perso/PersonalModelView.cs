@@ -22,7 +22,7 @@ namespace IHM.ModelView
         public ICommand MiseAJourUser { get; set; }
 
         private Utilisateur u;
-        private DropBoxBase DBB;
+        private DropBox DBB;
         private string strAccessToken = string.Empty;
         private string strAuthenticationURL = string.Empty;
 

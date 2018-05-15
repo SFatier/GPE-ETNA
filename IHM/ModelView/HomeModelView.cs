@@ -25,7 +25,7 @@ namespace IHM.ModelView
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;        
-        private DropBoxBase DBB;
+        private DropBox DBB;
 
         public ICommand PageAdmin { get; set; }
         public ICommand PageHome { get; set; }
@@ -42,7 +42,7 @@ namespace IHM.ModelView
             Singleton.GetInstance().SetHomeModelView(this);
                         
             curentUtilisateur = u;
-            DBB = new DropBoxBase(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
+            DBB = new DropBox(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
                         
             if (curentUtilisateur.Token != null && curentUtilisateur.Token != "")
@@ -151,7 +151,7 @@ namespace IHM.ModelView
 
         public void GetFiles()
         {
-            lMVM.DgFiles = DBB.getItemsDropbox();
+            lMVM.DgFiles = DBB.GetItems();
         }
 
         public void GetProjets()
