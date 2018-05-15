@@ -17,7 +17,7 @@ using System.Windows;
 
 namespace GPE
 {
-    public class DropBox : ICloud
+    public class DropBox 
     {
         #region Variables  
         public DropboxClient DBClient;
