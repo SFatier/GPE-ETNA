@@ -508,7 +508,7 @@ namespace IHM.ModelView
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddDays(20);
             Results = new List<Files>();
-            var lstFilesDropbox = Singleton.GetInstance().GetDBB().getItemsDropbox();
+            var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
             if (endDate < startDate)
             {
@@ -540,7 +540,7 @@ namespace IHM.ModelView
             Results = new List<Files>();
             bool trouve = false;
 
-            var lstFilesDropbox = Singleton.GetInstance().GetDBB().getItemsDropbox();
+            var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
             foreach (Files item in lstFilesDropbox)
             {

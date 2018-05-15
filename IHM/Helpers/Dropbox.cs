@@ -17,7 +17,7 @@ using System.Windows;
 
 namespace GPE
 {
-    class DropBoxBase
+    public class DropBox : ICloud
     {
         #region Variables  
         public DropboxClient DBClient;
@@ -28,7 +28,7 @@ namespace GPE
         #endregion
 
         #region Constructor  
-        public DropBoxBase(string ApiKey, string ApiSecret, string ApplicationName = "TestApp")
+        public DropBox(string ApiKey, string ApiSecret, string ApplicationName = "TestApp")
         {
             try
             {
@@ -266,7 +266,7 @@ namespace GPE
         /// <summary>
         /// Récupère la liste des fichiers et dossiers du compte dropbox connecté
         /// </summary>
-        public List<Files> getItemsDropbox()
+        public List<Files> GetItems()
         {
             var liste = DBClient.Files.ListFolderAsync(string.Empty);
             var Cursor = liste.Result.Cursor;
