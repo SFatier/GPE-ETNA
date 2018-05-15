@@ -22,6 +22,7 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
         public ListModelView lMVM = new ListModelView();
+        public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;        
@@ -44,7 +45,8 @@ namespace IHM.ModelView
             curentUtilisateur = u;
             DBB = new DropBox(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
-                        
+            Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
+
             if (curentUtilisateur.Token != null && curentUtilisateur.Token != "")
             {
                 DBB.GetDBClient(curentUtilisateur.Token);
@@ -151,7 +153,8 @@ namespace IHM.ModelView
 
         public void GetFiles()
         {
-            lMVM.DgFiles = DBB.GetItems();
+            lMVM.DgFiles = cloud.GetItems(Drive.DP);
+            lMVM.DgFiles.AddRange(cloud.GetItems(Drive.GG));
         }
 
         public void GetProjets()

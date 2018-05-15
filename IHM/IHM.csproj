@@ -66,7 +66,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helpers\DropboxBase.cs" />
+    <Compile Include="Helpers\Dropbox.cs" />
+    <Compile Include="Helpers\Google.cs" />
+    <Compile Include="Helpers\ICloud.cs" />
     <Compile Include="Helpers\IListItemConverter.cs" />
     <Compile Include="Helpers\MultiSelectorBehaviours.cs" />
     <Compile Include="Helpers\Singleton.cs" />
