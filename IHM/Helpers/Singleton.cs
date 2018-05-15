@@ -15,7 +15,7 @@ namespace IHM.Helpers
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         List<Projet> lstProject = new List<Projet>();
         List<Roles> lstRoles = new List<Roles>();
-        DropBoxBase DBB;
+        DropBox DBB;
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
@@ -103,11 +103,11 @@ namespace IHM.Helpers
 
         /********/
 
-        public void SetDBB(DropBoxBase _DBB)
+        public void SetDBB(DropBox _DBB)
         {
             DBB = _DBB;
         }
-        public DropBoxBase GetDBB()
+        public DropBox GetDBB()
         {
             return DBB;
         }
