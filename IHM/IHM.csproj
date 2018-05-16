@@ -99,7 +99,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\Dropbox.cs" />
-    <Compile Include="Helpers\Functions.cs" />
     <Compile Include="Helpers\Google.cs" />
     <Compile Include="Helpers\ICloud.cs" />
     <Compile Include="Helpers\IListItemConverter.cs" />

@@ -230,5 +230,6 @@ namespace IHM.Helpers
         bool SharingFile(Drive drive, Files fichier, Utilisateur utilisateur);
         List<Files> GetFilesShared(Drive drive);
         bool getSpace(Drive drive);
+
     }
 }
