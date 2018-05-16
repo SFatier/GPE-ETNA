@@ -22,6 +22,7 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
         public ListModelView lMVM = new ListModelView();
+        public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;        
@@ -40,16 +41,23 @@ namespace IHM.ModelView
         public HomeModelView(Utilisateur u)
         {
             Singleton.GetInstance().SetHomeModelView(this);
-                        
+            Helpers.GoogleCloud _google = new Helpers.GoogleCloud();
             curentUtilisateur = u;
             DBB = new DropBox(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
             Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
-                        
-            if (curentUtilisateur.Token != null && curentUtilisateur.Token != "")
+            Singleton.GetInstance().SetGoogle(_google);  //Instance de la classe GoogleAPI
+            Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
+
+            if (curentUtilisateur.Token_DP != null && curentUtilisateur.Token_DP != "")
             {
-                DBB.GetDBClient(curentUtilisateur.Token);
-                GetFiles();
+                DBB.GetDBClient(curentUtilisateur.Token_DP);
+                GetFilesDropbox();
                 GetFilesShared();
+            }
+
+            if (curentUtilisateur.Token_GG != null && curentUtilisateur.Token_GG != "")
+            {
+                GetFilesGoogle();
             }
 
             ContentViewModels.Add(new HomePageModelView());
@@ -149,9 +157,21 @@ namespace IHM.ModelView
             CurrentContentViewModel = lMVM;
         }
 
-        public void GetFiles()
+        private void GetFilesGoogle()
         {
-            lMVM.DgFiles = DBB.GetItems();
+            if (lMVM.DgFiles.Count() > 0)
+            {
+                lMVM.DgFiles.AddRange(cloud.GetItems(Drive.GG));
+            }
+            else
+            {
+                lMVM.DgFiles = cloud.GetItems(Drive.GG);
+            }
+        }
+
+        public void GetFilesDropbox()
+        {
+            lMVM.DgFiles = cloud.GetItems(Drive.DP);
         }
 
         public void GetProjets()

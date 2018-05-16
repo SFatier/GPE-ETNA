@@ -224,7 +224,7 @@ namespace IHM.ModelView
         /// <param name="value"></param>
         private void RechercheMetadataByProjet(string value)
         {
-            Singleton.GetInstance().GetHomeModelView().GetFiles();
+            Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
             Singleton.GetInstance().GetHomeModelView().GetFilesShared();
 
             Projet projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(x => x.Nom.Equals(value));
@@ -399,7 +399,7 @@ namespace IHM.ModelView
             try
             {
                 //DgFiles.Clear();
-                Singleton.GetInstance().GetHomeModelView().GetFiles();
+                Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
                 //Singleton.GetInstance().GetHomeModelView().GetFilesShared();
             } catch (Exception ex)
             {
@@ -446,7 +446,7 @@ namespace IHM.ModelView
                     string test = filesSelected.path;
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
-                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+                    Singleton.GetInstance().GetCloud().Download(Drive.DP, "/", DropboxFileName, DownloadFolderPath, DownloadFileName);
                 }
             }
             else
