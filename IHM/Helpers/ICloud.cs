@@ -169,10 +169,12 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().GetItems();
+                        if (Singleton.GetInstance().GetDBB() != null)
+                            lst = Singleton.GetInstance().GetDBB().GetItems();
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().GetItems();
+                        if (Singleton.GetInstance().GetGoogle() != null)
+                            lst = Singleton.GetInstance().GetGoogle().GetItems();
                         break;
                 }
             }

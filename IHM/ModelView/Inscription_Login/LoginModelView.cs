@@ -75,8 +75,8 @@ namespace IHM.ModelView
             LoadAction();
 
             Functions function = new Functions();
-            List<Utilisateur> items = function.JSONObject("UtilisateurJSON");
-            /*try
+            List<Utilisateur> items; //= function.JSONObject("UtilisateurJSON");
+            try
             {
                 StreamReader r;
                 using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
@@ -87,7 +87,7 @@ namespace IHM.ModelView
             }catch(Exception )
             {
                 items = new List<Utilisateur>();
-            }*/
+            }
 
             Singleton.GetInstance().SetListUtilisateur(items);
 

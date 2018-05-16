@@ -16,7 +16,7 @@ namespace IHM.Helpers
         List<Projet> lstProject = new List<Projet>();
         List<Roles> lstRoles = new List<Roles>();
         DropBox DBB;
-        Google google;
+        GoogleCloud google;
         Cloud cloud;
         MainModelView cMain;
         HomeModelView cContent;
@@ -126,11 +126,11 @@ namespace IHM.Helpers
         }
 
         /************/
-        public void SetGoogle(Google _google)
+        public void SetGoogle(GoogleCloud _google)
         {
             google = _google;
         }
-        public Google GetGoogle()
+        public GoogleCloud GetGoogle()
         {
             return google;
         }
