@@ -34,7 +34,6 @@ namespace IHM.ModelView
         public ICommand RecherchePeriode { get; set; }
         public ICommand Download { get; set; }
         public ICommand Open { get; set; }
-        
 
         //constructeur
         public ListModelView()
@@ -57,7 +56,6 @@ namespace IHM.ModelView
             Recherche = new RelayCommand(ActionRecherche);
             RechercheDate = new RelayCommand(ActionRechercheDate);
             RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
-            BtnSearch = ConfigurationSettings.AppSettings["FolderIMG"] + "search.png";
         }
         
         public void LoadProject()
@@ -88,19 +86,6 @@ namespace IHM.ModelView
             set {
                 lstProjets = value;
                 RaisePropertyChanged(nameof(LstProjets));
-            }
-        }
-        private string _BtnSearch;
-        public string BtnSearch
-        {
-            get { return this._BtnSearch; }
-            set
-            {
-                if (!string.Equals(this._BtnSearch, value))
-                {
-                    this._BtnSearch = value;
-                    RaisePropertyChanged(nameof(BtnSearch));
-                }
             }
         }
 
@@ -191,29 +176,29 @@ namespace IHM.ModelView
             }
         }
                 
-        private DateTime _dateDebut;
-        public DateTime dateDebut
+        private string _startDate;
+        public string startDate
         {
-            get { return _dateDebut; }
+            get { return this._startDate; }
             set
             {
-                if (!DateTime.Equals(this._dateDebut, value))
+                if (!string.Equals(this._startDate, value))
                 {
-                    this._dateDebut = value;
-                    RaisePropertyChanged(nameof(dateDebut));
+                    this._startDate = value;
+                    RaisePropertyChanged(nameof(startDate));
                 }
             }
         }
-        private DateTime _dateFin;
-        public DateTime dateFin
+        private string _endDate;
+        public string endDate
         {
-            get { return _dateFin; }
+            get { return this._endDate; }
             set
             {
-                if (!DateTime.Equals(this._dateFin, value))
+                if (!string.Equals(this._endDate, value))
                 {
-                    this._dateFin = value;
-                    RaisePropertyChanged(nameof(dateFin));
+                    this._endDate = value;
+                    RaisePropertyChanged(nameof(endDate));
                 }
             }
         }
@@ -239,7 +224,7 @@ namespace IHM.ModelView
         /// <param name="value"></param>
         private void RechercheMetadataByProjet(string value)
         {
-            Singleton.GetInstance().GetHomeModelView().GetFiles();
+            Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
             Singleton.GetInstance().GetHomeModelView().GetFilesShared();
 
             Projet projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(x => x.Nom.Equals(value));
@@ -414,7 +399,7 @@ namespace IHM.ModelView
             try
             {
                 //DgFiles.Clear();
-                Singleton.GetInstance().GetHomeModelView().GetFiles();
+                Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
                 //Singleton.GetInstance().GetHomeModelView().GetFilesShared();
             } catch (Exception ex)
             {
@@ -461,7 +446,7 @@ namespace IHM.ModelView
                     string test = filesSelected.path;
                     DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
                     DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
-                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+                    Singleton.GetInstance().GetCloud().Download(Drive.DP, "/", DropboxFileName, DownloadFolderPath, DownloadFileName);
                 }
             }
             else
@@ -496,35 +481,36 @@ namespace IHM.ModelView
         // search Files
         private void ActionRecherche(object par)
         {
-           
+            string nomRechercher = Nom;
             Results = new List<Files>();
-            char[] delimiters = new char[] { ' ', ',', '.', ':', '\t' };
-            string[] words = Nom.Split(delimiters);
             bool trouve = false;
-           
+
             foreach (Files item in DgFiles)
             {
 
-                if (words.Any(nomRechercher => nomRechercher == item.Nom))
+                if (item.Nom.Contains(nomRechercher))
                 {
                     trouve = true;
                     Results.Add(item);
-                    
-                    
+                    Console.WriteLine(Results);
+                    DgFiles = Results;
                 }
-                DgFiles = Results;
             }
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
         }
-        public void Recherche_Periode()
+
+        private void ActionRecherchePeriode(object obj)
         {
+            string recherchePeriode = this.Date;
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = startDate.AddDays(20);
             Results = new List<Files>();
             var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
-            if ( dateDebut< dateFin)
+            if (endDate < startDate)
             {
                 throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
             }
@@ -532,34 +518,29 @@ namespace IHM.ModelView
 
             foreach (Files item in lstFilesDropbox)
             {
-                if ((item.DateDeCreation != null && item.DateDeCreation > dateFin && item.DateDeCreation > dateDebut) ||
-                                        (item.DateInvitation != null && item.DateInvitation > this.dateFin && item.DateInvitation > dateDebut))
+                if ((item.DateDeCreation != null  && item.DateDeCreation > endDate && item.DateDeCreation > startDate) ||
+                                        ( item.DateInvitation != null  && item.DateInvitation > endDate && item.DateInvitation > startDate))
                 {
-                    dateDebut = dateDebut.AddDays(1);
+                    startDate = startDate.AddDays(1);
                     Console.WriteLine(Results);
-                    Results.Add(item);
                 }
             }
             DgFiles = Results;
         }
 
-        private void ActionRecherchePeriode(object obj)
+        private void ActionRechercheDate(object obj)
         {
-            Recherche_Periode();
-        }
-        public void Recherche_Date ()
-        {
-            string dateDebut = this.Date;
-        char[] delimiters = new char[] { '/', ' ' };
-        string[] words = dateDebut.Split(delimiters);
-        int month = int.Parse(words[0]);
-        int day = int.Parse(words[1]);
-        int year = int.Parse(words[2]);
+            string rechercheDate = this.Date;
+            char[] delimiters = new char[] { '/', ' ' };
+            string[] words = rechercheDate.Split(delimiters);
+            int month = int.Parse(words[0]);
+            int day = int.Parse(words[1]);
+            int year = int.Parse(words[2]);
 
-        Results = new List<Files>();
+            Results = new List<Files>();
             bool trouve = false;
 
-        var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
+            var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
             foreach (Files item in lstFilesDropbox)
             {
@@ -571,7 +552,7 @@ namespace IHM.ModelView
                         Results.Add(item);
                         Console.WriteLine(Results);
                     }
-}
+                }
 
                 if (item.DateInvitation != null)
                 {
@@ -590,10 +571,7 @@ namespace IHM.ModelView
             }
 
             DgFiles = Results;
-        }
-        private void ActionRechercheDate(object obj)
-        {
-          Recherche_Date();
+
         }
 
         #endregion

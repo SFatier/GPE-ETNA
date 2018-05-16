@@ -1,4 +1,5 @@
-﻿using IHM.Helpers;
+﻿using Google.Apis.Auth.OAuth2;
+using IHM.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,12 +12,28 @@ namespace IHM.Model
     public class Utilisateur : Base
     {
         private string image = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
-        private string token;
+        private string token_DP;
+        private string token_GG;
+        private string refreshToken;
         private string login;
         private string email;
         private string mdp;
         private string role;
+        private UserCredential credentiel;
         private List<Projet> lstProjet;
+
+        public UserCredential Credentiel
+        {
+            get { return this.credentiel; }
+            set
+            {
+                if (!string.Equals(this.credentiel, value))
+                {
+                    this.credentiel = value;
+                    RaisePropertyChanged(nameof(Credentiel));
+                }
+            }
+        }
 
         public string Image
         {
@@ -83,15 +100,28 @@ namespace IHM.Model
             }
         }
 
-        public string Token
+        public string Token_DP
         {
-            get { return this.token; }
+            get { return this.token_DP; }
             set
             {
-                if (!string.Equals(this.token, value))
+                if (!string.Equals(this.token_DP, value))
                 {
-                    this.token = value;
-                    RaisePropertyChanged(nameof(Token));
+                    this.token_DP = value;
+                    RaisePropertyChanged(nameof(Token_DP));
+                }
+            }
+        }
+
+        public string Token_GG
+        {
+            get { return this.token_GG; }
+            set
+            {
+                if (!string.Equals(this.token_GG, value))
+                {
+                    this.token_GG = value;
+                    RaisePropertyChanged(nameof(Token_GG));
                 }
             }
         }
@@ -105,6 +135,19 @@ namespace IHM.Model
                 {
                     this.role = value;
                     RaisePropertyChanged(nameof(Role));
+                }
+            }
+        }
+
+        public string RefreshToken
+        {
+            get { return this.refreshToken; }
+            set
+            {
+                if (!string.Equals(this.refreshToken, value))
+                {
+                    this.refreshToken = value;
+                    RaisePropertyChanged(nameof(RefreshToken));
                 }
             }
         }
