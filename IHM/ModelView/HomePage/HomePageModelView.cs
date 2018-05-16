@@ -18,7 +18,7 @@ namespace IHM.ModelView.HomePage
 
         public HomePageModelView()
         {
-            Singleton.GetInstance().GetDBB().getSpace();            
+            Singleton.GetInstance().GetDBB().getSpace() ;            
         }
 
         public void LoadAction()
