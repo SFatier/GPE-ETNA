@@ -74,7 +74,8 @@ namespace IHM.ModelView
         {
             LoadAction();
 
-            List<Utilisateur> items;
+            Functions function = new Functions();
+            List<Utilisateur> items; //= function.JSONObject("UtilisateurJSON");
             try
             {
                 StreamReader r;

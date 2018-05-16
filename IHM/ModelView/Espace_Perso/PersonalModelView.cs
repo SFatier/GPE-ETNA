@@ -22,7 +22,7 @@ namespace IHM.ModelView
         public ICommand MiseAJourUser { get; set; }
 
         private Utilisateur u;
-        private DropBoxBase DBB;
+        private DropBox DBB;
         private string strAccessToken = string.Empty;
         private string strAuthenticationURL = string.Empty;
 
@@ -33,7 +33,7 @@ namespace IHM.ModelView
             Mdp = u.MDP;
             Email = u.Email;
             Role = u.Role;
-            if (u.Token != null)
+            if (u.Token_DP != null)
             {
                 strDP = "Dropbox connecté";
             }
@@ -126,7 +126,7 @@ namespace IHM.ModelView
         private void ActionConnecterDropbox(object parameter)
         {
             DBB = Singleton.GetInstance().GetDBB();
-            if (u.Token == null)
+            if (u.Token_DP == null)
             {
                 try
                 {
@@ -142,10 +142,10 @@ namespace IHM.ModelView
                         var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => u.Equals(user));
                         if (uUpdate != null)
                         {
-                            uUpdate.Token = strAccessToken;
+                            uUpdate.Token_DP = strAccessToken;
                         }
                         UpdateUtilisateur();
-                        Singleton.GetInstance().GetHomeModelView().GetFiles();
+                        Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
                         strDP = "Dropbox connecté";
                     }
                 }
