@@ -10,5 +10,6 @@ namespace IHM.Helpers
     public interface ICloud
     {
         List<Files> GetItems();
+
     }
 }

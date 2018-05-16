@@ -16,7 +16,7 @@ namespace IHM.ModelView.Gestion_Utilisateurs
 {
     public class UtilisateurViewModel : ObservableObject, IPageViewModel
     {
-        public string Name => throw new NotImplementedException();
+       
         public ICommand ModifierUtilisateur { get; set; }
         private Utilisateur utilisateur_ = new Utilisateur();
 
