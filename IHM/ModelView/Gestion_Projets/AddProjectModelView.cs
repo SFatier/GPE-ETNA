@@ -102,7 +102,7 @@ namespace IHM.ModelView
                 Projet p = new Projet();
                 p.Nom = NomProjet;
                 p.Description = DescriptionProjet;
-                p.LstFiles = new List<Files>();
+                p.LstFiles = new List<Fichier>();
                 p.LstUser = new List<Utilisateur>();
                 p.LstUser = GetUserProject();
                 p.IcoIsArchived = "notvalidate.png";
