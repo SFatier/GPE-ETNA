@@ -82,7 +82,7 @@ namespace IHM.Helpers
         /// <param name="DownloadFolderPath"></param>
         /// <param name="DownloadFileName"></param>
         /// <returns></returns>
-        public bool Download(Drive drive, string FolderPath, string FileName, string DownloadFolderPath, string DownloadFileName)
+        public bool Download(Drive drive, string FolderPath, string FileName, string DownloadFolderPath, string DownloadFileName, string fileId, string mimeType)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().Download(FolderPath, FileName, DownloadFolderPath, DownloadFileName);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Download();
+                        Singleton.GetInstance().GetGoogle().Download(FileName,  fileId, DownloadFolderPath, mimeType);
                         break;
                 }
                 return true;
@@ -224,7 +224,7 @@ namespace IHM.Helpers
     public interface ICloud
     {
         List<Files> GetItems(Drive drive);
-        bool Download(Drive drive, string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName);
+        bool Download(Drive drive, string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName, string fileId, string mimeType);
         bool CreateFolder(Drive drive, string path);
         bool FolderExists(Drive drive, string path);
         bool Delete(Drive drive, string path);

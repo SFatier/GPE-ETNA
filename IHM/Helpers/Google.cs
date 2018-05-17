@@ -15,6 +15,8 @@ using Newtonsoft.Json;
 using System.Windows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2.Flows;
+using IHM.ModelView;
+using Google.Apis.Download;
 
 namespace IHM.Helpers
 {
@@ -170,15 +172,123 @@ namespace IHM.Helpers
                         Version = file.Version,
                         DateDeCreation = file.CreatedTime
                     };
+
                     FileList.Add(File);
                 }
             }
             return FileList;
         } 
 
-        internal void Download()
+        internal void Download (string filename, string fileId, string savePath, string mimeType)
         {
-            throw new NotImplementedException();
+           
+            try
+            {
+
+                if (Path.HasExtension(filename))
+                {
+                    var request = service.Files.Get(fileId);
+
+                    var stream = new System.IO.MemoryStream();
+                    System.Diagnostics.Debug.WriteLine(fileId);
+                    // Add a handler which will be notified on progress changes.
+                    // It will notify on each chunk download and when the
+                    // download is completed or failed.
+                    request.MediaDownloader.ProgressChanged +=
+                        (IDownloadProgress progress) =>
+                        {
+                            switch (progress.Status)
+                            {
+                                case DownloadStatus.Downloading:
+                                    {
+                                        System.Diagnostics.Debug.WriteLine(progress.BytesDownloaded);
+                                        break;
+                                    }
+                                case DownloadStatus.Completed:
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Download complete.");
+                                        break;
+                                    }
+                                case DownloadStatus.Failed:
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Download failed.");
+                                        MessageBox.Show("File failed to download!!!", "Download Message", MessageBoxButton.OK, MessageBoxImage.Error);
+                                        break;
+                                    }
+                            }
+                        };
+                    request.Download(stream);
+                    convertMemoryStreamToFileStream(stream, savePath + @"\" + @filename);
+                    stream.Dispose();
+                }
+                else
+                {
+                    string extension = "", converter = "";
+                    foreach (MimeTypeConvert obj in MimeConverter.mimeList())
+                    {
+                        if (mimeType == obj.mimeType)
+                        {
+                            extension = obj.extension;
+                            converter = obj.converterType;
+                        }
+                    }
+                    System.Diagnostics.Debug.WriteLine("{0} {1} {2}", fileId, extension, mimeType);
+                    var request = service.Files.Export(fileId, converter);
+                    var stream = new System.IO.MemoryStream();
+                    // Add a handler which will be notified on progress changes.
+                    // It will notify on each chunk download and when the
+                    // download is completed or failed.
+                    request.MediaDownloader.ProgressChanged +=
+                            (IDownloadProgress progress) =>
+                            {
+                                switch (progress.Status)
+                                {
+                                    case DownloadStatus.Downloading:
+                                        {
+                                            Console.WriteLine(progress.BytesDownloaded);
+                                            break;
+                                        }
+                                    case DownloadStatus.Completed:
+                                        {
+                                            Console.WriteLine("Download complete.");
+                                            break;
+                                        }
+                                    case DownloadStatus.Failed:
+                                        {
+                                            Console.WriteLine("Download failed.");
+                                            MessageBox.Show("File failed to download!!!", "Download Message", MessageBoxButton.OK, MessageBoxImage.Error);
+                                            break;
+                                        }
+                                }
+                            };
+                    request.Download(stream);
+                    convertMemoryStreamToFileStream(stream, savePath + @"\" + @filename + extension);
+                    stream.Dispose();
+                }
+
+            }
+            catch (Exception exc)
+            {
+                System.Diagnostics.Debug.WriteLine(exc.Message + " Download From Drive Error");
+              
+            }
+        }
+        private static void convertMemoryStreamToFileStream(MemoryStream stream, string savePath)
+        {
+            FileStream fileStream;
+            using (fileStream = new System.IO.FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                try
+                {
+                    // System.IO.File.Create(saveFile)
+                    stream.WriteTo(fileStream);
+                    fileStream.Close();
+                }
+                catch (Exception exc)
+                {
+                    System.Diagnostics.Debug.WriteLine(exc.Message +" Convert Memory stream Error");
+                }
+            }
         }
 
         internal void CreateFolder()

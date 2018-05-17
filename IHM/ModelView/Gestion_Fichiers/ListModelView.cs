@@ -20,16 +20,16 @@ namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         public string Name => "Liste des documents du cloud dropbox";
         public List<Files> FilesShared { get; internal set; }
 
         public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-        public ICommand ReloadDataGrid { get; set; } 
+        public ICommand ReloadDataGrid { get; set; }
         public ICommand Upload { get; set; }
-        public ICommand Recherche { get; set; } 
+        public ICommand Recherche { get; set; }
         public ICommand RechercheDate { get; set; }
         public ICommand RecherchePeriode { get; set; }
         public ICommand Download { get; set; }
@@ -57,9 +57,9 @@ namespace IHM.ModelView
             RechercheDate = new RelayCommand(ActionRechercheDate);
             RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
         }
-        
+
         public void LoadProject()
-        {           
+        {
             List<Projet> items;
             try
             {
@@ -68,7 +68,7 @@ namespace IHM.ModelView
                 {
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
-                    LstProjets = items.OrderByDescending(x => x.DateDeCreation).Select(x=>x.Nom).ToList(); 
+                    LstProjets = items.OrderByDescending(x => x.DateDeCreation).Select(x => x.Nom).ToList();
                 }
             } catch (Exception)
             {
@@ -105,7 +105,7 @@ namespace IHM.ModelView
                 }
             }
         }
-       
+
         private List<Files> _Results;
         public List<Files> Results
         {
@@ -175,7 +175,7 @@ namespace IHM.ModelView
                 }
             }
         }
-                
+
         private string _startDate;
         public string startDate
         {
@@ -214,7 +214,7 @@ namespace IHM.ModelView
         {
             if (filesSelected != null && filesSelected.IsFile == false)
             {
-                DgFiles =  Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
+                DgFiles = Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
             }
         }
 
@@ -282,7 +282,7 @@ namespace IHM.ModelView
             }
             return rslt;
         }
-        
+
         /// <summary>
         /// Récupère une ico en fonction du type de l'image
         /// </summary>
@@ -432,28 +432,55 @@ namespace IHM.ModelView
        * */
         private void ActionDownload(object paramater)
         {
+
             if (filesSelected != null)
             {
-                string DropboxFolderPath = filesSelected.path;
-                string DropboxFileName = filesSelected.Nom;
-                string DownloadFolderPath = "";
-                string DownloadFileName = "";
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = filesSelected.Nom;
-
-                if (saveFileDialog.ShowDialog() == true)
+                if (filesSelected.IdGoogle != null)
                 {
-                    string test = filesSelected.path;
-                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
-                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
-                    Singleton.GetInstance().GetCloud().Download(Drive.DP, "/", DropboxFileName, DownloadFolderPath, DownloadFileName);
+
+                    string fileName, fileId, mimeType;
+                    fileName = filesSelected.Nom;
+                    mimeType = filesSelected.Type;
+                    fileId = filesSelected.IdDropbox;
+                  
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.FileName = filesSelected.Nom;
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        var DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                        Singleton.GetInstance().GetCloud().Download(Drive.GG, "", fileName, DownloadFolderPath, fileName, filesSelected.IdGoogle, Path.GetExtension(fileName));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+                    }
+
+
+                }
+                else
+                {
+                    string DropboxFolderPath = filesSelected.path;
+                    string DropboxFileName = filesSelected.Nom;
+                    string DownloadFolderPath = "";
+                    string DownloadFileName = "";
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.FileName = filesSelected.Nom;
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        string test = filesSelected.path;
+                        DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                        DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
+                        Singleton.GetInstance().GetCloud().Download(Drive.DP, "/", DropboxFileName, DownloadFolderPath, DownloadFileName,string.Empty, string.Empty);
+                    
+                    }
+                    else
+                    {
+                        MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+                    }
                 }
             }
-            else
-            {
-                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
-            }
-        }
+    }
 
         private void ActionOpen(object paramater)
         {
