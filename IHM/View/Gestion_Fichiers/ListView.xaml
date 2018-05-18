@@ -140,6 +140,7 @@
                 <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
                 <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
                 <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
