@@ -182,19 +182,20 @@ namespace IHM.Helpers
                 {
 
                     Fichier File = new Fichier();
-                    File.IdGoogle = file.Id;
-                    File.Nom = file.Name;
-                    File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                    File.Version = file.Version;
-                    File.MimeType = GetFile(file.Id);
-                    File.DateDeCreation = file.CreatedTime;
-                    File.IsFile = (file.Parents == null ? true : false);
-                    File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
-                    File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                    File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
-                    FileList.Add(File);
+                        File.IdGoogle = file.Id;
+                        File.Nom = file.Name;
+                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
+                        File.Version = file.Version;
+                        File.MimeType = GetFile(file.Id);
+                        File.DateDeCreation = file.CreatedTime;
+                        File.IsFile = (file.Parents == null ? true : false);
+                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
+                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
+                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
+                        FileList.Add(File);
                 }
             }
+
             return FileList.OrderBy(f => f.Nom).ToList();
         }
 
@@ -203,20 +204,27 @@ namespace IHM.Helpers
             Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
             try
             {
+
                  file = service.Files.Get(fileId).Execute();
             }
             catch (Exception e)
             {
+
                 Console.WriteLine("An error occurred: " + e.Message);
             }
             return file.MimeType;
 
         }
 
-        public void Download (string filename, string fileId, string DownloadFolderPath)
+        internal void Download (string filename, string fileId, string DownloadFolderPath)
         {
+
             MemoryStream stream1 = new MemoryStream();
             var request = service.Files.Get(fileId);
+
+            // Add a handler which will be notified on progress changes.
+            // It will notify on each chunk download and when the
+            // download is completed or failed.
 
             request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
             {
@@ -250,23 +258,6 @@ namespace IHM.Helpers
                 stream.WriteTo(file);
             }
         }
-        private static void convertMemoryStreamToFileStream(MemoryStream stream, string savePath)
-        {
-            FileStream fileStream;
-            using (fileStream = new System.IO.FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                try
-                {
-                    // System.IO.File.Create(saveFile)
-                    stream.WriteTo(fileStream);
-                    fileStream.Close();
-                }
-                catch (Exception exc)
-                {
-                    System.Diagnostics.Debug.WriteLine(exc.Message +" Convert Memory stream Error");
-                }
-            }
-        }
 
         private static string GetMimeType(string fileName)
         {
@@ -280,6 +271,7 @@ namespace IHM.Helpers
 
         public void Upload(string _uploadFile, string _paretn)
         {
+
             /*if (System.IO.File.Exists(_uploadFile))
             {
                 Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();

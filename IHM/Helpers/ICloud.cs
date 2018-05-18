@@ -93,7 +93,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().Download(FolderPath, FileName, DownloadFolderPath, DownloadFileName);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Download(FileName,  fileId, DownloadFolderPath);
+                      Singleton.GetInstance().GetGoogle().Download(FileName,  fileId, DownloadFolderPath);
                         break;
                 }
                 return true;
