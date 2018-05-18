@@ -23,7 +23,6 @@ namespace IHM.ModelView
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur cUtilisateur = Singleton.GetInstance().GetUtilisateur();
         public string Name => "Liste des documents du cloud dropbox";
-        public List<Fichier> FilesShared { get; internal set; }
 
         public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
@@ -41,8 +40,10 @@ namespace IHM.ModelView
         /// </summary>
         public ListModelView()
         {
-            _DgFiles = new List<Fichier>();
-
+            DgFiles = new List<List<Fichier>>(); //init de la liste
+            DgFiles.Add(new List<Fichier>()); //init list dropbox
+            DgFiles.Add(new List<Fichier>()); //init list Google
+            RefreshTab();
             LoadProject();
             LoadAction();
         }
@@ -81,7 +82,32 @@ namespace IHM.ModelView
             Singleton.GetInstance().SetListProject(items);
         }
 
+        #region [Binding dgFiles By Drive]
+        private List<Fichier> dgFiles_DP;
+        public List<Fichier> DgFiles_DP
+        {
+            get { return dgFiles_DP; }
+            set
+            {
+                dgFiles_DP = value;
+                RaisePropertyChanged(nameof(DgFiles_DP));
+            }
+        }
+
+        private List<Fichier> dgFiles_GG;
+        public List<Fichier> DgFiles_GG
+        {
+            get { return dgFiles_GG; }
+            set
+            {
+                dgFiles_GG = value;
+                RaisePropertyChanged(nameof(DgFiles_GG));
+            }
+        }
+        #endregion
+
         #region [Binding]
+
         private List<string> lstProjets;
         public List<string> LstProjets
         {
@@ -123,8 +149,8 @@ namespace IHM.ModelView
             }
         }
 
-        private List<Fichier> _DgFiles;
-        public List<Fichier> DgFiles
+        private List<List<Fichier>> _DgFiles;
+        public List<List<Fichier>>  DgFiles
         {
             get { return this._DgFiles; }
             set
@@ -178,7 +204,8 @@ namespace IHM.ModelView
                 }
             }
         }
-
+        
+        //Recherche binding
         private DateTime _dateDebut;
         public DateTime dateDebut
         {
@@ -210,6 +237,12 @@ namespace IHM.ModelView
 
         #region [Methods]
 
+        public void RefreshTab()
+        {
+            DgFiles_DP = DgFiles[0];
+            DgFiles_GG = DgFiles[1];
+        }
+
         /// <summary>
         /// Récupère les items d'un dossier
         /// </summary>
@@ -217,7 +250,15 @@ namespace IHM.ModelView
         {
             if (filesSelected != null && filesSelected.IsFile == false)
             {
-                DgFiles = Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
+                DgFiles.Clear();
+                if (filesSelected.IdDropbox != null)
+                {
+                    DgFiles[0] = Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
+                }
+                else
+                {
+                    //DgFiles[1].Add()
+                }
             }
         }
 
@@ -228,7 +269,6 @@ namespace IHM.ModelView
         private void RechercheMetadataByProjet(string value)
         {
             Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
-            Singleton.GetInstance().GetHomeModelView().GetFilesShared();
 
             Projet projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(x => x.Nom.Equals(value));
 
@@ -256,7 +296,7 @@ namespace IHM.ModelView
                     }
                 });
             }
-            DgFiles = lst;
+            DgFiles[0] = lst;
         }
 
         /// <summary>
@@ -416,23 +456,27 @@ namespace IHM.ModelView
         /// <param name="parameter"></param>
         private void ActionReloadDataGrid(object parameter)
         {
-            try
-            {
-                if (cUtilisateur.Token_DP != null)
-                {
-                    Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
-                    Singleton.GetInstance().GetHomeModelView().GetFilesShared();
-                }
-                if (cUtilisateur.Token_GG != null)
-                {
-                    DgFiles = Singleton.GetInstance().GetCloud().GetItems(Drive.GG);
-                    if (DgFiles.Count > 0 && cUtilisateur.Token_DP != null)
-                        DgFiles.AddRange(Singleton.GetInstance().GetCloud().GetItems(Drive.DP));
-                }
-            } catch (Exception ex)
-            {
-                MessageBox.Show("Error:\"" + ex.Message);
-            }
+            /* try
+             {
+                 if (cUtilisateur.Token_DP != null)
+                 {
+                     Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
+                     Singleton.GetInstance().GetHomeModelView().GetFilesShared();
+                 }
+                 if (cUtilisateur.Token_GG != null)
+                 {
+                     DgFiles[1] = Singleton.GetInstance().GetCloud().GetItems(Drive.GG);
+                     if (DgFiles[0].Count > 0 && cUtilisateur.Token_DP != null)
+                         DgFiles[0] = Singleton.GetInstance().GetCloud().GetItems(Drive.DP);
+                 }
+             } catch (Exception ex)
+             {
+                 MessageBox.Show("Error:\"" + ex.Message);
+             }*/
+
+            Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
+            Singleton.GetInstance().GetHomeModelView().GetFilesGoogle();
+            RefreshTab();
         }
 
         /// <summary>
@@ -560,33 +604,35 @@ namespace IHM.ModelView
             string[] words = Nom.Split(delimiters);
             bool trouve = false;
 
-            foreach (Fichier item in DgFiles)
+            if (DgFiles[0].Count() > 0)
             {
-
-                if (words.Any(nomRechercher => nomRechercher == item.Nom))
+                foreach (Fichier item in DgFiles[0])
                 {
-                    trouve = true;
-                    Results.Add(item);
+
+                    if (words.Any(nomRechercher => nomRechercher == item.Nom))
+                    {
+                        trouve = true;
+                        Results.Add(item);
 
 
+                    }
+                    DgFiles[0] = Results;
                 }
-                DgFiles = Results;
-            }
-            if (trouve == false)
-            {
-                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+                if (trouve == false)
+                {
+                    MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
+                }
             }
         }
         public void Recherche_Periode()
         {
             Results = new List<Fichier>();
-            var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
+            var lstFilesDropbox = Singleton.GetInstance().GetCloud().GetItems(Drive.DP);
 
             if (dateDebut < dateFin)
             {
                 throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
             }
-
 
             foreach (Fichier item in lstFilesDropbox)
             {
@@ -598,7 +644,7 @@ namespace IHM.ModelView
                     Results.Add(item);
                 }
             }
-            DgFiles = Results;
+            DgFiles[0] = Results;
         }
 
         private void ActionRecherchePeriode(object obj)
@@ -647,7 +693,7 @@ namespace IHM.ModelView
                 MessageBox.Show("La date séléctioné  n’existe pas");
             }
 
-            DgFiles = Results;
+            DgFiles[0] = Results;
         }
 
         private void ActionRechercheDate(object obj)
