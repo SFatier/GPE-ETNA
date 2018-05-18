@@ -258,23 +258,6 @@ namespace IHM.Helpers
                 stream.WriteTo(file);
             }
         }
-        private static void convertMemoryStreamToFileStream(MemoryStream stream, string savePath)
-        {
-            FileStream fileStream;
-            using (fileStream = new System.IO.FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                try
-                {
-                    // System.IO.File.Create(saveFile)
-                    stream.WriteTo(fileStream);
-                    fileStream.Close();
-                }
-                catch (Exception exc)
-                {
-                    System.Diagnostics.Debug.WriteLine(exc.Message +" Convert Memory stream Error");
-                }
-            }
-        }
 
         private static string GetMimeType(string fileName)
         {
