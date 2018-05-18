@@ -20,28 +20,26 @@ namespace IHM.ModelView
 {
     public class ListModelView : ObservableObject, IPageViewModel
     {
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
-        private Utilisateur cUtilisateur = Singleton.GetInstance().GetUtilisateur();
+        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];  
         public string Name => "Liste des documents du cloud dropbox";
-        public List<Fichier> FilesShared { get; internal set; }
+        public List<Files> FilesShared { get; internal set; }
 
         public ICommand LinkProject { get; set; }
         public ICommand Supprimer { get; set; }
         public ICommand CreateFolder { get; set; }
-        public ICommand ReloadDataGrid { get; set; }
+        public ICommand ReloadDataGrid { get; set; } 
         public ICommand Upload { get; set; }
-        public ICommand Recherche { get; set; }
+        public ICommand Recherche { get; set; } 
         public ICommand RechercheDate { get; set; }
         public ICommand RecherchePeriode { get; set; }
         public ICommand Download { get; set; }
         public ICommand Open { get; set; }
+        
 
-        /// <summary>
-        /// Constructeur
-        /// </summary>
+        //constructeur
         public ListModelView()
         {
-            _DgFiles = new List<Fichier>();
+            _DgFiles = new List<Files>();
 
             LoadProject();
             LoadAction();
@@ -59,10 +57,11 @@ namespace IHM.ModelView
             Recherche = new RelayCommand(ActionRecherche);
             RechercheDate = new RelayCommand(ActionRechercheDate);
             RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
+            BtnSearch = ConfigurationSettings.AppSettings["FolderIMG"] + "search.png";
         }
-
+        
         public void LoadProject()
-        {
+        {           
             List<Projet> items;
             try
             {
@@ -71,7 +70,7 @@ namespace IHM.ModelView
                 {
                     string json = r.ReadToEnd();
                     items = JsonConvert.DeserializeObject<List<Projet>>(json);
-                    LstProjets = items.OrderByDescending(x => x.DateDeCreation).Select(x => x.Nom).ToList();
+                    LstProjets = items.OrderByDescending(x => x.DateDeCreation).Select(x=>x.Nom).ToList(); 
                 }
             } catch (Exception)
             {
@@ -89,6 +88,19 @@ namespace IHM.ModelView
             set {
                 lstProjets = value;
                 RaisePropertyChanged(nameof(LstProjets));
+            }
+        }
+        private string _BtnSearch;
+        public string BtnSearch
+        {
+            get { return this._BtnSearch; }
+            set
+            {
+                if (!string.Equals(this._BtnSearch, value))
+                {
+                    this._BtnSearch = value;
+                    RaisePropertyChanged(nameof(BtnSearch));
+                }
             }
         }
 
@@ -109,8 +121,8 @@ namespace IHM.ModelView
             }
         }
        
-        private List<Fichier> _Results;
-        public List<Fichier> Results
+        private List<Files> _Results;
+        public List<Files> Results
         {
             get { return this._Results; }
             set
@@ -123,8 +135,8 @@ namespace IHM.ModelView
             }
         }
 
-        private List<Fichier> _DgFiles;
-        public List<Fichier> DgFiles
+        private List<Files> _DgFiles;
+        public List<Files> DgFiles
         {
             get { return this._DgFiles; }
             set
@@ -151,8 +163,8 @@ namespace IHM.ModelView
             }
         }
 
-        private Fichier _filesSelected;
-        public Fichier filesSelected
+        private Files _filesSelected;
+        public Files filesSelected
         {
             get { return this._filesSelected; }
             set
@@ -178,30 +190,30 @@ namespace IHM.ModelView
                 }
             }
         }
-
-        private string _startDate;
-        public string startDate
+                
+        private DateTime _dateDebut;
+        public DateTime dateDebut
         {
-            get { return this._startDate; }
+            get { return _dateDebut; }
             set
             {
-                if (!string.Equals(this._startDate, value))
+                if (!DateTime.Equals(this._dateDebut, value))
                 {
-                    this._startDate = value;
-                    RaisePropertyChanged(nameof(startDate));
+                    this._dateDebut = value;
+                    RaisePropertyChanged(nameof(dateDebut));
                 }
             }
         }
-        private string _endDate;
-        public string endDate
+        private DateTime _dateFin;
+        public DateTime dateFin
         {
-            get { return this._endDate; }
+            get { return _dateFin; }
             set
             {
-                if (!string.Equals(this._endDate, value))
+                if (!DateTime.Equals(this._dateFin, value))
                 {
-                    this._endDate = value;
-                    RaisePropertyChanged(nameof(endDate));
+                    this._dateFin = value;
+                    RaisePropertyChanged(nameof(dateFin));
                 }
             }
         }
@@ -217,7 +229,7 @@ namespace IHM.ModelView
         {
             if (filesSelected != null && filesSelected.IsFile == false)
             {
-                DgFiles = Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
+                DgFiles =  Singleton.GetInstance().GetDBB().GetItemsFolder(filesSelected.path);
             }
         }
 
@@ -227,12 +239,12 @@ namespace IHM.ModelView
         /// <param name="value"></param>
         private void RechercheMetadataByProjet(string value)
         {
-            Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
+            Singleton.GetInstance().GetHomeModelView().GetFiles();
             Singleton.GetInstance().GetHomeModelView().GetFilesShared();
 
             Projet projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(x => x.Nom.Equals(value));
 
-            List<Fichier> lst = new List<Fichier>();
+            List<Files> lst = new List<Files>();
 
             if (projet.LstFiles != null)
             {
@@ -265,10 +277,10 @@ namespace IHM.ModelView
         /// <param name="path"></param>
         /// <param name="NomFichier"></param>
         /// <returns></returns>
-        private List<Fichier> VerificationFichier(string path)
+        private List<Files> VerificationFichier(string path)
         {
-            List<Fichier> rslt = new List<Fichier>();
-            List<Fichier> lst = Singleton.GetInstance().GetDBB().GetItemsFolder(path);
+            List<Files> rslt = new List<Files>();
+            List<Files> lst = Singleton.GetInstance().GetDBB().GetItemsFolder(path);
             if (lst.Count() > 0)
             {
                 lst.ForEach(doc =>
@@ -285,7 +297,7 @@ namespace IHM.ModelView
             }
             return rslt;
         }
-
+        
         /// <summary>
         /// Récupère une ico en fonction du type de l'image
         /// </summary>
@@ -323,16 +335,13 @@ namespace IHM.ModelView
             }
             return path_img + str;
         }
-      
         #endregion
 
-        #region [Action ICommand]
-
-        /// <summary>
-        /// Lie un fichier à un projet 
-        /// Partage le fichier/dossier aux utilisateurs
-        /// </summary>
-        /// <param name="parameter"></param>
+        #region {Action ICommand]
+        /**
+         * Lie un fichier à un projet 
+         * Partage le fichier/dossier aux utilisateurs
+         * */
         private void ActionLinkProject(object parameter)
         {
             if (filesSelected != null)
@@ -349,29 +358,20 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Supprimer un dossier ou un fichier
-        /// </summary>
-        /// <param name="parameter"></param>
+        /**
+         * Supprimer un dossier ou un fichier
+         * */
         private void ActionSupprimer(object parameter)
         {
             if (filesSelected != null)
             {
                 MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer  " + filesSelected.Nom + "?", "Infos", MessageBoxButton.YesNo);
-
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        if (filesSelected.IdDropbox != null)
-                        {
-                            string test = filesSelected.path;
-                            Singleton.GetInstance().GetCloud().Delete(Drive.DP, filesSelected.path, string.Empty);
-                        }
-                        else
-                        {
-                            Singleton.GetInstance().GetCloud().Delete(Drive.GG, string.Empty, filesSelected.IdGoogle);
-                        }
-                        MessageBox.Show("Fichier supprimé.");
+                        string test = filesSelected.path;
+                        Singleton.GetInstance().GetDBB().Delete(filesSelected.path);
+                        //notification 
                         break;
                     case MessageBoxResult.No:
                         //
@@ -384,25 +384,21 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Lie un fichier à un projet 
-        /// Partage le fichier/dossier aux utilisateurs
-        /// </summary>
-        /// <param name="parameter"></param>
+        /**
+        * Lie un fichier à un projet 
+        * Partage le fichier/dossier aux utilisateurs
+        * */
         private void ActionCreateFolder(object parameter)
         {
             try
             {
-                Drive DriveChecked = Drive.GG;
+                //AddFolderView _AddFolder = new AddFolderView();
+                //AddFolderModelView context = new AddFolderModelView(_AddFolder);
+                //_AddFolder.Width = 300;
+                //_AddFolder.Height = 200;
+                //_AddFolder.Show();
 
-                if (Drive.DP == DriveChecked)
-                {
-                    Singleton.GetInstance().GetCloud().FolderExists(Drive.DP, "/", "test__");
-                }
-                else
-                {
-                    Singleton.GetInstance().GetCloud().CreateFolder(Drive.GG, "/", "test__");
-                }
+                Singleton.GetInstance().GetDBB().CreateFolder("/test__");
             }
             catch (Exception ex)
             {
@@ -410,35 +406,22 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Reload Grid
-        /// </summary>
-        /// <param name="parameter"></param>
+        /**
+         * Reload Grid
+         * */
         private void ActionReloadDataGrid(object parameter)
         {
             try
             {
-                if (cUtilisateur.Token_DP != null)
-                {
-                    Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
-                    Singleton.GetInstance().GetHomeModelView().GetFilesShared();
-                }
-                if (cUtilisateur.Token_GG != null)
-                {
-                    DgFiles = Singleton.GetInstance().GetCloud().GetItems(Drive.GG);
-                    if (DgFiles.Count > 0 && cUtilisateur.Token_DP != null)
-                        DgFiles.AddRange(Singleton.GetInstance().GetCloud().GetItems(Drive.DP));
-                }
+                //DgFiles.Clear();
+                Singleton.GetInstance().GetHomeModelView().GetFiles();
+                //Singleton.GetInstance().GetHomeModelView().GetFilesShared();
             } catch (Exception ex)
             {
                 MessageBox.Show("Error:\"" + ex.Message);
             }
         }
 
-        /// <summary>
-        /// Upload un fichier
-        /// </summary>
-        /// <param name="paramater"></param>
         private void ActionUpload(object paramater)
         {
 
@@ -459,89 +442,26 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Download File
-        /// </summary>
-        /// <param name="paramater"></param>
+        /**
+       * Download File
+       * */
         private void ActionDownload(object paramater)
         {
-
             if (filesSelected != null)
             {
-                if (filesSelected.IdGoogle != null)
+                string DropboxFolderPath = filesSelected.path;
+                string DropboxFileName = filesSelected.Nom;
+                string DownloadFolderPath = "";
+                string DownloadFileName = "";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = filesSelected.Nom;
+
+                if (saveFileDialog.ShowDialog() == true)
                 {
-
-                    string fileName, fileId, mimeType;
-                    fileName = filesSelected.Nom;
-                    mimeType = filesSelected.Type;
-                    fileId = filesSelected.IdDropbox;
-                  
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.FileName = filesSelected.Nom;
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        var DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
-                        Singleton.GetInstance().GetCloud().Download(Drive.GG, "", fileName, DownloadFolderPath, fileName, filesSelected.IdGoogle, "");
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Aucun fichier(s) sélectioné(s).");
-                    }
-
-
-                }
-                else
-                {
-                    string DropboxFolderPath = filesSelected.path;
-                    string DropboxFileName = filesSelected.Nom;
-                    string DownloadFolderPath = "";
-                    string DownloadFileName = "";
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.FileName = filesSelected.Nom;
-
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        string test = filesSelected.path;
-                        DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
-                        DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
-                        Singleton.GetInstance().GetCloud().Download(Drive.DP, "/", DropboxFileName, DownloadFolderPath, DownloadFileName,string.Empty, string.Empty);
-                    
-                    }
-                    else
-                    {
-                        MessageBox.Show("Aucun fichier(s) sélectioné(s).");
-                    }
-                }
-            }
-    }
-
-        /// <summary>
-        /// Action qui visualise un fichier
-        /// </summary>
-        /// <param name="paramater"></param>
-        private void ActionOpen(object paramater)
-        {
-            if (filesSelected != null)
-            {
-                if (filesSelected.IdDropbox != null)
-                {
-                    if (filesSelected.PreviewUrl == null)
-                    {
-                        string DropboxFileName = filesSelected.Nom;
-                        string DropboxFolderPath = filesSelected.path;
-                        string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
-                        Singleton.GetInstance().GetCloud().Download(Drive.GG, "", fileName, "" , fileName, filesSelected.IdGoogle, Path.GetExtension(fileName));
-                        System.Diagnostics.Process.Start(fileName);
-                    }
-                    else
-                    {
-                        System.Diagnostics.Process.Start(filesSelected.PreviewUrl);
-                    }
-                }
-                else
-                {
-                    Singleton.GetInstance().GetCloud().Watch(Drive.GG, filesSelected.IdGoogle);
+                    string test = filesSelected.path;
+                    DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
+                    DownloadFileName = Path.GetFileName(saveFileDialog.FileName);
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, DownloadFolderPath, DownloadFileName);
                 }
             }
             else
@@ -550,80 +470,98 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        /// <param name="par"></param>
+        private void ActionOpen(object paramater)
+        {
+            if (filesSelected != null)
+            {
+                if (filesSelected.PreviewUrl == null)
+                {
+                    string DropboxFileName = filesSelected.Nom;
+                    string DropboxFolderPath = filesSelected.path;
+                    string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+                    Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+                    System.Diagnostics.Process.Start(fileName);
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(filesSelected.PreviewUrl);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Aucun fichier(s) sélectioné(s).");
+            }
+        }
+
+        // search Files
         private void ActionRecherche(object par)
         {
-            string nomRechercher = Nom;
-            Results = new List<Fichier>();
+           
+            Results = new List<Files>();
+            char[] delimiters = new char[] { ' ', ',', '.', ':', '\t' };
+            string[] words = Nom.Split(delimiters);
             bool trouve = false;
-
-            foreach (Fichier item in DgFiles)
+           
+            foreach (Files item in DgFiles)
             {
 
-                if (item.Nom.Contains(nomRechercher))
+                if (words.Any(nomRechercher => nomRechercher == item.Nom))
                 {
                     trouve = true;
                     Results.Add(item);
-                    Console.WriteLine(Results);
-                    DgFiles = Results;
+                    
+                    
                 }
+                DgFiles = Results;
             }
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
         }
-
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        private void ActionRecherchePeriode(object obj)
+        public void Recherche_Periode()
         {
-            string recherchePeriode = this.Date;
-            DateTime startDate = DateTime.Now;
-            DateTime endDate = startDate.AddDays(20);
-            Results = new List<Fichier>();
+            Results = new List<Files>();
             var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
-            if (endDate < startDate)
+            if ( dateDebut< dateFin)
             {
                 throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
             }
 
 
-            foreach (Fichier item in lstFilesDropbox)
+            foreach (Files item in lstFilesDropbox)
             {
-                if ((item.DateDeCreation != null  && item.DateDeCreation > endDate && item.DateDeCreation > startDate) ||
-                                        ( item.DateInvitation != null  && item.DateInvitation > endDate && item.DateInvitation > startDate))
+                if ((item.DateDeCreation != null && item.DateDeCreation > dateFin && item.DateDeCreation > dateDebut) ||
+                                        (item.DateInvitation != null && item.DateInvitation > this.dateFin && item.DateInvitation > dateDebut))
                 {
-                    startDate = startDate.AddDays(1);
+                    dateDebut = dateDebut.AddDays(1);
                     Console.WriteLine(Results);
+                    Results.Add(item);
                 }
             }
             DgFiles = Results;
         }
 
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        private void ActionRechercheDate(object obj)
+        private void ActionRecherchePeriode(object obj)
         {
-            string rechercheDate = this.Date;
-            char[] delimiters = new char[] { '/', ' ' };
-            string[] words = rechercheDate.Split(delimiters);
-            int month = int.Parse(words[0]);
-            int day = int.Parse(words[1]);
-            int year = int.Parse(words[2]);
+            Recherche_Periode();
+        }
+        public void Recherche_Date ()
+        {
+            string dateDebut = this.Date;
+        char[] delimiters = new char[] { '/', ' ' };
+        string[] words = dateDebut.Split(delimiters);
+        int month = int.Parse(words[0]);
+        int day = int.Parse(words[1]);
+        int year = int.Parse(words[2]);
 
-            Results = new List<Fichier>();
+        Results = new List<Files>();
             bool trouve = false;
 
-            var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
+        var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
-            foreach (Fichier item in lstFilesDropbox)
+            foreach (Files item in lstFilesDropbox)
             {
                 if (item.DateDeCreation != null)
                 {
@@ -633,7 +571,7 @@ namespace IHM.ModelView
                         Results.Add(item);
                         Console.WriteLine(Results);
                     }
-                }
+}
 
                 if (item.DateInvitation != null)
                 {
@@ -652,7 +590,10 @@ namespace IHM.ModelView
             }
 
             DgFiles = Results;
-
+        }
+        private void ActionRechercheDate(object obj)
+        {
+          Recherche_Date();
         }
 
         #endregion

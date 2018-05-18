@@ -4,9 +4,7 @@ using IHM.ModelView;
 using IHM.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,18 +12,10 @@ namespace IHM.Helpers
 {
     class Singleton
     {
-        /**Cryptage**/
-        //static TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
-        static RijndaelManaged provider = new RijndaelManaged();
-        //static provider.IV = ...
-        //static provider.Key = ...
-
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         List<Projet> lstProject = new List<Projet>();
         List<Roles> lstRoles = new List<Roles>();
         DropBox DBB;
-        GoogleCloud google;
-        Cloud cloud;
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
@@ -33,7 +23,6 @@ namespace IHM.Helpers
         PopUpModelView popUp;
 
         static Singleton _instance;
-
         public static Singleton GetInstance()
         {
             if (_instance == null)
@@ -123,27 +112,6 @@ namespace IHM.Helpers
             return DBB;
         }
 
-        /************/
-
-        public void SetCloud(Cloud _cloud)
-        {
-            cloud = _cloud;
-        }
-        public Cloud GetCloud()
-        {
-            return cloud;
-        }
-
-        /************/
-        public void SetGoogle(GoogleCloud _google)
-        {
-            google = _google;
-        }
-        public GoogleCloud GetGoogle()
-        {
-            return google;
-        }
-
         /********/
 
         public void addProject(Projet p)
@@ -189,32 +157,6 @@ namespace IHM.Helpers
                 return null;
             }
         }
-
-        public byte[] Encrypt(string btext)
-        {
-            using (MemoryStream mstream = new MemoryStream())
-            {
-                using (CryptoStream cstream = new CryptoStream(mstream, provider.CreateEncryptor(), CryptoStreamMode.Write))
-                {
-                    cstream.Write(Encoding.ASCII.GetBytes(btext), 0, btext.Length);
-                }
-                return mstream.ToArray();
-            }
-        }
-
-        public string Decrypt(byte[] btext)
-        {
-            using (MemoryStream mstream = new MemoryStream(btext))
-            {
-                using (CryptoStream cstream = new CryptoStream(mstream, provider.CreateDecryptor(), CryptoStreamMode.Read))
-                {
-                    byte[] output = new byte[cstream.Length];
-                    cstream.Read(output, 0, output.Length);
-                    return output.ToString();
-                }
-            }
-        }
-
     }
 }
 

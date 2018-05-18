@@ -106,54 +106,51 @@ namespace IHM.ModelView
             //Enregistrement de l'utilisateur 
             if (Login != "" && Email != "" && Role != "")
             {
-                if (Singleton.GetInstance().GetAllUtilisateur().Count() > 0)
+                if ( Singleton.GetInstance().GetAllUtilisateur().Select(user => user.Login.Equals(Email)).Count() > 0){
+
+                    Utilisateur Nouvelle_Utilisateur = new Utilisateur();
+                    Nouvelle_Utilisateur.Login = Login;
+                    Nouvelle_Utilisateur.MDP = Mdp;
+                    Nouvelle_Utilisateur.Email = Email;
+                    Nouvelle_Utilisateur.Role = Role;
+                    Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
+
+                    #region [Ecriture de l'utilisateur dans le fichier .JSON]
+                    try
+                    {
+                        string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
+                        using (StreamWriter file = File.CreateText(@test))
+                        {
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error :\" " + ex.Message);
+                    }
+                    #endregion
+
+                    if (Singleton.GetInstance().GetUtilisateur() == null) // Inscription
+                    {
+
+                        Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
+
+                        HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
+                        HMV.IsConnect = "Se deconnecter";
+                        Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+                    }
+                    else // ajout d'un utilisateur
+                    {
+                        MessageBox.Show("L'utilisateur a été ajouté.");
+                        ListUsersModelView lstUMV = new ListUsersModelView();
+                        lstUMV.UsersList = Singleton.GetInstance().GetAllUtilisateur();
+                        Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = lstUMV;
+                    }
+                }
+                else
                 {
-                    if (Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => user.Email.Equals(Email)) == null)
-                    {
-                        //ajout de l'utilisateur
-                        Utilisateur Nouvelle_Utilisateur = new Utilisateur();
-                        Nouvelle_Utilisateur.Login = Login;
-                        Nouvelle_Utilisateur.MDP = Mdp;
-                        Nouvelle_Utilisateur.Email = Email;
-                        Nouvelle_Utilisateur.Role = Role;
-                        Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
-
-                        #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                        try
-                        {
-                            string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
-                            using (StreamWriter file = File.CreateText(@test))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error :\" " + ex.Message);
-                        }
-                        #endregion
-
-                        if (Singleton.GetInstance().GetUtilisateur() == null) // Inscription
-                        {
-                            Singleton.GetInstance().SetUtilisateur(Nouvelle_Utilisateur);
-
-                            HomeModelView HMV = new HomeModelView(Nouvelle_Utilisateur);
-                            HMV.IsConnect = "Se deconnecter";
-                            Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
-                        }
-                        else // ajout d'un utilisateur
-                        {
-                            MessageBox.Show("L'utilisateur a été ajouté.");
-                            ListUsersModelView lstUMV = new ListUsersModelView();
-                            lstUMV.UsersList = Singleton.GetInstance().GetAllUtilisateur();
-                            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = lstUMV;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Cette emai existe deja.");
-                    }
+                    MessageBox.Show("Il existe un utilisateur avec cette email");
                 }
             }
             else

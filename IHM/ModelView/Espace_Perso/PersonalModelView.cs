@@ -19,7 +19,6 @@ namespace IHM.ModelView
     {
         public string Name => "Espace personnel";
         public ICommand ConnecterDP { get; set; }
-        public ICommand ConnecterGG{ get; set; }
         public ICommand MiseAJourUser { get; set; }
 
         private Utilisateur u;
@@ -34,19 +33,11 @@ namespace IHM.ModelView
             Mdp = u.MDP;
             Email = u.Email;
             Role = u.Role;
-            LoadDrive();
-            LoadAction();
-        }
-
-        /// <summary>
-        /// Charge les drives connectés
-        /// </summary>
-        private void LoadDrive()
-        {
-            if (u.Token_DP != null)
+            if (u.Token != null)
+            {
                 strDP = "Dropbox connecté";
-            if (u.Token_GG != null)
-                strGG = "Google connecté";
+            }
+            LoadAction();
         }
 
         #region [Binding]
@@ -120,28 +111,12 @@ namespace IHM.ModelView
                 }
             }
         }
-
-        private string _strGG = " Connecter Google";
-        public string strGG
-        {
-            get { return this._strGG; }
-            set
-            {
-                if (!string.Equals(this._strGG, value))
-                {
-                    this._strGG = value;
-                    RaisePropertyChanged(nameof(strGG));
-                }
-            }
-        }
-        
         #endregion
 
         public void LoadAction()
         {
             MiseAJourUser = new RelayCommand(ActionMiseAJourUser);
             ConnecterDP = new RelayCommand(ActionConnecterDropbox);
-            ConnecterGG = new RelayCommand(ActionConnecterGoogle);
         }
 
         #region Dropbox        
@@ -151,7 +126,7 @@ namespace IHM.ModelView
         private void ActionConnecterDropbox(object parameter)
         {
             DBB = Singleton.GetInstance().GetDBB();
-            if (u.Token_DP == null)
+            if (u.Token == null)
             {
                 try
                 {
@@ -167,10 +142,10 @@ namespace IHM.ModelView
                         var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => u.Equals(user));
                         if (uUpdate != null)
                         {
-                            uUpdate.Token_DP = /*Singleton.GetInstance().Encrypt(*/strAccessToken; //).ToString();
+                            uUpdate.Token = strAccessToken;
                         }
                         UpdateUtilisateur();
-                        Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
+                        Singleton.GetInstance().GetHomeModelView().GetFiles();
                         strDP = "Dropbox connecté";
                     }
                 }
@@ -193,23 +168,8 @@ namespace IHM.ModelView
                 serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
             }
         }
-
+  
         #endregion
-
-        #region Google
-
-        /// <summary>
-        /// Se connecter à google
-        /// </summary>
-        /// <param name="obj"></param>
-        private void ActionConnecterGoogle(object obj)
-        {
-            //Pas très propre mais bon ... a changé !!!
-            GoogleCloud google = new GoogleCloud();
-            Singleton.GetInstance().SetGoogle(google);
-        }
-
-        #endregion  
 
         private void ActionMiseAJourUser(object obj)
         {

@@ -11,7 +11,7 @@ namespace IHM.Model
     {
         private string nom;
         private DateTime dateDeCreation = DateTime.Now;
-        private List<Fichier> lstFiles;
+        private List<Files> lstFiles;
         private bool isChecked = false;
 
         public bool Ischecked
@@ -47,7 +47,7 @@ namespace IHM.Model
             }
         }
 
-        public List<Fichier> LstFiles
+        public List<Files> LstFiles
         {
             get { return this.lstFiles; }
             set
