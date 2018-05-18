@@ -17,7 +17,8 @@
         <Image HorizontalAlignment="Left" Height="100" Margin="117,100,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="/IMG/user.png"/>
         <Image HorizontalAlignment="Left" Height="40" Margin="90,240,0,0" Grid.Row="1" VerticalAlignment="Top" Width="27" Source="/IMG/dropbox.png"/>
         <Button Content="{Binding strDP}" Grid.Row="1" HorizontalAlignment="Left" Margin="117,241,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterDP}"  BorderBrush="White" Background="White"/>
-
+        <Button Content="{Binding strGG}" Grid.Row="1" HorizontalAlignment="Left" Margin="130,241,0,0" VerticalAlignment="Top" Width="123" Command="{Binding ConnecterGG}"  BorderBrush="White" Background="White"/>
+        
         <Label Content="Login :" HorizontalAlignment="Left" Margin="399,100,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Height="22" Margin="449,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="272" Text="{Binding Login}" Grid.Row="1" IsReadOnly="True"/>
 

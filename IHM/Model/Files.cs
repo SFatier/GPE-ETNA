@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IHM.Model
 {
-    public class Files
+    public class Fichier
     {
 
         public int Id{ get; set; }
@@ -23,15 +23,15 @@ namespace IHM.Model
         public bool IsFile { get; set; }
         public string PreviewUrl { get; internal set; }
         public DateTime? DateInvitation { get; internal set; }
-    
+        public string MimeType { get; set; }
         public string path;
         
-        public Files()
+        public Fichier()
         {
 
         }
 
-        public Files(int _Id, string _IdDropbox, string _IMG, string _Nom, string _Type, DateTime? _DateDeCreation, DateTime? _ModifieLe, string _Taille, bool _IsFile)
+        public Fichier(int _Id, string _IdDropbox, string _IMG, string _Nom, string _Type, DateTime? _DateDeCreation, DateTime? _ModifieLe, string _Taille, bool _IsFile)
         {
             Id = _Id;
             IdDropbox = _IdDropbox;
@@ -44,7 +44,7 @@ namespace IHM.Model
             IsFile = _IsFile;
         }
 
-        public Files(string _IdDropbox, string _Nom, string _IMG, string _Type, DateTime? _DateDeCreation, DateTime? _ModifieLe, string _Taille, bool _IsFile)
+        public Fichier(string _IdDropbox, string _Nom, string _IMG, string _Type, DateTime? _DateDeCreation, DateTime? _ModifieLe, string _Taille, bool _IsFile)
         {
             IdDropbox = _IdDropbox;
             Nom = _Nom;

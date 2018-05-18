@@ -103,7 +103,9 @@
     <Compile Include="Helpers\Google.cs" />
     <Compile Include="Helpers\ICloud.cs" />
     <Compile Include="Helpers\IListItemConverter.cs" />
+    <Compile Include="Helpers\MimeTypeConvert.cs" />
     <Compile Include="Helpers\MultiSelectorBehaviours.cs" />
+    <Compile Include="Helpers\ParentReference.cs" />
     <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="Helpers\TwoListSynchronizer.cs" />
     <Compile Include="IPageViewModel.cs" />

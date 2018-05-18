@@ -34,6 +34,24 @@ namespace IHM.View
         private void DgFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Singleton.GetInstance().GetHomeModelView().lMVM.GetFolder();
-        }        
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            var Date = RechercheDate.SelectedDate;
+
+            Singleton.GetInstance().GetHomeModelView().lMVM.Recherche_Date();
+
+
+        }
+        private void Periode_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+            var Periode = RecherchePeriode.SelectedDate;
+
+            Singleton.GetInstance().GetHomeModelView().lMVM.Recherche_Periode();
+        }
     }
 }

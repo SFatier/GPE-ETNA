@@ -16,12 +16,12 @@ namespace IHM.ModelView
     class PopUpModelView : ObservableObject, IPageViewModel
     {
         private PopUp app;
-        private Files file;
+        private Fichier file;
         private List<Projet> lstPChecked = new List<Projet>();
         public string Name => "PopUp";
         
         #region [Constructeur]
-        public PopUpModelView(PopUp _app, Files _file)
+        public PopUpModelView(PopUp _app, Fichier _file)
         {
             Singleton.GetInstance().SetPopUp(this);
             app = _app;
@@ -63,7 +63,7 @@ namespace IHM.ModelView
 
                     if (p.LstFiles != null)
                     {
-                        Files isFIle = p.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
+                        Fichier isFIle = p.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
                         if (isFIle != null)
                         {
                             p.Ischecked = true;
@@ -91,7 +91,7 @@ namespace IHM.ModelView
 
             if (app.IsActive)
             {
-                Files isFIle = projet.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
+                Fichier isFIle = projet.LstFiles.FirstOrDefault(f => f.IdDropbox.Equals(file.IdDropbox)); //utilisé car la date du fichier se modifie lors du partage 
                 if (isFIle == null)
                 { 
                     DoShare(projet, file);
@@ -120,7 +120,7 @@ namespace IHM.ModelView
         /**
         * Partage le fichier entre le chef de projet et les utilisateurs
         * */
-        private void DoShare(Projet _projet, Files _file)
+        private void DoShare(Projet _projet, Fichier _file)
         {
             foreach (Utilisateur _utilisateur in _projet.LstUser)
             {
