@@ -354,5 +354,8 @@
   <ItemGroup>
     <Resource Include="IMG\notvalidate.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\google.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

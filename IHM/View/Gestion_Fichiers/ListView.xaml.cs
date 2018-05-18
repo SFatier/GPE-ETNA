@@ -1,4 +1,5 @@
 ﻿using IHM.Helpers;
+using IHM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,19 @@ namespace IHM.View
     /// </summary>
     public partial class ListView : UserControl
     {
+        Utilisateur cUtilisateur = Singleton.GetInstance().GetUtilisateur();
         public ListView()
         {
             InitializeComponent();
 
-            if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
-            {
+            if (cUtilisateur.Role != "Chef de projet")
                 BtnProject.Visibility = Visibility.Hidden;
-            }
+            if (cUtilisateur.Token_DP != null)
+                TabDropbox.Visibility = Visibility.Visible;
+            if (cUtilisateur.Token_GG != null)
+                TabGoogle.Visibility = Visibility.Visible;
+
+            Singleton.GetInstance().GetHomeModelView().lMVM.RefreshTab();
         }
 
         private void DgFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
