@@ -11,33 +11,30 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="239" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
         <!--Row 3-->
         <DockPanel HorizontalAlignment="Left" Height="760" LastChildFill="False" Grid.Row="1" VerticalAlignment="Top" Width="227" Grid.Column="0" Margin="10,0,0,0"  >
             <Grid Grid.Row="1" Grid.Column="0" Width="226"  >
                 <!--Filtrer par Nom / Type-->
-                <TextBox  x:Name="Filter"  HorizontalAlignment="Left" Height="23" Margin="6,46,0,0" Text="{Binding Nom}" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" />
-                <Button x:Name="button1" Content="Recherche" HorizontalAlignment="Left" Margin="137,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.133,0.45" Height="26"  Command="{Binding Recherche}"/>
-                <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-
-                <!--Filtrer par date-->
-                <TextBlock Grid.Column="0" Text="Date de création" Margin="12,81,84,647" FontSize="16" />
-                <DatePicker SelectedDate="{Binding Date, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Margin="8,114,0,0" VerticalAlignment="Top" Width="203" FontSize="16" Cursor="Hand" Height="28"/>
-                <Button x:Name="button" Content="Recherche" HorizontalAlignment="Left" Margin="113,161,0,0" VerticalAlignment="Top" Width="98" Height="30" Command="{Binding RechercheDate}" RenderTransformOrigin="1.618,-5.077"/>
+                <TextBox  x:Name="Filter"  HorizontalAlignment="Left" Height="22" Margin="3,52,0,0" Text="{Binding Nom}" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" />
+                <Button  Margin="167,30,30,665" Command="{Binding Recherche}" Height="22">
+                    <Image Source="/IMG/search.png"/>
+                </Button>
+                <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16"/>
 
                 <!--Filtrer par période-->
-                <Label x:Name="label1" Content="Période:" HorizontalAlignment="Left" Margin="10,197,0,0" VerticalAlignment="Top" FontSize="16" Width="74"/>
-                <DatePicker  SelectedDate="{Binding startDate,StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Margin="6,240,0,0" VerticalAlignment="Top" Height="29" Width="204"/>
-                <DatePicker  SelectedDate="{Binding endDate, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Margin="10,282,0,0" VerticalAlignment="Top" Width="202" Height="24"/>
-                <Button x:Name="button2" Content="Recherche" HorizontalAlignment="Left"  Margin="105,319,0,0" VerticalAlignment="Top" Width="103" Height="31" Command="{Binding RecherchePeriode}"/>
+                <Label x:Name="label1" Content="Période:" HorizontalAlignment="Left" Margin="6,89,0,0" VerticalAlignment="Top" FontSize="16" Width="74"/>
+                <DatePicker SelectedDate="{Binding Date, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Left" Name="RechercheDate" Margin="5,131,0,0" VerticalAlignment="Top" Width="203" FontSize="16" Cursor="Hand" Height="28" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                <DatePicker  SelectedDate="{Binding endDate, StringFormat=MM/dd/yyyy}" Name="RecherchePeriode" HorizontalAlignment="Left" Margin="5,163,0,0" VerticalAlignment="Top" Width="201" Height="27" SelectedDateChanged="Periode_SelectedDateChanged"/>
 
                 <!--Filtrer par projet-->
-                <Label Content="Par projet :" HorizontalAlignment="Left" Margin="0,370,0,0" VerticalAlignment="Top" FontSize="16" Width="100"/>
-                <ComboBox Margin="0,70,0,0" Height="25" Name="cbxProjets" ItemsSource="{Binding LstProjets}" Background="Transparent" BorderBrush="Black" SelectedItem="{Binding ProjetFiltre}"/>
+                <Label Content="Par projet :" HorizontalAlignment="Left" Margin="4,202,0,0" VerticalAlignment="Top" FontSize="16" Width="100"/>
+                <ComboBox Margin="1,206,2,470" Name="cbxProjets" ItemsSource="{Binding LstProjets}" Height="22" Background="Transparent" BorderBrush="Black" SelectedItem="{Binding ProjetFiltre}"/>    
+            
             </Grid>
         </DockPanel>
 
@@ -122,26 +119,54 @@
             </Button.ToolTip>
         </Button>
 
-        <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
-                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Margin="0,0,1,0" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
-            <DataGrid.Columns >
-                <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding IMG}" Width="20" Height="20" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
-                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
-                <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
-                <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <TabControl Name="TabControl_Drive" Grid.Column="1" Margin="3,0,0,0" Grid.Row="1">
+            <TabItem Header="Google" Name="TabGoogle" Visibility="Hidden" >
+                <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_GG}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                    <DataGrid.Columns >
+                        <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding IMG}" Width="20" Height="20" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
+                        <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                        <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
+                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem >
+            <TabItem Header="Dropbox" Name="TabDropbox" Visibility="Hidden" >
+                <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_DP}" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                    <DataGrid.Columns >
+                        <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding IMG}" Width="20" Height="20" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
+                        <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                        <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
+                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </UserControl>

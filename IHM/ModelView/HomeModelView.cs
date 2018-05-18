@@ -21,7 +21,7 @@ namespace IHM.ModelView
         #region [ Fields ]   
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
-        public ListModelView lMVM = new ListModelView();
+        public ListModelView lMVM;
         public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
@@ -38,6 +38,7 @@ namespace IHM.ModelView
         #endregion
 
         #region [Constructor]
+
         public HomeModelView(Utilisateur u)
         {
             Singleton.GetInstance().SetHomeModelView(this);
@@ -48,36 +49,21 @@ namespace IHM.ModelView
             Singleton.GetInstance().SetGoogle(_google);  //Instance de la classe GoogleAPI
             Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
 
+            lMVM = new ListModelView();
+            
             if (curentUtilisateur.Token_DP != null && curentUtilisateur.Token_DP != "")
-            {
                 DBB.GetDBClient(curentUtilisateur.Token_DP);
                 GetFilesDropbox();
-                GetFilesShared();
-            }
 
             if (curentUtilisateur.Token_GG != null && curentUtilisateur.Token_GG != "")
-            {
                 GetFilesGoogle();
-            }
-
+           
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
         }
-
-        public void GetFilesShared()
-        {
-            List<Fichier> lst = DBB.GetFilesShared();
-            lMVM.FilesShared = lst;
-            if (lMVM.FilesShared.Count > 0)
-            {
-                foreach (Fichier f in lMVM.FilesShared)
-                {
-                    lMVM.DgFiles.Add(f);
-                }
-            }
-        }
+               
         #endregion
 
         #region ChangeContent
@@ -136,11 +122,12 @@ namespace IHM.ModelView
                 }
             }
         }
-           
-        
+
+
         #endregion
 
         #region [Actions]
+
         public void LoadAction()
         {       
             PageAdmin = new RelayCommand(ActionPageAdmin);
@@ -152,6 +139,10 @@ namespace IHM.ModelView
             Disconnect = new RelayCommand(ActionDisconnect);
         }
 
+        /// <summary>
+        /// Appelle la page Gestion fichier
+        /// </summary>
+        /// <param name="obj"></param>
         private void ActionPageFichiers(object obj)
         {
             CurrentContentViewModel = lMVM;
@@ -162,22 +153,21 @@ namespace IHM.ModelView
         /// </summary>
         public void GetFilesGoogle()
         {
-            if (lMVM.DgFiles.Count() > 0)
-            {
-                lMVM.DgFiles.AddRange(cloud.GetItems(Drive.GG));
-            }
-            else
-            {
-                lMVM.DgFiles = cloud.GetItems(Drive.GG);
-            }
+            lMVM.DgFiles[1] = cloud.GetItems(Drive.GG);
         }
     
         /// <summary>
-        /// Récupère les fichiers de drop
+        /// Récupère les fichiers de dropbox  ainsi que les fichiers partagés avec l'utilisateur
         /// </summary>
         public void GetFilesDropbox()
         {
-            lMVM.DgFiles = cloud.GetItems(Drive.DP);
+            //fichier de l'utilisateur
+            lMVM.DgFiles[0] = cloud.GetItems(Drive.DP);
+            
+            //fichier partagé avec l'utilisateur
+            List<Fichier> lst = DBB.GetFilesShared();
+            if (lst != null && lst.Count() > 0)
+                lMVM.DgFiles[0].AddRange(lst);
         }
 
         public void GetProjets()

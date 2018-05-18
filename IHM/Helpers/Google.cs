@@ -275,6 +275,7 @@ namespace IHM.Helpers
             // Path.GetFileName(file.FileName));
             // file.SaveAs(path);
             if(System.IO.File.Exists(UploadfolderPath))
+
             {
                 ///byte[] byteArray = System.IO.File.ReadAllBytes(UploadfolderPath);
                // System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);

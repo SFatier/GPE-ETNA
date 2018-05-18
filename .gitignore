@@ -1,3 +1,4 @@
 
 *.json
 IHM/App.config
+*.config
