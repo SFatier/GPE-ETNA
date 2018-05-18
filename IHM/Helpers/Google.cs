@@ -182,20 +182,19 @@ namespace IHM.Helpers
                 {
 
                     Fichier File = new Fichier();
-                        File.IdGoogle = file.Id;
-                        File.Nom = file.Name;
-                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                        File.Version = file.Version;
-                        File.MimeType = GetFile(file.Id);
-                        File.DateDeCreation = file.CreatedTime;
-                        File.IsFile = (file.Parents == null ? true : false);
-                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
-                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
-                        FileList.Add(File);
+                    File.IdGoogle = file.Id;
+                    File.Nom = file.Name;
+                    File.Taille = (file.Size == null ? "-" : file.Size.ToString());
+                    File.Version = file.Version;
+                    File.MimeType = GetFile(file.Id);
+                    File.DateDeCreation = file.CreatedTime;
+                    File.IsFile = (file.Parents == null ? true : false);
+                    File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
+                    File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
+                    File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
+                    FileList.Add(File);
                 }
             }
-
             return FileList.OrderBy(f => f.Nom).ToList();
         }
 
@@ -204,27 +203,20 @@ namespace IHM.Helpers
             Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
             try
             {
-
                  file = service.Files.Get(fileId).Execute();
             }
             catch (Exception e)
             {
-
                 Console.WriteLine("An error occurred: " + e.Message);
             }
             return file.MimeType;
 
         }
 
-        internal void Download (string filename, string fileId, string DownloadFolderPath)
+        public void Download (string filename, string fileId, string DownloadFolderPath)
         {
-
             MemoryStream stream1 = new MemoryStream();
             var request = service.Files.Get(fileId);
-
-            // Add a handler which will be notified on progress changes.
-            // It will notify on each chunk download and when the
-            // download is completed or failed.
 
             request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
             {
