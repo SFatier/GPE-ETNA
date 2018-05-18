@@ -179,29 +179,29 @@ namespace IHM.ModelView
             }
         }
 
-        private string _startDate;
-        public string startDate
+        private DateTime _dateDebut;
+        public DateTime dateDebut
         {
-            get { return this._startDate; }
+            get { return _dateDebut; }
             set
             {
-                if (!string.Equals(this._startDate, value))
+                if (!DateTime.Equals(this._dateDebut, value))
                 {
-                    this._startDate = value;
-                    RaisePropertyChanged(nameof(startDate));
+                    this._dateDebut = value;
+                    RaisePropertyChanged(nameof(dateDebut));
                 }
             }
         }
-        private string _endDate;
-        public string endDate
+        private DateTime _dateFin;
+        public DateTime dateFin
         {
-            get { return this._endDate; }
+            get { return _dateFin; }
             set
             {
-                if (!string.Equals(this._endDate, value))
+                if (!DateTime.Equals(this._dateFin, value))
                 {
-                    this._endDate = value;
-                    RaisePropertyChanged(nameof(endDate));
+                    this._dateFin = value;
+                    RaisePropertyChanged(nameof(dateFin));
                 }
             }
         }
@@ -550,45 +550,39 @@ namespace IHM.ModelView
             }
         }
 
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        /// <param name="par"></param>
+
+        // search Files
         private void ActionRecherche(object par)
         {
-            string nomRechercher = Nom;
+
             Results = new List<Fichier>();
+            char[] delimiters = new char[] { ' ', ',', '.', ':', '\t' };
+            string[] words = Nom.Split(delimiters);
             bool trouve = false;
 
             foreach (Fichier item in DgFiles)
             {
 
-                if (item.Nom.Contains(nomRechercher))
+                if (words.Any(nomRechercher => nomRechercher == item.Nom))
                 {
                     trouve = true;
                     Results.Add(item);
-                    Console.WriteLine(Results);
-                    DgFiles = Results;
+
+
                 }
+                DgFiles = Results;
             }
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
         }
-
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        private void ActionRecherchePeriode(object obj)
+        public void Recherche_Periode()
         {
-            string recherchePeriode = this.Date;
-            DateTime startDate = DateTime.Now;
-            DateTime endDate = startDate.AddDays(20);
             Results = new List<Fichier>();
             var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
 
-            if (endDate < startDate)
+            if (dateDebut < dateFin)
             {
                 throw new ArgumentException("endDate doit être supérieur ou égal à  startDate");
             }
@@ -596,24 +590,26 @@ namespace IHM.ModelView
 
             foreach (Fichier item in lstFilesDropbox)
             {
-                if ((item.DateDeCreation != null  && item.DateDeCreation > endDate && item.DateDeCreation > startDate) ||
-                                        ( item.DateInvitation != null  && item.DateInvitation > endDate && item.DateInvitation > startDate))
+                if ((item.DateDeCreation != null && item.DateDeCreation > dateFin && item.DateDeCreation > dateDebut) ||
+                                        (item.DateInvitation != null && item.DateInvitation > this.dateFin && item.DateInvitation > dateDebut))
                 {
-                    startDate = startDate.AddDays(1);
+                    dateDebut = dateDebut.AddDays(1);
                     Console.WriteLine(Results);
+                    Results.Add(item);
                 }
             }
             DgFiles = Results;
         }
 
-        /// <summary>
-        /// Action Recherche
-        /// </summary>
-        private void ActionRechercheDate(object obj)
+        private void ActionRecherchePeriode(object obj)
         {
-            string rechercheDate = this.Date;
+            Recherche_Periode();
+        }
+        public void Recherche_Date()
+        {
+            string dateDebut = this.Date;
             char[] delimiters = new char[] { '/', ' ' };
-            string[] words = rechercheDate.Split(delimiters);
+            string[] words = dateDebut.Split(delimiters);
             int month = int.Parse(words[0]);
             int day = int.Parse(words[1]);
             int year = int.Parse(words[2]);
@@ -642,7 +638,7 @@ namespace IHM.ModelView
                         trouve = true;
                         Results.Add(item);
                         Console.WriteLine(Results);
-                       
+
                     }
                 }
             }
@@ -652,7 +648,11 @@ namespace IHM.ModelView
             }
 
             DgFiles = Results;
+        }
 
+        private void ActionRechercheDate(object obj)
+        {
+            Recherche_Date();
         }
 
         #endregion
