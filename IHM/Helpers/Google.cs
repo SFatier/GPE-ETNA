@@ -268,38 +268,69 @@ namespace IHM.Helpers
                 mimeType = regKey.GetValue("Content Type").ToString();
             return mimeType;
         }
-
-        public void Upload(string _uploadFile, string _paretn)
+        public void Upload (string UploadfolderPath, string UploadfileName, string SourceFilePath, string _parent)
         {
-            /*if (System.IO.File.Exists(_uploadFile))
-            {
-                Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-                body.Name = System.IO.Path.GetFileName(_uploadFile);
-                body.Description = "File uploaded by Diamto Drive Sample";
-                body.MimeType = GetMimeType(_uploadFile);
-                body.Parents = new List() { new ParentReference() { Id = _parent } };
 
-                // File's content.
-                byte[] byteArray = System.IO.File.ReadAllBytes(_uploadFile);
-                System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
-                try
-                {
-                    service.Files. //(body, stream, GetMimeType(_uploadFile)).Upload();
-                    //return request.ResponseBody;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred: " + e.Message);
-                    return null;
-                }
+            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
+            // Path.GetFileName(file.FileName));
+            // file.SaveAs(path);
+            if(System.IO.File.Exists(UploadfolderPath))
+            {
+                ///byte[] byteArray = System.IO.File.ReadAllBytes(UploadfolderPath);
+               // System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
+              
+                    var FileMetaData = new Google.Apis.Drive.v3.Data.File();
+                    FileMetaData.Name = Path.GetFileName(UploadfileName);
+                    FileMetaData.MimeType = GetMimeType(UploadfolderPath);
+
+                    FilesResource.CreateMediaUpload request;
+
+                    using (var stream = new FileStream(UploadfolderPath, System.IO.FileMode.Open))
+                    {
+                        request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
+                        request.Fields = "id";
+                        request.Upload();
+                    }
+               
             }
             else
             {
-                Console.WriteLine("File does not exist: " + _uploadFile);
+                MessageBox.Show("The file does not exist.", "404");
+            }
+        }
+            
+        
+        //   public void Upload(string _uploadFile, string _paretn)
+        // {
+        /*if (System.IO.File.Exists(_uploadFile))
+        {
+            Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
+            body.Name = System.IO.Path.GetFileName(_uploadFile);
+            body.Description = "File uploaded by Diamto Drive Sample";
+            body.MimeType = GetMimeType(_uploadFile);
+            body.Parents = new List() { new ParentReference() { Id = _parent } };
+
+            // File's content.
+            byte[] byteArray = System.IO.File.ReadAllBytes(_uploadFile);
+            System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
+            try
+            {
+                service.Files. //(body, stream, GetMimeType(_uploadFile)).Upload();
+                //return request.ResponseBody;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: " + e.Message);
                 return null;
             }
-            */
         }
+        else
+        {
+            Console.WriteLine("File does not exist: " + _uploadFile);
+            return null;
+        }
+        */
+        //}
 
         /// <summary>
         /// Créé un fichier

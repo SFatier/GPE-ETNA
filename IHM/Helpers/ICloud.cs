@@ -216,9 +216,25 @@ namespace IHM.Helpers
         /// <param name="UploadfileName"></param>
         /// <param name="SourceFilePath"></param>
         /// <returns></returns>
-        public bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath)
+        public bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath, string _parent)
         {
-            throw new NotImplementedException();
+            try
+            {
+                switch (drive)
+                {
+                    case Drive.DP:
+                        Singleton.GetInstance().GetDBB().Upload(UploadfolderPath,  UploadfileName,  SourceFilePath);
+                        break;
+                    case Drive.GG:
+                        Singleton.GetInstance().GetGoogle().Upload(UploadfolderPath, UploadfileName, SourceFilePath, _parent);
+                        break;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -250,7 +266,7 @@ namespace IHM.Helpers
         bool CreateFolder(Drive drive, string path, string nameFolder);
         bool FolderExists(Drive drive, string path, string nameFolder);
         bool Delete(Drive drive, string path, string fileId);
-        bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath);
+        bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath,string _parent);
         bool SharingFile(Drive drive, Fichier fichier, Utilisateur utilisateur);
         List<Fichier> GetFilesShared(Drive drive);
         bool getSpace(Drive drive);
