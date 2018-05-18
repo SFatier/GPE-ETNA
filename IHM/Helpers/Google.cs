@@ -180,14 +180,14 @@ namespace IHM.Helpers
                 {
                     Fichier File = new Fichier();
                     File.IdGoogle = file.Id;
-                        File.Nom = file.Name;
-                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                        File.Version = file.Version;
-                        File.DateDeCreation = file.CreatedTime;
-                        File.IsFile = (file.Parents == null ? true : false);
-                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
-                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
+                    File.Nom = file.Name;
+                    File.Taille = (file.Size == null ? "-" : file.Size.ToString());
+                    File.Version = file.Version;
+                    File.DateDeCreation = file.CreatedTime;
+                    File.IsFile = (file.Parents == null ? true : false);
+                    File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
+                    File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
+                    File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
                     FileList.Add(File);
                 }
             }
