@@ -23,7 +23,7 @@ namespace IHM.Model
         public bool IsFile { get; set; }
         public string PreviewUrl { get; internal set; }
         public DateTime? DateInvitation { get; internal set; }
-    
+        public string MimeType { get; set; }
         public string path;
         
         public Fichier()

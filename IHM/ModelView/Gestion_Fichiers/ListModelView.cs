@@ -481,7 +481,8 @@ namespace IHM.ModelView
                     if (saveFileDialog.ShowDialog() == true)
                     {
                         var DownloadFolderPath = saveFileDialog.FileName.Replace("\\", "/");
-                        Singleton.GetInstance().GetCloud().Download(Drive.GG, "", fileName, DownloadFolderPath, fileName, filesSelected.IdGoogle, Path.GetExtension(fileName));
+                        Singleton.GetInstance().GetCloud().Download(Drive.GG, "", fileName, DownloadFolderPath, fileName, filesSelected.IdGoogle, "");
+
                     }
                     else
                     {
