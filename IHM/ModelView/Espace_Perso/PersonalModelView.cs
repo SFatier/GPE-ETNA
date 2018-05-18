@@ -204,9 +204,7 @@ namespace IHM.ModelView
         /// <param name="obj"></param>
         private void ActionConnecterGoogle(object obj)
         {
-            //Pas très propre mais bon ... a changé !!!
-            GoogleCloud google = new GoogleCloud();
-            Singleton.GetInstance().SetGoogle(google);
+            Singleton.GetInstance().GetGoogle().Connect();
         }
 
         #endregion  

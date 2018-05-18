@@ -26,6 +26,7 @@ namespace IHM.Helpers
         //defined scope.
         public static string[] Scopes = { DriveService.Scope.Drive };
         public static DriveService service = null;
+        static Dictionary<string, Google.Apis.Drive.v3.Data.File> files = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 
         public GoogleCloud()
         {
@@ -38,7 +39,7 @@ namespace IHM.Helpers
              * Fin
              * On connecte le Service
              **/
-            UserCredential rsltCredential;
+            /*UserCredential rsltCredential;
             Utilisateur u = Singleton.GetInstance().GetUtilisateur();
             if (u.Token_GG == null)
             {
@@ -47,23 +48,27 @@ namespace IHM.Helpers
             }
             else
             {
-                var accesstoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(*/u.Token_GG; //));
-                var refreshtoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(*/u.RefreshToken; //));
-                rsltCredential = CreateCredential(new TokenResponse { AccessToken = accesstoken, RefreshToken = refreshtoken});
+                var accesstoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(u.Token_GG; //));
+                /*var refreshtoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(u.RefreshToken; //));
+                /*rsltCredential = CreateCredential(new TokenResponse { AccessToken = accesstoken, RefreshToken = refreshtoken});
             }
             GetGoogleService(rsltCredential);
-            GetItems();
+            GetItems();*/
         }
 
         /// <summary>
         /// Réupération de l'autorisation de l'utilisateur
         /// </summary>
         /// <returns></returns>
-        public static UserCredential GetAuthorization()
+        public UserCredential GetAuthorization()
         {
-            UserCredential credential;
+            UserCredential credential = null;
+            service = null;
             try
             {
+                if (Directory.Exists(ConfigurationSettings.AppSettings["ClientSecretJSON"]) == true)
+                    Directory.Delete(ConfigurationSettings.AppSettings["ClientSecretJSON"], true);
+
                 using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
                 {
                     String FolderPath = @"C:\";
@@ -135,7 +140,7 @@ namespace IHM.Helpers
         public UserCredential CreateCredential(TokenResponse token)
         {
             ClientSecrets clientsecret;
-
+            
             //récupération du client secret
             using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
             {
@@ -150,19 +155,25 @@ namespace IHM.Helpers
                 DataStore = new FileDataStore("Store")
             });
 
-            //creation du credential
             var googleServiceCredential = new UserCredential(flow, Environment.UserName, token);
-
             return googleServiceCredential;
         }
 
-        public static void GetGoogleService(UserCredential credential)
+        public void GetGoogleService(UserCredential credential)
         {
             service = new DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
                 ApplicationName = "GoogleDriveRestAPI-v3",
             });
+        }
+
+        public void Connect()
+        {
+            UserCredential uc =  GetAuthorization();
+            SaveToken(uc);
+            GetGoogleService(uc);
+            GetItems();
         }
 
         /// <summary>
@@ -175,23 +186,27 @@ namespace IHM.Helpers
             FileListRequest.Fields = "nextPageToken, files(id, name, size, version, createdTime)";
             IList<Google.Apis.Drive.v3.Data.File> files = FileListRequest.Execute().Files;
             List<Fichier> FileList = new List<Fichier>();
-
+                        
             if (files != null && files.Count > 0)
             {
                 foreach (var file in files)
                 {
+                    Google.Apis.Drive.v3.Data.File cFile = GetFile(file.Id);
+                    //var previousParents = GetParentByFileId(file.Id);
 
-                    Fichier File = new Fichier();
-                        File.IdGoogle = file.Id;
-                        File.Nom = file.Name;
-                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                        File.Version = file.Version;
-                        File.MimeType = GetFile(file.Id);
-                        File.DateDeCreation = file.CreatedTime;
-                        File.IsFile = (file.Parents == null ? true : false);
-                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
+                        Fichier File = new Fichier();
+                        File.IdGoogle = cFile.Id;
+                        File.Nom = cFile.Name;
+                        File.Taille = (cFile.Size == null ? "-" : cFile.Size.ToString());
+                        File.Version = cFile.Version;
+                        File.MimeType = cFile.MimeType;
+                        File.DateDeCreation = cFile.CreatedTime;
+                        File.IsFile = (cFile.Parents == null ? true : false);
+                        File.PreviewUrl = (cFile.WebContentLink == null ? "" : cFile.WebContentLink);
                         File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
+                        File.Type = (File.IsFile != false ? Path.GetExtension(cFile.Name) : "-");
+
+                    //if (previousParents == "")
                         FileList.Add(File);
                 }
             }
@@ -199,20 +214,52 @@ namespace IHM.Helpers
             return FileList.OrderBy(f => f.Nom).ToList();
         }
 
-        private string GetFile(String fileId)
+        /// <summary>
+        /// Récupére les id des dossiers parents d'un fichier
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string GetParentByFileId(string id)
+        {
+            string previousParents = "";
+            try
+            {
+                var getRequest = service.Files.Get(id);
+                getRequest.Fields = "parents";
+                var test = getRequest.Execute();
+
+                var test2 = service.About.Get().ExecuteAsStream();
+                
+
+                if (test.Parents != null)
+                    previousParents = String.Join(",", test.Parents);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return previousParents;
+        }
+
+        /// <summary>
+        /// Récupére les informations d'un fichier par son ID
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        private Google.Apis.Drive.v3.Data.File GetFile(String fileId)
         {
             Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
             try
             {
-
                  file = service.Files.Get(fileId).Execute();
+                
             }
             catch (Exception e)
             {
 
                 Console.WriteLine("An error occurred: " + e.Message);
             }
-            return file.MimeType;
+            return file;
 
         }
 

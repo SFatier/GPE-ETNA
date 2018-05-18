@@ -359,30 +359,21 @@ namespace GPE
             List<String> lstFolder = new List<string>();
             foreach (var item in Entries.Where(i => i.IsFolder))
             {
-                string IdFile = item.AsFolder.Id;
-                string nom = item.Name;
-                string type = "dossier de fichiers";
                 string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
-                string taille = "";
-                string path = item.PathDisplay;
-                Fichier f = new Fichier(IdFile, nom, IMG, type, null, null, taille, false);
-                f.path = path;
+                Fichier f = new Fichier(item.AsFolder.Id, item.Name, IMG, "dossier de fichiers", null, null, "-", false);
+                f.path = item.PathDisplay;
                 lstFiles.Add(f);
             }
 
             //Files
             foreach (var item in Entries.Where(i => i.IsFile))
             {
-                string IdFile = item.AsFile.Id;
-                string nom = item.Name;
-                var type = Path.GetExtension(item.Name);
-                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(Path.GetExtension(item.Name));
                 DateTime dateDeCreation = Convert.ToDateTime(item.AsFile.ClientModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 DateTime ModifieLe = Convert.ToDateTime( item.AsFile.ServerModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
-                string path = item.PathDisplay;
-                Fichier f = new Fichier(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, true);
-                f.path = path;
+                Fichier f = new Fichier(item.AsFile.Id, item.Name, IMG, Path.GetExtension(item.Name), dateDeCreation, ModifieLe, taille, true);
+                f.path = item.PathDisplay;
                 lstFiles.Add(f);
             }
             return lstFiles;
