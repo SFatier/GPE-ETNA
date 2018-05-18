@@ -271,6 +271,7 @@ namespace IHM.Helpers
 
         public void Upload(string _uploadFile, string _paretn)
         {
+
             /*if (System.IO.File.Exists(_uploadFile))
             {
                 Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
