@@ -1,4 +1,5 @@
-﻿using IHM.Model;
+﻿using Google.Apis.Drive.v3.Data;
+using IHM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace IHM.Helpers
         /// <param name="drive"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public bool CreateFolder(Drive drive, string path)
+        public bool CreateFolder(Drive drive, string path, string nameFolder)
         {
             try
             {
@@ -35,7 +36,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().CreateFolder(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().CreateFolder();
+                        Singleton.GetInstance().GetGoogle().CreateFolder(nameFolder);
                         break;
                 }
                 return true;
@@ -52,7 +53,7 @@ namespace IHM.Helpers
         /// <param name="drive"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public bool Delete(Drive drive, string path)
+        public bool Delete(Drive drive, string path, string fileId)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().Delete(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Delete();
+                        Singleton.GetInstance().GetGoogle().Delete(fileId);
                         break;
                 }
                 return true;
@@ -82,7 +83,7 @@ namespace IHM.Helpers
         /// <param name="DownloadFolderPath"></param>
         /// <param name="DownloadFileName"></param>
         /// <returns></returns>
-        public bool Download(Drive drive, string FolderPath, string FileName, string DownloadFolderPath, string DownloadFileName)
+        public bool Download(Drive drive, string FolderPath, string FileName, string DownloadFolderPath, string DownloadFileName, string fileId, string mimeType)
         {
             try
             {
@@ -92,7 +93,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().Download(FolderPath, FileName, DownloadFolderPath, DownloadFileName);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Download();
+                      Singleton.GetInstance().GetGoogle().Download(FileName,  fileId, DownloadFolderPath);
                         break;
                 }
                 return true;
@@ -108,17 +109,17 @@ namespace IHM.Helpers
         /// <param name="drive"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public bool FolderExists(Drive drive, string path)
+        public bool FolderExists(Drive drive, string path, string nameFolder)
         {
             try
             {
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().CreateFolder(path);
+                        Singleton.GetInstance().GetDBB().FolderExists(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().CreateFolder();
+                        Singleton.GetInstance().GetGoogle().FolderExists(nameFolder);
                         break;
                 }
                 return true;
@@ -134,9 +135,9 @@ namespace IHM.Helpers
         /// </summary>
         /// <param name="drive"></param>
         /// <returns></returns>
-        public List<Files> GetFilesShared(Drive drive)
+        public List<Fichier> GetFilesShared(Drive drive)
         {
-            List<Files> list = new List<Files>();
+            List<Fichier> list = new List<Fichier>();
             try
             {
                 switch (drive)
@@ -161,9 +162,9 @@ namespace IHM.Helpers
         /// </summary>
         /// <param name="drive"></param>
         /// <returns></returns>
-        public List<Files> GetItems(Drive drive)
+        public List<Fichier> GetItems(Drive drive)
         {
-            List<Files> lst = new List<Files>();
+            List<Fichier> lst = new List<Fichier>();
 
             try {
                 switch (drive)
@@ -202,7 +203,7 @@ namespace IHM.Helpers
         /// <param name="fichier"></param>
         /// <param name="utilisateur"></param>
         /// <returns></returns>
-        public bool SharingFile(Drive drive, Files fichier, Utilisateur utilisateur)
+        public bool SharingFile(Drive drive, Fichier fichier, Utilisateur utilisateur)
         {
             throw new NotImplementedException();
         }
@@ -219,18 +220,39 @@ namespace IHM.Helpers
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Visualiser un fichier
+        /// </summary>
+        /// <param name="drive"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        public Channel Watch(Drive drive, string fileId)
+        {
+            Channel channel = new Channel();
+            try
+            {
+                if(drive == Drive.GG)
+                    channel = Singleton.GetInstance().GetGoogle().Watch(fileId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return channel;
+        }
     }
 
     public interface ICloud
     {
-        List<Files> GetItems(Drive drive);
-        bool Download(Drive drive, string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName);
-        bool CreateFolder(Drive drive, string path);
-        bool FolderExists(Drive drive, string path);
-        bool Delete(Drive drive, string path);
+        List<Fichier> GetItems(Drive drive);
+        bool Download(Drive drive, string DropboxFolderPath, string DropboxFileName, string DownloadFolderPath, string DownloadFileName, string fileId, string mimeType);
+        bool CreateFolder(Drive drive, string path, string nameFolder);
+        bool FolderExists(Drive drive, string path, string nameFolder);
+        bool Delete(Drive drive, string path, string fileId);
         bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath);
-        bool SharingFile(Drive drive, Files fichier, Utilisateur utilisateur);
-        List<Files> GetFilesShared(Drive drive);
+        bool SharingFile(Drive drive, Fichier fichier, Utilisateur utilisateur);
+        List<Fichier> GetFilesShared(Drive drive);
         bool getSpace(Drive drive);
     }
 }

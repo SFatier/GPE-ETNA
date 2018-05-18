@@ -68,11 +68,11 @@ namespace IHM.ModelView
 
         public void GetFilesShared()
         {
-            List<Files> lst = DBB.GetFilesShared();
+            List<Fichier> lst = DBB.GetFilesShared();
             lMVM.FilesShared = lst;
             if (lMVM.FilesShared.Count > 0)
             {
-                foreach (Files f in lMVM.FilesShared)
+                foreach (Fichier f in lMVM.FilesShared)
                 {
                     lMVM.DgFiles.Add(f);
                 }
@@ -157,7 +157,10 @@ namespace IHM.ModelView
             CurrentContentViewModel = lMVM;
         }
 
-        private void GetFilesGoogle()
+        /// <summary>
+        /// Récupère les fichiers de google
+        /// </summary>
+        public void GetFilesGoogle()
         {
             if (lMVM.DgFiles.Count() > 0)
             {
@@ -168,7 +171,10 @@ namespace IHM.ModelView
                 lMVM.DgFiles = cloud.GetItems(Drive.GG);
             }
         }
-
+    
+        /// <summary>
+        /// Récupère les fichiers de drop
+        /// </summary>
         public void GetFilesDropbox()
         {
             lMVM.DgFiles = cloud.GetItems(Drive.DP);
