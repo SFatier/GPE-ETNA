@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using System.Windows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2.Flows;
+using IHM.ModelView;
+using Google.Apis.Download;
 
 namespace IHM.Helpers
 {
@@ -178,26 +180,100 @@ namespace IHM.Helpers
             {
                 foreach (var file in files)
                 {
+
                     Fichier File = new Fichier();
-                    File.IdGoogle = file.Id;
-                    File.Nom = file.Name;
-                    File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                    File.Version = file.Version;
-                    File.DateDeCreation = file.CreatedTime;
-                    File.IsFile = (file.Parents == null ? true : false);
-                    File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
-                    File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                    File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
-                    FileList.Add(File);
+                        File.IdGoogle = file.Id;
+                        File.Nom = file.Name;
+                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
+                        File.Version = file.Version;
+                        File.MimeType = GetFile(file.Id);
+                        File.DateDeCreation = file.CreatedTime;
+                        File.IsFile = (file.Parents == null ? true : false);
+                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
+                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
+                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
+                        FileList.Add(File);
                 }
             }
 
             return FileList.OrderBy(f => f.Nom).ToList();
-        } 
+        }
 
-        internal void Download()
+        private string GetFile(String fileId)
         {
-            throw new NotImplementedException();
+            Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
+            try
+            {
+
+                 file = service.Files.Get(fileId).Execute();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("An error occurred: " + e.Message);
+            }
+            return file.MimeType;
+
+        }
+
+        internal void Download (string filename, string fileId, string DownloadFolderPath)
+        {
+
+            MemoryStream stream1 = new MemoryStream();
+            var request = service.Files.Get(fileId);
+
+            // Add a handler which will be notified on progress changes.
+            // It will notify on each chunk download and when the
+            // download is completed or failed.
+
+            request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
+            {
+                switch (progress.Status)
+                {
+                    case DownloadStatus.Downloading:
+                        {
+                            Console.WriteLine(progress.BytesDownloaded);
+                            break;
+                        }
+                    case DownloadStatus.Completed:
+                        {
+                            Console.WriteLine("Download complete.");
+                            SaveStream(stream1, DownloadFolderPath);
+                            break;
+                        }
+                    case DownloadStatus.Failed:
+                        {
+                            Console.WriteLine("Download failed.");
+                            break;
+                        }
+                }
+            };
+            request.Download(stream1);
+            //return FilePath;
+        }
+        private static void SaveStream(MemoryStream stream, string DownloadFolderPath)
+        {
+            using (System.IO.FileStream file = new FileStream(DownloadFolderPath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                stream.WriteTo(file);
+            }
+        }
+        private static void convertMemoryStreamToFileStream(MemoryStream stream, string savePath)
+        {
+            FileStream fileStream;
+            using (fileStream = new System.IO.FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                try
+                {
+                    // System.IO.File.Create(saveFile)
+                    stream.WriteTo(fileStream);
+                    fileStream.Close();
+                }
+                catch (Exception exc)
+                {
+                    System.Diagnostics.Debug.WriteLine(exc.Message +" Convert Memory stream Error");
+                }
+            }
         }
 
         private static string GetMimeType(string fileName)
