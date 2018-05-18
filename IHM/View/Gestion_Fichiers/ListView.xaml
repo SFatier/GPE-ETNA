@@ -11,18 +11,18 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="239" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
         <!--Row 3-->
         <DockPanel HorizontalAlignment="Left" Height="760" LastChildFill="False" Grid.Row="1" VerticalAlignment="Top" Width="227" Grid.Column="0" Margin="10,0,0,0"  >
             <Grid Grid.Row="1" Grid.Column="0" Width="226"  >
                 <!--Filtrer par Nom / Type-->
                 <TextBox  x:Name="Filter"  HorizontalAlignment="Left" Height="22" Margin="3,52,0,0" Text="{Binding Nom}" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" />
                 <Button  Margin="167,30,30,665" Command="{Binding Recherche}" Height="22">
-                    <Image Source="/IHM/search.png"/>
+                    <Image Source="/IMG/search.png"/>
                 </Button>
                 <Label x:Name="label" Content="Mots clés:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16"/>
 
@@ -119,26 +119,54 @@
             </Button.ToolTip>
         </Button>
 
-        <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
-                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Margin="0,0,1,0" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
-            <DataGrid.Columns >
-                <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding IMG}" Width="20" Height="20" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-                <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
-                <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
-                <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
-                <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <TabControl Name="TabControl_Drive" Grid.Column="1" Margin="3,0,0,0" Grid.Row="1">
+            <TabItem Header="Google" Name="TabGoogle" Visibility="Hidden" >
+                <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_GG}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                    <DataGrid.Columns >
+                        <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding IMG}" Width="20" Height="20" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
+                        <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                        <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
+                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem >
+            <TabItem Header="Dropbox" Name="TabDropbox" Visibility="Hidden" >
+                <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_DP}" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                    <DataGrid.Columns >
+                        <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding IMG}" Width="20" Height="20" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="Taille" Binding="{Binding Taille}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date de création" Binding="{Binding DateDeCreation}" />
+                        <DataGridTextColumn Header="Modifié le" Binding="{Binding ModifieLe}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="Date d'invitation" Binding="{Binding DateInvitation}" />
+                        <DataGridTextColumn Header="Url de visualisation" Binding="{Binding PreviewUrl}" Visibility="Hidden" />
+                        <DataGridTextColumn Header="Path" Binding="{Binding Path}" Visibility="Hidden"/>
+                        <DataGridTextColumn Header="MimeType" Binding="{Binding MimeType}" Visibility="Hidden"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </UserControl>
