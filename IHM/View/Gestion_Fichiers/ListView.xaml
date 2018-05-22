@@ -119,7 +119,7 @@
             </Button.ToolTip>
         </Button>
 
-        <TabControl Name="TabControl_Drive" Grid.Column="1" Margin="3,0,0,0" Grid.Row="1">
+        <TabControl Name="TabControl_Drive" Grid.Column="1" Margin="3,0,0,0" Grid.Row="1" SelectedIndex="{Binding indexTab}">
             <TabItem Header="Google" Name="TabGoogle" Visibility="Hidden" >
                 <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_GG}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
                    SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >

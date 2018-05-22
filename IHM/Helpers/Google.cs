@@ -180,8 +180,8 @@ namespace IHM.Helpers
             {
                 foreach (var file in files)
                 {
-
-                    Fichier File = new Fichier();
+                        
+                        Fichier File = new Fichier();
                         File.IdGoogle = file.Id;
                         File.Nom = file.Name;
                         File.Taille = (file.Size == null ? "-" : file.Size.ToString());
@@ -268,7 +268,7 @@ namespace IHM.Helpers
                 mimeType = regKey.GetValue("Content Type").ToString();
             return mimeType;
         }
-        public void Upload (string UploadfolderPath, string UploadfileName, string SourceFilePath, string _parent)
+        public void Upload(string UploadfolderPath, string UploadfileName, string SourceFilePath, string _parent)
         {
 
             //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
@@ -283,8 +283,8 @@ namespace IHM.Helpers
                     var FileMetaData = new Google.Apis.Drive.v3.Data.File();
                     FileMetaData.Name = Path.GetFileName(UploadfileName);
                     FileMetaData.MimeType = GetMimeType(UploadfolderPath);
-
-                    FilesResource.CreateMediaUpload request;
+               // FileMetaData.Parents= new List<ParentReference>() { new ParentReference() { Id = _parent } };
+                FilesResource.CreateMediaUpload request;
 
                     using (var stream = new FileStream(UploadfolderPath, System.IO.FileMode.Open))
                     {

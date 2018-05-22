@@ -52,12 +52,15 @@ namespace IHM.ModelView
             lMVM = new ListModelView();
             
             if (curentUtilisateur.Token_DP != null && curentUtilisateur.Token_DP != "")
+            { 
                 DBB.GetDBClient(curentUtilisateur.Token_DP);
                 GetFilesDropbox();
+            }
 
             if (curentUtilisateur.Token_GG != null && curentUtilisateur.Token_GG != "")
-                GetFilesGoogle();
-           
+            { 
+             GetFilesGoogle();
+            }
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 

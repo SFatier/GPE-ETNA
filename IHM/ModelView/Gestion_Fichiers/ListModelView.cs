@@ -81,7 +81,18 @@ namespace IHM.ModelView
             }
             Singleton.GetInstance().SetListProject(items);
         }
-
+        #region [Binding SelectedIndex]
+        private int indexTab;
+        public int IndexTab
+        {
+            get { return indexTab; }
+            set
+            {
+                indexTab = value;
+                RaisePropertyChanged(nameof(IndexTab));
+            }
+        }
+        #endregion
         #region [Binding dgFiles By Drive]
         private List<Fichier> dgFiles_DP;
         public List<Fichier> DgFiles_DP
@@ -485,7 +496,6 @@ namespace IHM.ModelView
         /// <param name="paramater"></param>
         private void ActionUpload(object paramater)
         {
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.Multiselect = true;
@@ -493,14 +503,30 @@ namespace IHM.ModelView
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
 
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            string SourceFilePath = "/";
-
-            if (openFileDialog.ShowDialog() == true)
+            if (IndexTab == 0)
             {
-                SourceFilePath = openFileDialog.FileName;
-                Singleton.GetInstance().GetDBB().Upload("/", Path.GetFileName(SourceFilePath), SourceFilePath);
+                
+
+                string SourceFilePath = "/";
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    SourceFilePath = openFileDialog.FileName;
+                    Singleton.GetInstance().GetCloud().Upload(Drive.DP, "/", Path.GetFileName(SourceFilePath), SourceFilePath,"");
+                }
             }
+            else
+            {
+                string SourceFilePath = "/";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    SourceFilePath = openFileDialog.FileName;
+                    //List<> _parent = new List<ParentReference>() { new ParentReference() { Id = _parent } };
+
+                    Singleton.GetInstance().GetCloud().Upload(Drive.GG, "/", Path.GetFileName(SourceFilePath), SourceFilePath, "");
+                }
+            }
+           
         }
 
         /// <summary>
