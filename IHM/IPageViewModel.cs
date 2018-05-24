@@ -2,7 +2,6 @@
 {
     public interface IPageViewModel
     {
-       
         void LoadAction();
     }
 }

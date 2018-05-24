@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-[{"Credentiel":null,"Image":"C:\\\\Users\\\\fatie\\\\Desktop\\\\GED-ETNA\\\\IHM\\\\IMG\\\\user.png","LstProjet":null,"Login":"fatier_s","Email":"fatier_s@etna-alternance.net","MDP":"pass","Token_DP":"yJLkyP3VBKAAAAAAAAABcVTOpcwDTZ8csVJn41cUmt2bi0hbkP-bHcFnzDFucWu4","Token_GG":"ya29.Glu_BWWC81oeW7ssEl-EPYP-ASnjLx6XFSvEuTR6PXl1KGBOrOWHNpr2VnAmuzlVYQLpzR3sxzpAnPuvTNxbJO96PylDW9rvGvM4mBU3sEbmoe7UKj0fZG9t_9Vp","Role":"Chef de projet","RefreshToken":"1/b5m9L-oOtOgpd05WzXgBK5arRoeGOGce0_B6BlQhN8w","Ischecked":false,"DateDeCreation":"2018-05-18T13:10:57.7554494+02:00","LstFiles":null,"Nom":null},{"Credentiel":null,"Image":"C:\\\\Users\\\\fatie\\\\Desktop\\\\GED-ETNA\\\\IHM\\\\IMG\\\\user.png","LstProjet":null,"Login":"a","Email":"a","MDP":"pass","Token_DP":null,"Token_GG":null,"Role":"Chef de projet","RefreshToken":null,"Ischecked":false,"DateDeCreation":"2018-05-16T17:36:47.2312975+02:00","LstFiles":null,"Nom":null}]
-=======
 [
   
   {
@@ -10,12 +7,12 @@
     "Login": "fatier_s",
     "Email": "fatier_s@etna-alternance.net",
     "MDP": "pass",
-    "Token_DP": null,
-    "Token_GG": "ya29.Glu9BdhyeCvfVU2iiCEgNfyhC4CCJmYVDrodcfkv35S1oCsfO_Xjl_YFvunClT0Rqb6EEGgL89FZkf9Uf7nj4IfZ9WsqRlYfWb_E7rvZ6oS63yE6-A3gilGA8JVr",
+    "Token_DP": "yJLkyP3VBKAAAAAAAAABcVTOpcwDTZ8csVJn41cUmt2bi0hbkP-bHcFnzDFucWu4",
+    "Token_GG": "ya29.Glu_BWWC81oeW7ssEl-EPYP-ASnjLx6XFSvEuTR6PXl1KGBOrOWHNpr2VnAmuzlVYQLpzR3sxzpAnPuvTNxbJO96PylDW9rvGvM4mBU3sEbmoe7UKj0fZG9t_9Vp",
     "Role": "Chef de projet",
-    "RefreshToken": "1/YmgZLxm5aAnpL66p2m9-DPH3YhyCXG6Zof0dyb_F_ek",
+    "RefreshToken": "1/b5m9L-oOtOgpd05WzXgBK5arRoeGOGce0_B6BlQhN8w",
     "Ischecked": false,
-    "DateDeCreation": "2018-05-16T15:36:25.3928861+02:00",
+    "DateDeCreation": "2018-05-18T13:10:57.7554494+02:00",
     "LstFiles": null,
     "Nom": null
   },
@@ -27,13 +24,12 @@
     "Email": "a",
     "MDP": "pass",
     "Token_DP": null,
-    "Token_GG": "ya29.Glu9BdhyeCvfVU2iiCEgNfyhC4CCJmYVDrodcfkv35S1oCsfO_Xjl_YFvunClT0Rqb6EEGgL89FZkf9Uf7nj4IfZ9WsqRlYfWb_E7rvZ6oS63yE6-A3gilGA8JVr",
+    "Token_GG": null,
     "Role": "Chef de projet",
-    "RefreshToken": "1/YmgZLxm5aAnpL66p2m9-DPH3YhyCXG6Zof0dyb_F_ek",
+    "RefreshToken": null,
     "Ischecked": false,
     "DateDeCreation": "2018-05-16T17:36:47.2312975+02:00",
     "LstFiles": null,
     "Nom": null
   }
 ]
->>>>>>> dd13a311e8473da0823ca72e314027764cb2583a

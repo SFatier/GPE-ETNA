@@ -23,11 +23,11 @@ namespace IHM.ModelView
         #region [ Fields ]   
         private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
-        public ListModelView lMVM;
+        public ListModelView _listModelView;
         public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
-        private List<IPageViewModel> _contentViewModels;        
+        private List<IPageViewModel> _contentViewModels;
         private DropBox DBB;
         private GoogleCloud Google;
 
@@ -53,7 +53,7 @@ namespace IHM.ModelView
             Singleton.GetInstance().SetGoogle(Google);  //Instance de la classe GoogleAPI
             Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
 
-            lMVM = new ListModelView();
+            _listModelView = new ListModelView();
 
             //Dropbox
             if (curentUtilisateur.Token_DP != null && curentUtilisateur.Token_DP != "")
@@ -78,126 +78,126 @@ namespace IHM.ModelView
             LoadAction();
         }
 
-                    #endregion
+        #endregion
 
-                    #region ChangeContent
+        #region ChangeContent
 
-                    public List<IPageViewModel> ContentViewModels
-                    {
-                        get
-                        {
-                            if (_contentViewModels == null)
-                                _contentViewModels = new List<IPageViewModel>();
+        public List<IPageViewModel> ContentViewModels
+        {
+            get
+            {
+                if (_contentViewModels == null)
+                    _contentViewModels = new List<IPageViewModel>();
 
-                            return _contentViewModels;
-                        }
-                    }
+                return _contentViewModels;
+            }
+        }
 
-                    public IPageViewModel CurrentContentViewModel
-                    {
-                        get
-                        {
-                            return _currentContentViewModel;
-                        }
-                        set
-                        {
-                            if (_currentContentViewModel != value)
-                            {
-                                _currentContentViewModel = value;
-                                OnPropertyChanged("CurrentContentViewModel");
-                                RaisePropertyChanged(nameof(CurrentContentViewModel));
-                            }
-                        }
-                    }
+        public IPageViewModel CurrentContentViewModel
+        {
+            get
+            {
+                return _currentContentViewModel;
+            }
+            set
+            {
+                if (_currentContentViewModel != value)
+                {
+                    _currentContentViewModel = value;
+                    OnPropertyChanged("CurrentContentViewModel");
+                    RaisePropertyChanged(nameof(CurrentContentViewModel));
+                }
+            }
+        }
 
-                    public void ChangeViewModel(IPageViewModel viewModel)
-                    {
-                        if (!ContentViewModels.Contains(viewModel))
-                            ContentViewModels.Add(viewModel);
+        public void ChangeViewModel(IPageViewModel viewModel)
+        {
+            if (!ContentViewModels.Contains(viewModel))
+                ContentViewModels.Add(viewModel);
 
-                        CurrentContentViewModel = ContentViewModels
-                            .FirstOrDefault(vm => vm == viewModel);
-                    }
-
-
-                    #endregion
-
-                    #region [Binding]
-                    private string _IsConnect = "Se connecter";
-                    public string IsConnect
-                    {
-                        get { return this._IsConnect; }
-                        set
-                        {
-                            if (!string.Equals(this._IsConnect, value))
-                            {
-                                this._IsConnect = value;
-                                RaisePropertyChanged(nameof(IsConnect));
-                            }
-                        }
-                    }
+            CurrentContentViewModel = ContentViewModels
+                .FirstOrDefault(vm => vm == viewModel);
+        }
 
 
-                    #endregion
+        #endregion
 
-                    #region [Actions]
+        #region [Binding]
+        private string _IsConnect = "Se connecter";
+        public string IsConnect
+        {
+            get { return this._IsConnect; }
+            set
+            {
+                if (!string.Equals(this._IsConnect, value))
+                {
+                    this._IsConnect = value;
+                    RaisePropertyChanged(nameof(IsConnect));
+                }
+            }
+        }
 
-                    public void LoadAction()
-                    {       
-                        PageAdmin = new RelayCommand(ActionPageAdmin);
-                        PageHome = new RelayCommand(ActionPageHome);
-                        PagePerso = new RelayCommand(ActionPagePerso);
-                        PageUser = new RelayCommand(ActionPageUtilisateurs);
-                        PageFichiers = new RelayCommand(ActionPageFichiers);
-                        PageRoles = new RelayCommand(ActionPageRoles);
-                        Disconnect = new RelayCommand(ActionDisconnect);
-                    }
 
-                    /// <summary>
-                    /// Appelle la page Gestion fichier
-                    /// </summary>
-                    /// <param name="obj"></param>
-                    private void ActionPageFichiers(object obj)
-                    {
-                        CurrentContentViewModel = lMVM;
-                    }
+        #endregion
 
-                    /// <summary>
-                    /// Récupère les fichiers de google
-                    /// </summary>
-                    public void GetFilesGoogle()
-                    {
-                        lMVM.DgFiles[1] = cloud.GetItems(Drive.GG);
-                    }
+        #region [Actions]
 
-                    /// <summary>
-                    /// Récupère les fichiers de dropbox  ainsi que les fichiers partagés avec l'utilisateur
-                    /// </summary>
-                    public void GetFilesDropbox()
-                    {
-                        //fichier de l'utilisateur
-                        lMVM.DgFiles[0] = cloud.GetItems(Drive.DP);
+        public void LoadAction()
+        {
+            PageAdmin = new RelayCommand(ActionPageAdmin);
+            PageHome = new RelayCommand(ActionPageHome);
+            PagePerso = new RelayCommand(ActionPagePerso);
+            PageUser = new RelayCommand(ActionPageUtilisateurs);
+            PageFichiers = new RelayCommand(ActionPageFichiers);
+            PageRoles = new RelayCommand(ActionPageRoles);
+            Disconnect = new RelayCommand(ActionDisconnect);
+        }
 
-                        //fichier partagé avec l'utilisateur
-                        List<Fichier> lst = DBB.GetFilesShared();
-                        if (lst != null && lst.Count() > 0)
-                            lMVM.DgFiles[0].AddRange(lst);
-                    }
+        /// <summary>
+        /// Appelle la page Gestion fichier
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ActionPageFichiers(object obj)
+        {
+            CurrentContentViewModel = _listModelView;
+        }
 
-                    public void GetProjets()
-                    {
-                        lMVM.LoadProject();
-                    }
+        /// <summary>
+        /// Récupère les fichiers de google
+        /// </summary>
+        public void GetFilesGoogle()
+        {
+            _listModelView.DgFiles[1] = cloud.GetItems(Drive.GG);
+        }
 
-                    private void ActionPageRoles(object param)
-                    {
-                        Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new RolesModelView();
-                    }
+        /// <summary>
+        /// Récupère les fichiers de dropbox  ainsi que les fichiers partagés avec l'utilisateur
+        /// </summary>
+        public void GetFilesDropbox()
+        {
+            //fichier de l'utilisateur
+            _listModelView.DgFiles[0] = cloud.GetItems(Drive.DP);
 
-                    /**
-                   * Retourne la page Administration
-                   * */
-            private void ActionPageAdmin(object parameter)
+            //fichier partagé avec l'utilisateur
+            List<Fichier> lst = DBB.GetFilesShared();
+            if (lst != null && lst.Count() > 0)
+                _listModelView.DgFiles[0].AddRange(lst);
+        }
+
+        public void GetProjets()
+        {
+            _listModelView.LoadProject();
+        }
+
+        private void ActionPageRoles(object param)
+        {
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new RolesModelView();
+        }
+
+        /**
+       * Retourne la page Administration
+       * */
+        private void ActionPageAdmin(object parameter)
         {
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
         }
@@ -220,11 +220,11 @@ namespace IHM.ModelView
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new ListUsersModelView();
         }
 
-         private void ActionDisconnect(object paramter)
+        private void ActionDisconnect(object paramter)
         {
             Singleton.GetInstance().GetMainWindowViewModel().App.Close();
         }
-        
+
         #endregion
     }
 }

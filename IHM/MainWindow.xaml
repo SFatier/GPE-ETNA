@@ -9,6 +9,7 @@
         xmlns:local3="clr-namespace:IHM.ModelView.Gestion_Utilisateurs"
         xmlns:local4="clr-namespace:IHM.View.HomePage"
         xmlns:local5="clr-namespace:IHM.ModelView.HomePage"
+        xmlns:local6="clr-namespace:IHM.View.Gestion_Fichiers"
         mc:Ignorable="d"
         Title="" Height="800" Width="1000"  ResizeMode="CanResize" Background="White">
 
@@ -48,6 +49,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type local5:HomePageModelView}">
             <local4:HomePageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local1:PopInModelView}">
+            <local6:PopInView />
         </DataTemplate>
     </Window.Resources>
     <Grid>         

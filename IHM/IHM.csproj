@@ -114,7 +114,6 @@
     <Compile Include="ModelView\Gestions_Roles\RolesModelView.cs" />
     <Compile Include="ModelView\Gestion_Fichiers\AddFolderModelView.cs" />
     <Compile Include="ModelView\Gestion_Fichiers\ListModelView.cs" />
-    <Compile Include="ModelView\Gestion_Fichiers\PopUpModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AddProjectModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AdminModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\UpdateProjectModelView.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="ModelView\Inscription_Login\LoginModelView.cs" />
     <Compile Include="ModelView\Inscription_Login\RegisterViewModel.cs" />
     <Compile Include="ModelView\MainModelView.cs" />
+    <Compile Include="ModelView\Gestion_Fichiers\PopInModelView.cs" />
     <Compile Include="Model\Base.cs" />
     <Compile Include="Model\Projet.cs" />
     <Compile Include="Model\Roles.cs" />
@@ -141,8 +141,8 @@
     <Compile Include="View\Gestion_Fichiers\ListView.xaml.cs">
       <DependentUpon>ListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Gestion_Fichiers\PopUp.xaml.cs">
-      <DependentUpon>PopUp.xaml</DependentUpon>
+    <Compile Include="View\Gestion_Fichiers\PopInView.xaml.cs">
+      <DependentUpon>PopInView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Gestion_Projets\AddProjectView.xaml.cs">
       <DependentUpon>AddProjectView.xaml</DependentUpon>
@@ -202,9 +202,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Gestion_Fichiers\PopUp.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="View\Gestion_Fichiers\PopInView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Gestion_Projets\AddProjectView.xaml">
       <Generator>MSBuild:Compile</Generator>

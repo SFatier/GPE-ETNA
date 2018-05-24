@@ -34,12 +34,12 @@ namespace IHM.View
             if (cUtilisateur.Token_GG != null)
                 TabGoogle.Visibility = Visibility.Visible;
 
-            Singleton.GetInstance().GetHomeModelView().lMVM.RefreshTab();
+            Singleton.GetInstance().GetHomeModelView()._listModelView.RefreshTab();
         }
 
         private void DgFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Singleton.GetInstance().GetHomeModelView().lMVM.GetFolder();
+            Singleton.GetInstance().GetHomeModelView()._listModelView.GetFolder();
         }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -47,7 +47,7 @@ namespace IHM.View
 
             var Date = RechercheDate.SelectedDate;
 
-            Singleton.GetInstance().GetHomeModelView().lMVM.Recherche_Date();
+            Singleton.GetInstance().GetHomeModelView()._listModelView.Recherche_Date();
 
 
         }
@@ -57,7 +57,7 @@ namespace IHM.View
 
             var Periode = RecherchePeriode.SelectedDate;
 
-            Singleton.GetInstance().GetHomeModelView().lMVM.Recherche_Periode();
+            Singleton.GetInstance().GetHomeModelView()._listModelView.Recherche_Periode();
         }
     }
 }
