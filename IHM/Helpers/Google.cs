@@ -23,10 +23,10 @@ namespace IHM.Helpers
 {
     public class GoogleCloud
     {
-        //defined scope.
         public static string[] Scopes = { DriveService.Scope.Drive };
         public static DriveService service = null;
         static Dictionary<string, Google.Apis.Drive.v3.Data.File> files = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+        private string clientJson = ConfigurationSettings.AppSettings["ClientSecretJSON"];
 
         public GoogleCloud()
         {
@@ -66,10 +66,10 @@ namespace IHM.Helpers
             service = null;
             try
             {
-                if (Directory.Exists(ConfigurationSettings.AppSettings["ClientSecretJSON"]) == true)
-                    Directory.Delete(ConfigurationSettings.AppSettings["ClientSecretJSON"], true);
+                if (Directory.Exists(clientJson) == true)
+                    Directory.Delete(clientJson, true);
 
-                using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(clientJson, FileMode.Open, FileAccess.Read))
                 {
                     String FolderPath = @"C:\";
                     String FilePath = Path.Combine(FolderPath, "DriveServiceCredentials.json");
@@ -82,11 +82,10 @@ namespace IHM.Helpers
                         new FileDataStore(FilePath, true)).Result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
-
             return credential;            
         }
         
@@ -142,7 +141,7 @@ namespace IHM.Helpers
             ClientSecrets clientsecret;
             
             //récupération du client secret
-            using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(clientJson, FileMode.Open, FileAccess.Read))
             {
                 clientsecret = GoogleClientSecrets.Load(stream).Secrets;
             }
@@ -168,6 +167,9 @@ namespace IHM.Helpers
             });
         }
 
+        /// <summary>
+        /// Connection de Google Drive
+        /// </summary>
         public void Connect()
         {
             UserCredential uc =  GetAuthorization();
@@ -200,10 +202,10 @@ namespace IHM.Helpers
                         File.Taille = (cFile.Size == null ? "-" : cFile.Size.ToString());
                         File.Version = cFile.Version;
                         File.MimeType = cFile.MimeType;
-                        File.DateDeCreation = cFile.CreatedTime;
+                        File.DateDeCreation = file.CreatedTime;
                         File.IsFile = (cFile.Parents == null ? true : false);
                         File.PreviewUrl = (cFile.WebContentLink == null ? "" : cFile.WebContentLink);
-                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
+                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType("dossier"));
                         File.Type = (File.IsFile != false ? Path.GetExtension(cFile.Name) : "-");
 
                     //if (previousParents == "")
@@ -251,8 +253,7 @@ namespace IHM.Helpers
             Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
             try
             {
-                 file = service.Files.Get(fileId).Execute();
-                
+                file = service.Files.Get(fileId).Execute();
             }
             catch (Exception e)
             {
@@ -260,9 +261,14 @@ namespace IHM.Helpers
                 Console.WriteLine("An error occurred: " + e.Message);
             }
             return file;
-
         }
 
+        /// <summary>
+        /// Télécharge un fichier dans un dossier cible
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="fileId"></param>
+        /// <param name="DownloadFolderPath"></param>
         internal void Download (string filename, string fileId, string DownloadFolderPath)
         {
 
@@ -315,7 +321,6 @@ namespace IHM.Helpers
                 mimeType = regKey.GetValue("Content Type").ToString();
             return mimeType;
         }
-
         public void Upload(string _uploadFile, string _paretn)
         {
 
@@ -401,7 +406,6 @@ namespace IHM.Helpers
                 throw new ArgumentNullException("Erreur de Service Google");
             if (fileId == null)
                 throw new ArgumentNullException("Erreur de suppression du fichier google =>" + fileId);
-
         }
 
         /// <summary>
@@ -409,13 +413,37 @@ namespace IHM.Helpers
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public Channel Watch(string fileId)
+        public void Watch(string filename, string fileId)
         {
             try
             {
                 Verification(fileId);
-                var request = service.Files.Watch(new Channel(), fileId);
-                return request.Execute();
+                MemoryStream stream1 = new MemoryStream();
+                var request = service.Files.Get(fileId);
+                request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
+                {
+                    switch (progress.Status)
+                    {
+                        case DownloadStatus.Downloading:
+                            {
+                                Console.WriteLine(progress.BytesDownloaded);
+                                break;
+                            }
+                        case DownloadStatus.Completed:
+                            {
+                                string path = @"C:\Temp\" + filename;
+                                SaveStream(stream1, path);
+                                System.Diagnostics.Process.Start(path);
+                                break;
+                            }
+                        case DownloadStatus.Failed:
+                            {
+                                Console.WriteLine("Download failed.");
+                                break;
+                            }
+                    }
+                };
+                request.Download(stream1);
             }
             catch (Exception ex)
             {

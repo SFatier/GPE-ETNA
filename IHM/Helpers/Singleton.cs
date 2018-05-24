@@ -30,7 +30,7 @@ namespace IHM.Helpers
         HomeModelView cContent;
         Utilisateur cUtilisateur;
         RolesModelView rolesModelView;
-        PopUpModelView popUp;
+        PopInModelView popUp;
 
         static Singleton _instance;
 
@@ -76,11 +76,11 @@ namespace IHM.Helpers
 
         /********/
 
-        public void SetPopUp(PopUpModelView popup)
+        public void SetPopUp(PopInModelView popup)
         {
             popUp = popup;
         }
-        public PopUpModelView GetPopUp()
+        public PopInModelView GetPopUp()
         {
             return popUp;
         }

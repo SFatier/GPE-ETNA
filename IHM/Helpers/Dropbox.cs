@@ -306,7 +306,7 @@ namespace GPE
                 foreach (var metadata in ListReceivedFiles)
                 {
                     var type = Path.GetExtension(metadata.Name);
-                    string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                    string IMG = Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType(type);
                     
                     Fichier f = new Fichier(string.Empty, metadata.Name, IMG, type, null, null, string.Empty, true);
                     f.PreviewUrl = metadata.PreviewUrl;
@@ -359,7 +359,7 @@ namespace GPE
             List<String> lstFolder = new List<string>();
             foreach (var item in Entries.Where(i => i.IsFolder))
             {
-                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
+                string IMG = Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType("dossier");
                 Fichier f = new Fichier(item.AsFolder.Id, item.Name, IMG, "dossier de fichiers", null, null, "-", false);
                 f.path = item.PathDisplay;
                 lstFiles.Add(f);
@@ -368,7 +368,7 @@ namespace GPE
             //Files
             foreach (var item in Entries.Where(i => i.IsFile))
             {
-                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(Path.GetExtension(item.Name));
+                string IMG = Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType(Path.GetExtension(item.Name));
                 DateTime dateDeCreation = Convert.ToDateTime(item.AsFile.ClientModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 DateTime ModifieLe = Convert.ToDateTime( item.AsFile.ServerModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();

@@ -23,7 +23,7 @@ namespace IHM.Model
                 {
                     this.isChecked = value;
                     RaisePropertyChanged(nameof(Ischecked));
-                    if (Singleton.GetInstance().GetPopUp() != null)
+                    if (isChecked == true)
                     {
                         Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
                     }

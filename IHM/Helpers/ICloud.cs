@@ -227,19 +227,19 @@ namespace IHM.Helpers
         /// <param name="drive"></param>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public Channel Watch(Drive drive, string fileId)
+        public Fichier Watch(Drive drive, string nom ,string fileId)
         {
-            Channel channel = new Channel();
+            Fichier fichier = new Fichier();
             try
             {
                 if(drive == Drive.GG)
-                    channel = Singleton.GetInstance().GetGoogle().Watch(fileId);
+                     Singleton.GetInstance().GetGoogle().Watch(nom, fileId);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return channel;
+            return fichier;
         }
     }
 

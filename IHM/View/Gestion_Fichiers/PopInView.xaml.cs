@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IHM.View
+namespace IHM.View.Gestion_Fichiers
 {
     /// <summary>
-    /// Logique d'interaction pour PopUp.xaml
+    /// Logique d'interaction pour PopInView.xaml
     /// </summary>
-    public partial class PopUp : Window
+    public partial class PopInView : UserControl
     {
-        public PopUp()
+        public PopInView()
         {
             InitializeComponent();
         }
