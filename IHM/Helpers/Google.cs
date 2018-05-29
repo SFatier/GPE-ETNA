@@ -268,39 +268,33 @@ namespace IHM.Helpers
                 mimeType = regKey.GetValue("Content Type").ToString();
             return mimeType;
         }
-        public void Upload(string UploadfolderPath, string UploadfileName, string SourceFilePath, string _parent)
+
+        public void Upload(string fileType,string fileName, string filePath)
         {
-
-            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
-            // Path.GetFileName(file.FileName));
-            // file.SaveAs(path);
-            if(System.IO.File.Exists(UploadfolderPath))
-
+       
+            try
             {
-                ///byte[] byteArray = System.IO.File.ReadAllBytes(UploadfolderPath);
-               // System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
-              
-                    var FileMetaData = new Google.Apis.Drive.v3.Data.File();
-                    FileMetaData.Name = Path.GetFileName(UploadfileName);
-                    FileMetaData.MimeType = GetMimeType(UploadfolderPath);
-               // FileMetaData.Parents= new List<ParentReference>() { new ParentReference() { Id = _parent } };
+                var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+                {
+                    Name = fileName
+                };
+                
                 FilesResource.CreateMediaUpload request;
-
-                    using (var stream = new FileStream(UploadfolderPath, System.IO.FileMode.Open))
-                    {
-                        request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
-                        request.Fields = "id";
-                        request.Upload();
-                    }
-               
+                using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open))
+                {
+                    request = service.Files.Create(
+                        fileMetadata, stream, fileType);
+                    request.ChunkSize = FilesResource.CreateMediaUpload.MinimumChunkSize;
+                    request.Fields = "id";
+                    request.Upload();
+                }
             }
-            else
+            catch (Exception exc)
             {
-                MessageBox.Show("The file does not exist.", "404");
+                System.Diagnostics.Debug.WriteLine(exc.Message + " Upload file to Drive Error");          
             }
         }
-            
-        
+
         //   public void Upload(string _uploadFile, string _paretn)
         // {
         /*if (System.IO.File.Exists(_uploadFile))

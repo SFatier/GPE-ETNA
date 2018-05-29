@@ -497,11 +497,8 @@ namespace IHM.ModelView
         private void ActionUpload(object paramater)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-
             openFileDialog.Multiselect = true;
-
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (IndexTab == 0)
             {
@@ -518,12 +515,17 @@ namespace IHM.ModelView
             else
             {
                 string SourceFilePath = "/";
+                string filePath, fileName, fileType;
+                bool result;
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    SourceFilePath = openFileDialog.FileName;
-                    //List<> _parent = new List<ParentReference>() { new ParentReference() { Id = _parent } };
-
-                    Singleton.GetInstance().GetCloud().Upload(Drive.GG, "/", Path.GetFileName(SourceFilePath), SourceFilePath, "");
+                    result = (MessageBox.Show("Do you want to upload only new/changed files on Google Drive ?",
+                                  "Upload existing files?",
+                                  MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes );
+                    filePath = openFileDialog.FileName;
+                    fileName = Path.GetFileName(filePath);
+                    fileType = Path.GetExtension(fileName);
+                    Singleton.GetInstance().GetCloud().Upload(Drive.GG, "/", fileName, filePath, fileType);
                 }
             }
            

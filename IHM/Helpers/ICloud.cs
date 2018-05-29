@@ -226,7 +226,7 @@ namespace IHM.Helpers
                         Singleton.GetInstance().GetDBB().Upload(UploadfolderPath,  UploadfileName,  SourceFilePath);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Upload(UploadfolderPath, UploadfileName, SourceFilePath, _parent);
+                        Singleton.GetInstance().GetGoogle().Upload(UploadfolderPath, UploadfileName, SourceFilePath);
                         break;
                 }
                 return true;
