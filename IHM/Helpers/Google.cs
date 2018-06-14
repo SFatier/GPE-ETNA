@@ -185,17 +185,24 @@ namespace IHM.Helpers
         public List<Fichier> GetItems()
         {
             FilesResource.ListRequest FileListRequest = service.Files.List();
-            FileListRequest.Fields = "nextPageToken, files(id, name, size, version, createdTime)";
+            FileListRequest.Fields = "nextPageToken, files(id, name, size, version, createdTime, parents, fileExtension, iconLink, owners)";
             IList<Google.Apis.Drive.v3.Data.File> files = FileListRequest.Execute().Files;
             List<Fichier> FileList = new List<Fichier>();
-                        
+            
             if (files != null && files.Count > 0)
-            {
+            {                
+                //fichier qui n'a pas la base de google drive comme parent
+                var filesSansDossier = files.Where(f => f.Parents != null).ToList().Where(f => f.Parents[0] == "0ABI4MM5S-GyDUk9PVA").ToList();
+                //fichier avec parent à null
+                var tmpFileSansParent = files.Where(f => f.Parents == null).ToList();
+                tmpFileSansParent.AddRange(filesSansDossier); // on ajoute dans la meme liste les fichiers ayant pour parent la base de google
+                //récupération des bons fichiers sans dossiers.
+                files.Clear(); //on supprime les fichiers 
+                files = tmpFileSansParent; // on ajoute tous les fichiers ayant pour parent la base de google ainsi que les fichiers n'ayant pas de parents.
+
                 foreach (var file in files)
                 {
-                    Google.Apis.Drive.v3.Data.File cFile = GetFile(file.Id);
-                    //var previousParents = GetParentByFileId(file.Id);
-
+                        Google.Apis.Drive.v3.Data.File cFile = GetFile(file.Id);
                         Fichier File = new Fichier();
                         File.IdGoogle = cFile.Id;
                         File.Nom = cFile.Name;
@@ -205,14 +212,12 @@ namespace IHM.Helpers
                         File.DateDeCreation = file.CreatedTime;
                         File.IsFile = (cFile.Parents == null ? true : false);
                         File.PreviewUrl = (cFile.WebContentLink == null ? "" : cFile.WebContentLink);
-                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType("dossier"));
+                        File.IMG = cFile.IconLink == null ? cFile.IconLink : "";  //(File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView()._listModelView.GetIcoByType("dossier"));
                         File.Type = (File.IsFile != false ? Path.GetExtension(cFile.Name) : "-");
-
-                    //if (previousParents == "")
+                    
                         FileList.Add(File);
                 }
             }
-
             return FileList.OrderBy(f => f.Nom).ToList();
         }
 

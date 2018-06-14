@@ -214,7 +214,7 @@ namespace IHM.ModelView
         public Fichier filesSelected
         {
             get {
-                if (_filesSelected != null)
+                if (_filesSelected != null && Singleton.GetInstance().GetPopUp() != null)
                 {
                     Singleton.GetInstance().GetPopUp().file = _filesSelected;
                     Singleton.GetInstance().GetPopUp().LoadProject();

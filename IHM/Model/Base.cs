@@ -23,13 +23,17 @@ namespace IHM.Model
                 {
                     this.isChecked = value;
                     RaisePropertyChanged(nameof(Ischecked));
-                    if (isChecked == true)
+                    if (Singleton.GetInstance().GetPopUp() != null)
                     {
-                        Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
+                        if (isChecked == true)
+                        {
+                            Singleton.GetInstance().GetPopUp().setLstPChecked(Nom);
+                        }
                     }
-                    else if (Singleton.GetInstance().GetRolesModelView() != null && Nom != null)
-                    {                        
-                            Singleton.GetInstance().GetRolesModelView().setLstPChecked(Nom, isChecked);
+
+                    if (Singleton.GetInstance().GetRolesModelView() != null && Nom != null)
+                    {
+                        Singleton.GetInstance().GetRolesModelView().setLstPChecked(Nom, isChecked);
                     }
                 }
             }
