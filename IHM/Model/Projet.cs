@@ -8,13 +8,9 @@ using System.Drawing;
 
 namespace IHM.Model
 {
-    public class Projet :  Base
+    public class Projet : Base
     {
-        public string description;
         private List<Utilisateur> lstUser;
-        private string icoIsArchived;
-        public string IcoToolTip { get; internal set; }
-        
         public List<Utilisateur> LstUser
         {
             get { return this.lstUser; }
@@ -28,6 +24,7 @@ namespace IHM.Model
             }
         }
 
+        public string description;
         public string Description
         {
             get { return this.description; }
@@ -110,6 +107,38 @@ namespace IHM.Model
             }
         }
 
+        private string icoIsArchived;
         public string IcoArchived { get; internal set; }
+
+        public string IcoToolTip { get; internal set; }
+
+        private string nomProject;
+        public string NomProject
+        {
+            get { return this.nomProject; }
+            set
+            {
+                if (!string.Equals(this.nomProject, value))
+                {
+                    this.nomProject = value;
+                    RaisePropertyChanged(nameof(NomProject));
+                }
+            }
+        }
+
+        private bool ischeckedProject = false;
+        public bool IscheckedProject
+        {
+            get { return this.ischeckedProject; }
+            set
+            {
+                if (!string.Equals(this.ischeckedProject, value))
+                {
+                    this.ischeckedProject = value;
+                    RaisePropertyChanged(nameof(IscheckedProject));
+                }
+            }
+        }
+
     }
 }

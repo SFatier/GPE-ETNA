@@ -21,16 +21,13 @@ namespace IHM.ModelView
     public class HomeModelView : ObservableObject, IPageViewModel
     {
         #region [ Fields ]   
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"];
         private Utilisateur curentUtilisateur;
         public ListModelView _listModelView;
         public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;
-        private DropBox DBB;
-        private GoogleCloud Google;
-
+ 
         public ICommand PageAdmin { get; set; }
         public ICommand PageHome { get; set; }
         public ICommand PagePerso { get; set; }
@@ -46,32 +43,18 @@ namespace IHM.ModelView
         {
             Singleton.GetInstance().SetHomeModelView(this);
             curentUtilisateur = u;
-            DBB = new DropBox(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
-            Google = new GoogleCloud();
-
-            Singleton.GetInstance().SetDBB(DBB); //Instance de la classe Dropboxbase
-            Singleton.GetInstance().SetGoogle(Google);  //Instance de la classe GoogleAPI
+          
             Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
 
-            _listModelView = new ListModelView();
-
-            //Dropbox
-            if (curentUtilisateur.Token_DP != null && curentUtilisateur.Token_DP != "")
-            {
-                DBB.GetDBClient(curentUtilisateur.Token_DP);
-                GetFilesDropbox();
-            }
-
-            //Google
-            if (curentUtilisateur.Token_GG != null && curentUtilisateur.Token_GG != "")
+            if (curentUtilisateur.Token_GG != null || curentUtilisateur.Token_DP != null)
             {
                 var _accesstoken = curentUtilisateur.Token_GG;
                 var refreshtoken = curentUtilisateur.RefreshToken;
-                UserCredential rsltCredential = Google.CreateCredential(new TokenResponse { AccessToken = _accesstoken, RefreshToken = refreshtoken });
-                Google.GetGoogleService(rsltCredential);
-                GetFilesGoogle();
-            }
 
+                cloud.GetCompteClient(curentUtilisateur.Token_DP, _accesstoken, refreshtoken);
+            }
+            _listModelView = new ListModelView();
+            
             ContentViewModels.Add(new HomePageModelView());
             CurrentContentViewModel = ContentViewModels[0];
 
@@ -160,33 +143,6 @@ namespace IHM.ModelView
         private void ActionPageFichiers(object obj)
         {
             CurrentContentViewModel = _listModelView;
-        }
-
-        /// <summary>
-        /// Récupère les fichiers de google
-        /// </summary>
-        public void GetFilesGoogle()
-        {
-            _listModelView.DgFiles[1] = cloud.GetItems(Drive.GG);
-        }
-
-        /// <summary>
-        /// Récupère les fichiers de dropbox  ainsi que les fichiers partagés avec l'utilisateur
-        /// </summary>
-        public void GetFilesDropbox()
-        {
-            //fichier de l'utilisateur
-            _listModelView.DgFiles[0] = cloud.GetItems(Drive.DP);
-
-            //fichier partagé avec l'utilisateur
-            List<Fichier> lst = DBB.GetFilesShared();
-            if (lst != null && lst.Count() > 0)
-                _listModelView.DgFiles[0].AddRange(lst);
-        }
-
-        public void GetProjets()
-        {
-            _listModelView.LoadProject();
         }
 
         private void ActionPageRoles(object param)

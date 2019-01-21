@@ -20,26 +20,11 @@ namespace IHM.ModelView
         public string Name => "Se connecter";
 
         #region [Command]
-        public ICommand ForgetPsswd { get; set; }
         public ICommand LogIn { get; set; }
         public ICommand Register { get; set; }
         #endregion
 
         #region [Binding]
-        private string _Background;
-        public string Background
-        {
-            get { return this._Background; }
-            set
-            {
-                if (!string.Equals(this._Background, value))
-                {
-                    this._Background = value;
-                    RaisePropertyChanged(nameof(Background));
-                }
-            }
-        }
-
         private string _Login;
         public string Login
         {
@@ -74,58 +59,31 @@ namespace IHM.ModelView
         {
             LoadAction();
 
-            Functions function = new Functions();
-            List<Utilisateur> items; //= function.JSONObject("UtilisateurJSON");
-            try
-            {
-                StreamReader r;
-                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-                {
-                    string json = r.ReadToEnd();
-                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
-                }
-            }catch(Exception )
-            {
-                items = new List<Utilisateur>();
-            }
-
+            List<Utilisateur> items = Functions.GetFileUtilisateur();
             Singleton.GetInstance().SetListUtilisateur(items);
-
-            Background = ConfigurationSettings.AppSettings["FolderIMG"] + "background - Login.jpg";
-            Login = "fatier_s";
-            Mdp = "pass";
+            Login = "";
+            Mdp = "";
         }
         #endregion
 
         public void LoadAction()
         {
-            ForgetPsswd = new RelayCommand(ActionForgetPsswd);
             LogIn = new RelayCommand(ActionLogiIn);
             Register = new RelayCommand(ActionResgister);
         }
 
         #region [Action]
         /**
-         * Renvoie le mot de passe à l'utilisateur
-         * */
-        private void ActionForgetPsswd(object p)
-        {
-            //Envoie d'une email
-            MessageBox.Show("Non Implémenté");
-        }
-
-        /**
          * Se connecte à l'appplication
          * */
         private void ActionLogiIn(object p)
         {
             List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
-            Utilisateur u = (Utilisateur) lst.FirstOrDefault(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
+            Utilisateur u = (Utilisateur) lst.First(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
             if (u != null)
             {
                 Singleton.GetInstance().SetUtilisateur(u);
                 HomeModelView HMV = new HomeModelView(u);
-                //HMV.IsConnect = "Se deconnecter";
                 Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
             }
             else
