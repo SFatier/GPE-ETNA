@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace IHM.Helpers
@@ -38,7 +39,7 @@ namespace IHM.Helpers
 
         public void Execute(object parameters)
         {
-            _execute(parameters);
+           _execute(parameters);
         }
     }
 }

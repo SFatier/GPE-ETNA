@@ -175,6 +175,13 @@ namespace IHM.Helpers
             return result;
         }
 
+        internal void GetDeleteProject(Projet SelectedProject)
+        {
+            Projet p = lstProject.Find(s => s.NomProject.Equals(SelectedProject.NomProject));
+            lstProject.Remove(p);
+            Functions.CreateFileProjet();
+        }
+
         public List<Projet> GetAllProject()
         {
             return lstProject;
@@ -184,19 +191,7 @@ namespace IHM.Helpers
         {
             var index = lstProject.FindIndex(p => p.NomProject.Equals(pr.NomProject));
             lstProject[index] = pr;
-
-            try
-            {
-                using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, lstProject);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error :\" " + ex.Message);
-            }
+            Functions.CreateFileProjet();
         }
 
         public void SetListProject(List<Projet> _lstProject)

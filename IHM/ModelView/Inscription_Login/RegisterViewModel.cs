@@ -103,6 +103,9 @@ namespace IHM.ModelView
 
         public void ActionInscription(object parameter)
         {
+            System.Windows.Controls.PasswordBox p = (System.Windows.Controls.PasswordBox)parameter;
+            Mdp = p.Password;
+
             //Enregistrement de l'utilisateur 
             if (Login != "" && Email != "" && Role != "")
             {

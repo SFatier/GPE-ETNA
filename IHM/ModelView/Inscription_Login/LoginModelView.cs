@@ -58,7 +58,6 @@ namespace IHM.ModelView
         public LoginModelView()
         {
             LoadAction();
-
             List<Utilisateur> items = Functions.GetFileUtilisateur();
             Singleton.GetInstance().SetListUtilisateur(items);
             Login = "";
@@ -76,8 +75,11 @@ namespace IHM.ModelView
         /**
          * Se connecte à l'appplication
          * */
-        private void ActionLogiIn(object p)
+        public void ActionLogiIn(object parameter)
         {
+            System.Windows.Controls.PasswordBox p = (System.Windows.Controls.PasswordBox)parameter;
+            Mdp = p.Password;
+
             List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
             Utilisateur u = (Utilisateur) lst.First(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
             if (u != null)

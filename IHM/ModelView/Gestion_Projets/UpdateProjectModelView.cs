@@ -132,23 +132,9 @@ namespace IHM.ModelView
 
             Projet.NomProject = nomProjet;
             Projet.Description = DescriptionProjet;
-    
-            #region [Ecriture de l'utilisateur dans le fichier .JSON]
-            try
-            {
-                using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
-                }
-
-                Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error :\" " + ex.Message);
-            }
-            #endregion
+            Functions.CreateFileProjet();
+            Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+            
         }
 
         private List<Utilisateur> GetUserProject()

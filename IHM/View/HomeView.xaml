@@ -10,6 +10,14 @@
         <ImageBrush ImageSource="/IMG/background.jpg"/>
     </UserControl.Background>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="63" />
             <RowDefinition Height="77" />
@@ -17,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <!--Menu-->
-        <Button Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="78" Command="{Binding PageHome}"  BorderBrush="Transparent"  Height="59" Background="Transparent">
+        <Button Grid.Row="1" Grid.ColumnSpan="7" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="78" Command="{Binding PageHome}"  BorderBrush="Transparent"  Height="59" Background="Transparent">
             <Image Source="/IMG/home.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -27,7 +35,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  Grid.Row="1" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="Transparent" Background="Transparent" Height="59">
+        <Button  Grid.Row="1" Grid.ColumnSpan="7" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="1.673,0.275" Command="{Binding PageAdmin}" BorderBrush="Transparent" Background="Transparent" Height="59">
             <Image Source="/IMG/project.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -37,7 +45,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="98,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PagePerso}" >
+        <Button  HorizontalAlignment="Left" Margin="98,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Grid.ColumnSpan="7" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PagePerso}" >
             <Image Source="/IMG/perso.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -47,8 +55,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-
-        <Button Name="BtnGestionUtilisateur" HorizontalAlignment="Left" Margin="348,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageUser}" >
+        <Button Name="BtnGestionUtilisateur"  HorizontalAlignment="Left" Margin="348,10,0,0" VerticalAlignment="Top" Width="78"  Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageUser}" Grid.Row="1" Grid.ColumnSpan="7">
             <Image Source="/IMG/GestionUtilisateur.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -58,8 +65,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-
-        <Button  HorizontalAlignment="Left" Margin="182,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageFichiers}" >
+        <Button  HorizontalAlignment="Left" Margin="182,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Grid.ColumnSpan="7" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageFichiers}" >
             <Image Source="/IMG/GestionFichiers.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -69,8 +75,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-
-        <Button  Name="BtnGestionRoles" HorizontalAlignment="Left" Margin="430,10,0,0" VerticalAlignment="Top" Width="78" Grid.Row="1" Height="59" BorderBrush="Transparent" Background="Transparent" Command="{Binding PageRoles}" >
+        <Button  Name="BtnGestionRoles" HorizontalAlignment="Left" Margin="430,10,0,0" VerticalAlignment="Top" Width="78" Height="59" BorderBrush="Transparent" Background="Transparent" Grid.Row="1" Grid.ColumnSpan="7" Command="{Binding PageRoles}" >
             <Image Source="/IMG/role.png"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -82,8 +87,8 @@
         </Button>
         
         <!--Row 2-->
-        <ContentControl Content="{Binding CurrentContentViewModel}" Grid.Row="2" Width="auto"/>
-        <Button Content="Se déconnecter" HorizontalAlignment="Left" Margin="876,10,0,0" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown"  Command="{Binding Disconnect}" Height="30"/>
+        <ContentControl Content="{Binding CurrentContentViewModel}" Grid.ColumnSpan="7"  Grid.Row="2" Width="auto"/>
+        <Button Content="Se déconnecter" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="104" Background="White" BorderBrush="Brown" Grid.Column="7"  Command="{Binding Disconnect}" Height="30"/>
         <Label Content="GED ETNA" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="43" RenderTransformOrigin="-4.092,-0.5" FontSize="24" Width="152" FontFamily="Stencil" Foreground="#FFE6E1DC" />
     </Grid>
 </UserControl>
