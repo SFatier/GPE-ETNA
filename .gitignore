@@ -1,7 +1,9 @@
 
-*.json
 IHM/App.config
-*.config
+IHM/bin/*
+IHM/obj/*
+.vs/*
+
+IHM/projets.json
+IHM/App.config
 *.json
-*.json
-*.config

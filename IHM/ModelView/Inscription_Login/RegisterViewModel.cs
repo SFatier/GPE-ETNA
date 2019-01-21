@@ -106,10 +106,12 @@ namespace IHM.ModelView
             //Enregistrement de l'utilisateur 
             if (Login != "" && Email != "" && Role != "")
             {
-                if (Singleton.GetInstance().GetAllUtilisateur().Count() > 0)
-                {
-                    if (Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => user.Email.Equals(Email)) == null)
+                    if (Singleton.GetInstance().GetAllUtilisateur().Count() !=0 &&  Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => user.Email.Equals(Email)) == null)
                     {
+                        MessageBox.Show("Cette emai existe deja.");
+                        return;
+                    }
+
                         //ajout de l'utilisateur
                         Utilisateur Nouvelle_Utilisateur = new Utilisateur();
                         Nouvelle_Utilisateur.Login = Login;
@@ -118,21 +120,7 @@ namespace IHM.ModelView
                         Nouvelle_Utilisateur.Role = Role;
                         Singleton.GetInstance().addUtilisateur(Nouvelle_Utilisateur);
 
-                        #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                        try
-                        {
-                            string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
-                            using (StreamWriter file = File.CreateText(@test))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error :\" " + ex.Message);
-                        }
-                        #endregion
+                        Functions.CreateFileUtilisateur();
 
                         if (Singleton.GetInstance().GetUtilisateur() == null) // Inscription
                         {
@@ -149,12 +137,6 @@ namespace IHM.ModelView
                             lstUMV.UsersList = Singleton.GetInstance().GetAllUtilisateur();
                             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = lstUMV;
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Cette emai existe deja.");
-                    }
-                }
             }
             else
             {
@@ -169,20 +151,7 @@ namespace IHM.ModelView
 
         private void LoadUtilisateur()
         {
-            List<Utilisateur> items;
-            try
-            {
-                StreamReader r;
-                using (r = new StreamReader(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-                {
-                    string json = r.ReadToEnd();
-                    items = JsonConvert.DeserializeObject<List<Utilisateur>>(json);
-                }
-            }
-            catch (Exception)
-            {
-                items = new List<Utilisateur>();
-            }
+            List<Utilisateur> items =  Functions.GetFileUtilisateur();
             Singleton.GetInstance().SetListUtilisateur(items);
         }
 

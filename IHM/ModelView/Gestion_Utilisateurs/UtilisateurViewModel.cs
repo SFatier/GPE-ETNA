@@ -22,8 +22,7 @@ namespace IHM.ModelView.Gestion_Utilisateurs
 
         public UtilisateurViewModel(Utilisateur _u)
         {
-            _u.LstProjet = GetProjets(_u);
-            ImgUser = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
+            _u.LstProjet = GetProjets(_u);     
             Utilisateur = _u;
             utilisateur_ = _u; //garde les traces de l'utilisateurs
             LoadAction();

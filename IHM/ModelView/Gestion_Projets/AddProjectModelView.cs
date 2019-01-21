@@ -100,7 +100,7 @@ namespace IHM.ModelView
             if (NomProjet != "" && DescriptionProjet != "")
             {
                 Projet p = new Projet();
-                p.Nom = NomProjet;
+                p.NomProject = NomProjet;
                 p.Description = DescriptionProjet;
                 p.LstFiles = new List<Fichier>();
                 p.LstUser = new List<Utilisateur>();
@@ -110,25 +110,9 @@ namespace IHM.ModelView
                 p.IsprojetEncours = true;
                 p.DateDeCreation = DateTime.Now;
                 Singleton.GetInstance().addProject(p);
-            
-                #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                try
-                {
-                    using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
-                    }
 
-                    Singleton.GetInstance().GetHomeModelView().GetProjets();
-                    Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error :\" " + ex.Message);
-                }
-                #endregion
+                Functions.CreateFileProjet();
+                Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
             }
             else
             {

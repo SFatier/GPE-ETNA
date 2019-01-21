@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="800"  Background="White">
+        mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="1000"  Background="White">
 
     <UserControl.Resources>
         <Style  TargetType="{x:Type ListViewItem}">
@@ -24,6 +24,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
 
         <Label Name="lblPageProjets" Content="Gestion des projets" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.692,3.715" Width="250" FontSize="24" Height="45" Margin="3,10,0,0"/>
         <Button Content="Ajouter Projet" Grid.Row="1" Width="100" Height="30" Margin="850,10,10,10" Command="{Binding AddProject}" Background="Transparent"  Name="btnAjouterProjet"> </Button>
@@ -38,13 +42,13 @@
                                     <Expander.Header >
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="500"></ColumnDefinition>
-                                                <ColumnDefinition Width="500"></ColumnDefinition>
+                                                <ColumnDefinition Width="1000"></ColumnDefinition>
+                                                <ColumnDefinition Width="auto"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Orientation="Horizontal" Grid.Column="0">                                            
                                             <!--Nom des projets-->
                                             <Label></Label>
-                                            <TextBlock Text="{Binding Nom}" Margin="0,10"></TextBlock>
+                                            <TextBlock Text="{Binding NomProject}" Margin="0,10"></TextBlock>
                                             <Label></Label>
                                                 <Image Source="{Binding IcoArchived}" Width="15">
                                                 <Image.ToolTip>

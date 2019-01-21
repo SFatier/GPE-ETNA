@@ -2,13 +2,16 @@
 using IHM.Model;
 using IHM.ModelView;
 using IHM.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace IHM.Helpers
 {
@@ -17,20 +20,18 @@ namespace IHM.Helpers
         /**Cryptage**/
         //static TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
         static RijndaelManaged provider = new RijndaelManaged();
-        //static provider.IV = ...
-        //static provider.Key = ...
 
         List<Utilisateur> lstUtilisateur = new List<Utilisateur>();
         List<Projet> lstProject = new List<Projet>();
         List<Roles> lstRoles = new List<Roles>();
-        DropBox DBB;
-        GoogleCloud google;
+        DropBox DBB = new DropBox(ConfigurationSettings.AppSettings["strAppKey"], "PTM_Centralized");
+        GoogleCloud google  = new GoogleCloud();
         Cloud cloud;
         MainModelView cMain;
         HomeModelView cContent;
         Utilisateur cUtilisateur;
         RolesModelView rolesModelView;
-        PopInModelView popUp;
+        ListModelView cList;
 
         static Singleton _instance;
 
@@ -50,6 +51,16 @@ namespace IHM.Helpers
         public MainModelView GetMainWindowViewModel()
         {
             return cMain;
+        }
+
+        public void setListFilesView(ListModelView listModelView)
+        {
+            cList = listModelView;
+        }
+
+        public ListModelView GetListModelView()
+        {
+            return cList;
         }
 
         /********/
@@ -73,18 +84,7 @@ namespace IHM.Helpers
         {
             return cUtilisateur;
         }
-
-        /********/
-
-        public void SetPopUp(PopInModelView popup)
-        {
-            popUp = popup;
-        }
-        public PopInModelView GetPopUp()
-        {
-            return popUp;
-        }
-
+      
         /********/
 
         public void SetRolesModelView(RolesModelView _rolesModelView)
@@ -150,9 +150,53 @@ namespace IHM.Helpers
         {
             lstProject.Add(p);
         }
+
+        public Projet getProjetByName(string name)
+        {
+            return lstProject.First(p => p.NomProject.Equals(name));
+        }
+
+
+        public List<Projet> getProjetByFileId(Fichier fichier)
+        {
+            List<Projet> result = new List<Projet>();
+
+            lstProject.ForEach(p =>
+            {
+                foreach(Fichier f in p.LstFiles)
+                {
+                    if (fichier.IdDropbox == f.IdDropbox || fichier.IdGoogle == f.IdGoogle)
+                    {
+                        result.Add(p);
+                        break;
+                    }
+                }
+            });
+            return result;
+        }
+
         public List<Projet> GetAllProject()
         {
             return lstProject;
+        }
+
+        public void UpdateProject(Projet pr)
+        {
+            var index = lstProject.FindIndex(p => p.NomProject.Equals(pr.NomProject));
+            lstProject[index] = pr;
+
+            try
+            {
+                using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, lstProject);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error :\" " + ex.Message);
+            }
         }
 
         public void SetListProject(List<Projet> _lstProject)

@@ -37,11 +37,15 @@
                 <DatePicker  SelectedDate="{Binding endDate, StringFormat=MM/dd/yyyy}" Name="RecherchePeriode" HorizontalAlignment="Left" Margin="0,71,0,0" VerticalAlignment="Top" Width="226" Height="28" SelectedDateChanged="Periode_SelectedDateChanged" Grid.Row="1"/>
 
                 <!--Filtrer par projet-->
-                <Label Content="Par projet :" HorizontalAlignment="Left" Margin="4,62,0,0"  VerticalAlignment="Top" FontSize="16" Width="100" Height="0" Grid.Row="2"/>
-                <ComboBox Margin="0,123,0,52" Name="cbxProjets" ItemsSource="{Binding LstProjets}" Background="Transparent" BorderBrush="Black" SelectedItem="{Binding ProjetFiltre}" Grid.Row="1"/>
-
-                <!--content Link Projet-->
-                <ContentControl Content="{Binding Popin}"  Grid.Row="2" Margin="0,0,0,-446" />
+                <ListBox HorizontalAlignment="Left" Height="505" Margin="0,10,0,-446" Grid.Row="2" VerticalAlignment="Top" Width="216"  ItemsSource="{Binding LstProjet}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <CheckBox Content="{Binding NomProject}"  IsChecked="{Binding IscheckedProject, Mode=TwoWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </DockPanel>
 
@@ -75,7 +79,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button HorizontalAlignment="Left" Margin="453,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding CreateFolder}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
+        <!--<Button HorizontalAlignment="Left" Margin="453,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding CreateFolder}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
             <Image Source="/IMG/add.png" Width="32"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -84,8 +88,8 @@
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
-        </Button>
-        <Button Name="BtnEdit" HorizontalAlignment="Left" Margin="514,0,0,0"  VerticalAlignment="Top" Width="57" Height="40"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
+        </Button>-->
+        <!--<Button Name="BtnEdit" HorizontalAlignment="Left" Margin="514,0,0,0"  VerticalAlignment="Top" Width="57" Height="40"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
             <Image Source="/IMG/edit.png" Width="31"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -94,8 +98,8 @@
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
-        </Button>
-        <Button  HorizontalAlignment="Left" Margin="575,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding Supprimer}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
+        </Button>-->
+        <Button  HorizontalAlignment="Left" Margin="453,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding Supprimer}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
             <Image Source="/IMG/trash.png" Height="30" Width="43"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -105,7 +109,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button  HorizontalAlignment="Left" Margin="636,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding Open}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
+        <Button  HorizontalAlignment="Left" Margin="514,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding Open}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
             <Image Source="/IMG/open.png" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -115,7 +119,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <Button Name="BtnProject" HorizontalAlignment="Left" Margin="697,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding PopinCommand}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
+        <!--<Button Name="BtnProject" HorizontalAlignment="Left" Margin="636,0,0,0"  VerticalAlignment="Top" Width="57" Height="40" Command="{Binding PopinCommand}"  BorderBrush="Transparent" Background="Transparent" Grid.Column="1">
             <Image Source="/IMG/link.png" Height="24" Width="26"/>
             <Button.ToolTip>
                 <ToolTip>
@@ -124,12 +128,12 @@
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
-        </Button>
+        </Button>-->
 
         <TabControl Name="TabControl_Drive"  SelectedIndex="{Binding TabIndex}" Grid.Column="1" Margin="3,0,0,0" Grid.Row="1">
             <TabItem Header="Google" Name="TabGoogle" Visibility="Hidden" >
                 <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_GG}" x:Name="DgFiles" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
-                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick"  SelectedCellsChanged="DataGrid_SelectedCellsChanged"  IsReadOnly="True" >
                     <DataGrid.Columns >
                         <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
@@ -152,7 +156,7 @@
             </TabItem >
             <TabItem Header="Dropbox" Name="TabDropbox" Visibility="Hidden" >
                 <DataGrid  VerticalAlignment="Top"  ItemsSource="{Binding DgFiles_DP}" AutoGenerateColumns="False"  SelectionMode="Single" SelectionUnit="FullRow" 
-                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick" IsReadOnly="True" >
+                   SelectedItem="{Binding filesSelected}" Grid.Column="1" Grid.Row="1" Height="auto" BorderBrush="White" MouseDoubleClick="DgFiles_MouseDoubleClick"  SelectedCellsChanged="DataGrid_SelectedCellsChanged" IsReadOnly="True" >
                     <DataGrid.Columns >
                         <DataGridTemplateColumn Header="" Width="50" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>

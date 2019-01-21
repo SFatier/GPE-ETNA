@@ -13,8 +13,6 @@
             <RowDefinition Height="23*" />
         </Grid.RowDefinitions>
 
-        <!--<Image Source="{Binding Background}" Margin="0,0,10,0"/>-->
-
         <Label Content="Se connecter" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="158" FontSize="24" Grid.Row="1" Margin="422,24,0,0" Height="42"/>
 
         <Label Content="Login  :" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="7.143,4.808" Margin="360,153,0,0" Height="26" Width="49"/>
