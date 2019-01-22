@@ -1,14 +1,8 @@
 ﻿using IHM.Helpers;
 using IHM.Model;
 using IHM.ViewModel;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -109,7 +103,7 @@ namespace IHM.ModelView
             //Enregistrement de l'utilisateur 
             if (Login != "" && Email != "" && Role != "")
             {
-                    if (Singleton.GetInstance().GetAllUtilisateur().Count() !=0 &&  Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => user.Email.Equals(Email)) == null)
+                    if (Singleton.GetInstance().GetAllUtilisateur().Find(user => user.Email.Equals(Email)) != null && Singleton.GetInstance().GetAllUtilisateur().Count() != 0)
                     {
                         MessageBox.Show("Cette emai existe deja.");
                         return;

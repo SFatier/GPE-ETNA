@@ -1,12 +1,14 @@
 ﻿using IHM.Helpers;
 using IHM.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -38,7 +40,7 @@ namespace IHM
         {
             string path_projet = Constant.path_projet; 
             string path_role = Constant.path_role; 
-            string path_utilisateur = Constant.path_utilisateur; 
+            string path_utilisateur = Constant.path_utilisateur;
 
             try
             {
@@ -116,13 +118,27 @@ namespace IHM
                     using (StreamWriter file = File.CreateText(path_utilisateur))
                     {
                         JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(file, new List<Projet>());
+                        serializer.Serialize(file, new List<Utilisateur>());
                     }
                 }
+
+                if (!File.Exists(Constant.ClientSecretJSON))
+                {
+                    string str = "{'installed':{'client_id':'654071449191-danfhp839mq0ivi7a0ddkm4oo0g9o5ju.apps.googleusercontent.com','project_id':'focal-appliance-204212','auth_uri':'https://accounts.google.com/o/oauth2/auth','Token_DP_uri':'https://accounts.google.com/o/oauth2/Token_DP','auth_provider_x509_cert_url':'https://www.googleapis.com/oauth2/v1/certs','client_secret':'JZ_Pi9D4--QS2jZ8SfnTxBWW','redirect_uris':['urn:ietf:wg:oauth:2.0:oob','http://localhost']}}";
+                    JavaScriptSerializer j = new JavaScriptSerializer();
+                    object a = j.Deserialize(str, typeof(object));
+
+                    using (StreamWriter file = File.CreateText(Constant.ClientSecretJSON))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.Serialize(file, a);
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.Message);
             }
         }
     }
