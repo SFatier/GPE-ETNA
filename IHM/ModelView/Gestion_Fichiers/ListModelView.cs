@@ -68,6 +68,7 @@ namespace IHM.ModelView
             Open = new RelayCommand(ActionOpen);
             Recherche = new RelayCommand(ActionRecherche);
             RechercheDate = new RelayCommand(ActionRechercheDate);
+          
             RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
         }
 
@@ -207,7 +208,20 @@ namespace IHM.ModelView
                 }
             }
         }
-        
+        private string _Type;
+        public string Type
+        {
+            get { return this._Type; }
+            set
+            {
+                if (!string.Equals(this._Type, value))
+                {
+                    this._Type = value;
+                    RaisePropertyChanged(nameof(Type));
+                }
+            }
+        }
+
         private DateTime _dateDebut;
         public DateTime dateDebut
         {
@@ -600,8 +614,9 @@ namespace IHM.ModelView
         // search Files
         private void ActionRecherche(object par)
         {
+            string nomRechercher = Nom;
             Results = new List<Fichier>();
-            char[] delimiters = new char[] { ' ', ',', '.', ':', '\t' };
+            char[] delimiters = new char[] { ' ', ',', '.', ':', '\t', };
             string[] words = Nom.Split(delimiters);
             bool trouve = false;
 
@@ -610,25 +625,52 @@ namespace IHM.ModelView
                 foreach (Fichier item in DgFiles[0])
                 {
 
-                    if (words.Any(nomRechercher => nomRechercher == item.Nom))
+                    if (item.Nom.Contains(nomRechercher))
+                    {
+                        trouve = true;
+                        Results.Add(item);
+                       
+
+                    }
+                    DgFiles[0] = Results;
+                }
+
+               
+
+            }
+            if (DgFiles[1].Count() > 0)
+            {
+                foreach (Fichier item in DgFiles[1])
+                {
+
+                    if (item.Nom.Contains(nomRechercher))
+
                     {
                         trouve = true;
                         Results.Add(item);
 
 
                     }
-                    DgFiles[0] = Results;
+                    DgFiles[1] = Results;
                 }
-                if (trouve == false)
-                {
-                    MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
-                }
+       }
+            if (trouve == false)
+            {
+                MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
             }
+            else
+            {
+                RefreshTab();
+            }
+
         }
+
+
         public void Recherche_Periode()
         {
             Results = new List<Fichier>();
-            var lstFilesDropbox = Singleton.GetInstance().GetCloud().GetItems(Drive.DP);
+            
+            var lstFilesDropbox = Singleton.GetInstance().GetCloud().GetItems(Drive.GG);
 
             if (dateDebut < dateFin)
             {
@@ -646,7 +688,9 @@ namespace IHM.ModelView
                 }
             }
             DgFiles[0] = Results;
+           RefreshTab();
         }
+
 
         private void ActionRecherchePeriode(object obj)
         {
@@ -665,8 +709,32 @@ namespace IHM.ModelView
             bool trouve = false;
 
             var lstFilesDropbox = Singleton.GetInstance().GetDBB().GetItems();
+             var lstFilesGoogle = Singleton.GetInstance().GetDBB().GetItems(); 
 
             foreach (Fichier item in lstFilesDropbox)
+            {
+                if (item.DateDeCreation != null)
+                {
+                    if (item.DateDeCreation.Value.Year == year && item.DateDeCreation.Value.Month == month && item.DateDeCreation.Value.Day == day)
+                    {
+                        trouve = true;
+                        Results.Add(item);
+                        Console.WriteLine(Results);
+                    }
+                }
+
+                if (item.DateInvitation != null)
+                {
+                    if (item.DateInvitation.Value.Year == year && item.DateInvitation.Value.Month == month && item.DateInvitation.Value.Day == day)
+                    {
+                        trouve = true;
+                        Results.Add(item);
+                        Console.WriteLine(Results);
+
+                    }
+                }
+            }
+            foreach (Fichier item in lstFilesGoogle)
             {
                 if (item.DateDeCreation != null)
                 {
@@ -694,7 +762,9 @@ namespace IHM.ModelView
                 MessageBox.Show("La date séléctioné  n’existe pas");
             }
 
-            DgFiles[0] = Results;
+            //DgFiles[0] = Results;
+            DgFiles[1] = Results;
+            RefreshTab();
         }
 
         private void ActionRechercheDate(object obj)
