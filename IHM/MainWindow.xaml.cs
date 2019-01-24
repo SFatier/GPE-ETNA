@@ -1,23 +1,11 @@
 ﻿using IHM.Helpers;
 using IHM.Model;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IHM
 {
@@ -53,8 +41,10 @@ namespace IHM
                     }
                 }
 
-                if (!File.Exists(path_role))
+                if (File.Exists(path_role))
                 {
+                    File.Delete(path_role);
+                }
 
                     List<Fonctionnalites> fonctionnalite_secretaire = new List<Fonctionnalites>();
                     fonctionnalite_secretaire.Add(new Fonctionnalites() { Ischecked = true, DateDeCreation = DateTime.Now, Nom = "Lister les fichiers d'un dropbox" });
@@ -102,6 +92,7 @@ namespace IHM
 
                     List<Roles> lst_role = new List<Roles>();
                     lst_role.Add(  new Roles { Ischecked = true, DateDeCreation = DateTime.Now, Nom = "Secrétaire" , lstFontionnalites = fonctionnalite_secretaire } );
+                    lst_role.Add(new Roles { Ischecked = true, DateDeCreation = DateTime.Now, Nom = "Développeur", lstFontionnalites = fonctionnalite_secretaire });
                     lst_role.Add(new Roles() { Ischecked = true, DateDeCreation = DateTime.Now, Nom = "Chef de projet" , lstFontionnalites = fonctionnalite_chef});
                     lst_role.Add(new Roles() { Ischecked = true, DateDeCreation = DateTime.Now, Nom = "Gestionnaire de cloud", lstFontionnalites = fonctionnalite_gestionnaire });
 
@@ -111,7 +102,7 @@ namespace IHM
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.Serialize(file, lst_role);
                     }
-                }
+                
 
                 if (!File.Exists(path_utilisateur))
                 {

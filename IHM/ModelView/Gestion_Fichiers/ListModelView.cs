@@ -244,15 +244,18 @@ namespace IHM.ModelView
             List<Projet> lst = new List<Projet>();
 
             LstProjet = Singleton.GetInstance().GetAllProject();
-            foreach (var item in LstProjet)
+            if (filesSelected != null)
             {
-                if (item.LstFiles.Exists(f => (f.IdDropbox == filesSelected.IdDropbox || f.IdGoogle == filesSelected.IdGoogle) && f.Nom.Equals(filesSelected.Nom)))
+                foreach (var item in LstProjet)
                 {
-                    item.IscheckedProject = true;
-                }
-                else
-                {
-                    item.IscheckedProject = false;
+                    if (item.LstFiles.Exists(f => (f.IdDropbox == filesSelected.IdDropbox || f.IdGoogle == filesSelected.IdGoogle) && f.Nom.Equals(filesSelected.Nom)))
+                    {
+                        item.IscheckedProject = true;
+                    }
+                    else
+                    {
+                        item.IscheckedProject = false;
+                    }
                 }
             }
         }
@@ -585,7 +588,13 @@ namespace IHM.ModelView
         {
             if (filesSelected.PreviewUrl == null)
             {
-                cloud.Download(Drive.DP, "/", filesSelected.Nom, filesSelected.path, filesSelected.Nom, string.Empty, string.Empty);
+                string DropboxFileName = filesSelected.Nom;
+                string DropboxFolderPath = filesSelected.path;
+                string fileName = System.IO.Path.GetTempPath() + DropboxFileName;
+
+               // Singleton.GetInstance().GetDBB().Download("/", DropboxFileName, fileName, DropboxFileName);
+
+                cloud.Download(Drive.DP, "/", DropboxFileName, fileName, DropboxFileName, string.Empty, string.Empty);
                 System.Diagnostics.Process.Start(System.IO.Path.GetTempPath() + filesSelected.Nom);
             }
             else
@@ -596,10 +605,12 @@ namespace IHM.ModelView
 
         #endregion
 
+
         #region SALAH
         // search Files
         private void ActionRecherche(object par)
         {
+            string nomRechercher = Nom;
             Results = new List<Fichier>();
             char[] delimiters = new char[] { ' ', ',', '.', ':', '\t' };
             string[] words = Nom.Split(delimiters);
@@ -610,12 +621,10 @@ namespace IHM.ModelView
                 foreach (Fichier item in DgFiles[0])
                 {
 
-                    if (words.Any(nomRechercher => nomRechercher == item.Nom))
+                    if (item.Nom.Contains(nomRechercher))
                     {
                         trouve = true;
                         Results.Add(item);
-
-
                     }
                     DgFiles[0] = Results;
                 }
@@ -623,8 +632,15 @@ namespace IHM.ModelView
                 {
                     MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
                 }
+                else
+                {
+                    RefreshTab();
+                }
+
             }
         }
+
+
         public void Recherche_Periode()
         {
             Results = new List<Fichier>();
@@ -646,6 +662,8 @@ namespace IHM.ModelView
                 }
             }
             DgFiles[0] = Results;
+            RefreshTab();
+
         }
 
         private void ActionRecherchePeriode(object obj)
@@ -695,6 +713,7 @@ namespace IHM.ModelView
             }
 
             DgFiles[0] = Results;
+            RefreshTab();
         }
 
         private void ActionRechercheDate(object obj)
