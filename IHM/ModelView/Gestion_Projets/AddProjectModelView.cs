@@ -18,6 +18,7 @@ namespace IHM.ModelView
     public class AddProjectModelView : ObservableObject, IPageViewModel
     {
         ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
+        ObservableCollection<string> _selectedFiles = new ObservableCollection<string>();
         public ICommand  Save{ get; set; }
         
         public AddProjectModelView()
@@ -25,9 +26,10 @@ namespace IHM.ModelView
             TitrePage = "Ajouter un projet";
             LoadAction();
             LstUser = Singleton.GetInstance().GetAllUtilisateur().Where(user => user.Email != Singleton.GetInstance().GetUtilisateur().Email).Select(u => u.Login).ToList() ;
+            LoadFiles();
         }
 
-        #region [Binding]
+       #region [Binding]
         private string titrePage;
         public string TitrePage
         {
@@ -84,11 +86,32 @@ namespace IHM.ModelView
             }
         }
 
+        private List<string> _lstFiles;
+        public List<string> LstFiles
+        {
+            get { return _lstFiles; }
+            set
+            {
+                if (!string.Equals(this._lstFiles, value))
+                {
+                    this._lstFiles = value;
+                    RaisePropertyChanged(nameof(LstFiles));
+                }
+            }
+        }
+
         public ObservableCollection<string> SelectedUsers
         {
             get
             {
                 return _selectedUsers;
+            }
+        }
+        public ObservableCollection<string> SelectedFiles
+        {
+            get
+            {
+                return _selectedFiles;
             }
         }
         #endregion
@@ -102,15 +125,14 @@ namespace IHM.ModelView
                 Projet p = new Projet();
                 p.NomProject = NomProjet;
                 p.Description = DescriptionProjet;
-                p.LstFiles = new List<Fichier>();
-                p.LstUser = new List<Utilisateur>();
+                p.LstFiles = GetFilesProject();
                 p.LstUser = GetUserProject();
                 p.IcoIsArchived = "notvalidate.png";
                 p.IsprojetFin = false;
                 p.IsprojetEncours = true;
                 p.DateDeCreation = DateTime.Now;
                 Singleton.GetInstance().addProject(p);
-
+                shareFile(p);
                 Functions.CreateFileProjet();
                 Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
             }
@@ -120,7 +142,36 @@ namespace IHM.ModelView
             }
         }
 
+        //partage les fichiers dropbox avec les différents utilisateurs
+        private void shareFile(Projet p)
+        {
+            foreach (Fichier f in p.LstFiles) {
+                if (f.IdDropbox != null) {
+                    foreach (Utilisateur u in p.LstUser) {
+                        Singleton.GetInstance().GetDBB().SharingFile(f, u);
+                     }
+                }
+                else
+                {
+                    //non fait
+                }
+            }
+        }
+
         #endregion
+
+        /// <summary>
+        /// Récupérer les fichiers des drive 
+        /// </summary>
+        private void LoadFiles()
+        {
+            List<string> lst_file_gg = Singleton.GetInstance().GetListModelView().DgFiles_GG.Select(f => f.Nom).ToList();
+            List<string> lst_file_dp = Singleton.GetInstance().GetListModelView().DgFiles_DP.Select(f => f.Nom).ToList();
+            List<string> rslt = new List<string>();
+            rslt.AddRange(lst_file_dp);
+            rslt.AddRange(lst_file_gg);
+            LstFiles = rslt;
+        }
 
         public void LoadAction()
         {
@@ -144,6 +195,36 @@ namespace IHM.ModelView
                 }
             }
             return lst;
-        }        
+        }
+
+        private List<Fichier> GetFilesProject()
+        {
+            List<Fichier> lst = new List<Fichier>();
+            if (SelectedFiles != null)
+            {
+                List<Fichier> lstdp = Singleton.GetInstance().GetListModelView().DgFiles_DP;
+
+                foreach (var item in SelectedFiles)
+                {
+                    Fichier u = lstdp.Find(f => f.Nom == item);
+                    if (u != null)
+                    {
+                        lst.Add(u);
+                    }
+                }
+
+                List<Fichier> lstgg = Singleton.GetInstance().GetListModelView().DgFiles_GG;
+
+                foreach (var item in SelectedFiles)
+                {
+                    Fichier u = lstgg.Find(f => f.Nom == item);
+                    if (u != null)
+                    {
+                        lst.Add(u);
+                    }
+                }
+            }
+            return lst;
+        }
     }
 }
