@@ -34,13 +34,13 @@
             </TextBox.RenderTransform>
         </TextBox>
 
-        <Label Content="Mot de passe :" HorizontalAlignment="Left" Margin="351,221,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,3.653" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="22" Margin="449,221,0,0" TextWrapping="Wrap" Text="{Binding Mdp}" VerticalAlignment="Top" Width="272" Grid.Row="1" IsReadOnly="True"/>
+        <!--<Label Content="Mot de passe :" HorizontalAlignment="Left" Margin="351,221,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,3.653" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="22" Margin="449,221,0,0" TextWrapping="Wrap" Text="{Binding Mdp}" VerticalAlignment="Top" Width="272" Grid.Row="1" IsReadOnly="True"/>-->
 
-        <Label Content="Role :" HorizontalAlignment="Left" Margin="399,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,3.653" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="449,292,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="272" Text="{Binding Role}" IsReadOnly="True"/>
+        <Label Content="Role :" HorizontalAlignment="Left" Margin="399,218,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,3.653" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="449,221,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="272" Text="{Binding Role}" IsReadOnly="True"/>
 
-        <Button Content="Enregistrer" HorizontalAlignment="Left" Margin="646,373,0,0" VerticalAlignment="Top" Width="75" Command="{Binding MiseAJourUser}" Grid.Row="1"/>
+        <Button Content="Enregistrer" HorizontalAlignment="Left" Margin="646,294,0,0" VerticalAlignment="Top" Width="75" Command="{Binding MiseAJourUser}" Grid.Row="1"/>
 
     </Grid>
 </UserControl>

@@ -25,10 +25,10 @@ namespace IHM.View
             InitializeComponent();
             if (Singleton.GetInstance().GetUtilisateur().Role != "Chef de projet")
             {
-                btnAjouterProjet.Visibility = Visibility.Hidden;
-                ItemsList.ContextMenu.IsEnabled = false;
-                ItemsList.ContextMenu.Visibility = Visibility.Hidden;
-                lblPageProjets.Content = "Mes projets attribués";
+                //btnAjouterProjet.Visibility = Visibility.Hidden;
+                //ItemsList.ContextMenu.IsEnabled = false;
+                //ItemsList.ContextMenu.Visibility = Visibility.Hidden;
+                //lblPageProjets.Content = "Mes projets attribués";
             }
         }
     }

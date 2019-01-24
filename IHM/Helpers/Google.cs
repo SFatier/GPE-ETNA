@@ -56,9 +56,9 @@ namespace IHM.Helpers
                         new FileDataStore(FilePath, true)).Result;
                 }
             }
-            catch (Exception)
+            catch (Exception ex )
             {
-                throw;
+                MessageBox.Show(ex.Message);
             }
             return credential;            
         }

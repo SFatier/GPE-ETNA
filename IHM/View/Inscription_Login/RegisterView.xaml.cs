@@ -24,5 +24,6 @@ namespace IHM.View
         {
             InitializeComponent();
         }
+
     }
 }

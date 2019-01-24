@@ -168,10 +168,11 @@ namespace IHM.ModelView
                         var uUpdate = Singleton.GetInstance().GetAllUtilisateur().FirstOrDefault(user => u.Equals(user));
                         if (uUpdate != null)
                         {
-                            uUpdate.Token_DP = /*Singleton.GetInstance().Encrypt(*/strAccessToken; //).ToString();
+                            uUpdate.Token_DP = strAccessToken; 
                         }
                         UpdateUtilisateur();
                         strDP = "Dropbox connecté";
+                        MessageBox.Show("Dropbox connecté");
                     }
                 }
                 catch (Exception)
@@ -205,7 +206,16 @@ namespace IHM.ModelView
         /// <param name="obj"></param>
         private void ActionConnecterGoogle(object obj)
         {
-            Singleton.GetInstance().GetGoogle().Connect();
+            try
+            {
+                Singleton.GetInstance().GetGoogle().Connect();
+                strGG = "Google connecté";
+                MessageBox.Show("Google connecté");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         #endregion  
