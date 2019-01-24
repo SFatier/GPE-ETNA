@@ -17,6 +17,8 @@ namespace IHM.ModelView
 {
     public class UpdateProjectModelView : ObservableObject, IPageViewModel
     {
+        ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
+        ObservableCollection<string> _selectedFiles = new ObservableCollection<string>();
         private  Projet Projet { get; set; }
         public ICommand Save { get; set; }
 
@@ -93,12 +95,32 @@ namespace IHM.ModelView
             }
         }
 
-        private ObservableCollection<string> _selectedUsers;
+        private List<string> _lstFiles;
+        public List<string> LstFiles
+        {
+            get { return _lstFiles; }
+            set
+            {
+                if (!string.Equals(this._lstFiles, value))
+                {
+                    this._lstFiles = value;
+                    RaisePropertyChanged(nameof(LstFiles));
+                }
+            }
+        }
+
         public ObservableCollection<string> SelectedUsers
         {
             get
             {
                 return _selectedUsers;
+            }
+        }
+        public ObservableCollection<string> SelectedFiles
+        {
+            get
+            {
+                return _selectedFiles;
             }
         }
         #endregion
@@ -108,16 +130,8 @@ namespace IHM.ModelView
             NomProjet = Projet.NomProject;
             DescriptionProjet = Projet.Description;
             List<Utilisateur> lstUtilisateur = Singleton.GetInstance().GetAllUtilisateur();
-            LstUser = new List<string>();
-
-            foreach (Utilisateur u in lstUtilisateur)
-            {
-                Utilisateur utilisateur = Projet.LstUser.FirstOrDefault(user => user.Login.Equals(u.Login));
-                if( utilisateur != null)
-                {
-                    LstUser.Add(utilisateur.Login);
-                }
-            }
+            LstUser = Projet.LstUser.Select(u => u.Login).ToList();
+            LstFiles = Projet.LstFiles.Select(f => f.Nom).ToList();
         }
 
         public void LoadAction()
@@ -135,6 +149,36 @@ namespace IHM.ModelView
             Functions.CreateFileProjet();
             Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
             
+        }
+
+        private List<Fichier> GetFilesProject()
+        {
+            List<Fichier> lst = new List<Fichier>();
+            if (SelectedFiles != null)
+            {
+                List<Fichier> lstdp = Singleton.GetInstance().GetListModelView().DgFiles_DP;
+
+                foreach (var item in SelectedFiles)
+                {
+                    Fichier u = lstdp.Find(f => f.Nom == item);
+                    if (u != null)
+                    {
+                        lst.Add(u);
+                    }
+                }
+
+                List<Fichier> lstgg = Singleton.GetInstance().GetListModelView().DgFiles_GG;
+
+                foreach (var item in SelectedFiles)
+                {
+                    Fichier u = lstgg.Find(f => f.Nom == item);
+                    if (u != null)
+                    {
+                        lst.Add(u);
+                    }
+                }
+            }
+            return lst;
         }
 
         private List<Utilisateur> GetUserProject()
