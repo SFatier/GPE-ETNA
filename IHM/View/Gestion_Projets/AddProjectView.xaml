@@ -23,11 +23,16 @@
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="24,0,0,-12" Grid.Row="1" TextWrapping="Wrap" Text="{Binding NomProjet}" VerticalAlignment="Top" Width="563"/>
 
         <Label Grid.Row="1" Grid.Column="0" Margin="159,50,0,-126" Content="Description :"/>
-        <TextBox Grid.Row="1" Grid.Column="1" AcceptsReturn="True" Margin="24,30,65,-198" Text="{Binding DescriptionProjet, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150" TextWrapping="Wrap"/>
+        <TextBox Grid.Column="1" AcceptsReturn="True" Margin="24,54,65,-151" Text="{Binding DescriptionProjet, UpdateSourceTrigger=PropertyChanged}" MaxHeight="100" TextWrapping="Wrap" Grid.RowSpan="2"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Margin="159,227,0,-307" Content="Team :"/>
-        <ListBox Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="24,227,0,-332" Grid.Row="1" VerticalAlignment="Top" Width="563" ItemsSource="{Binding LstUser}" SelectionMode="Extended"
+        <Label Grid.Row="1" Grid.Column="0" Margin="159,207,0,-307" Content="Team :"/>
+        <ListBox Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="24,207,0,-332" Grid.Row="1" VerticalAlignment="Top" Width="563" Grid.RowSpan="2" ItemsSource="{Binding LstUser}" SelectionMode="Extended"
                  ff:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedUsers}">
+        </ListBox>
+
+        <Label Grid.Row="1" Grid.Column="0" Margin="159,310,0,-307" Content="Fichiers :"/>
+        <ListBox Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="24,317,0,-332" Grid.Row="1" VerticalAlignment="Top" Grid.RowSpan="2" Width="563" ItemsSource="{Binding LstFiles}" SelectionMode="Extended"
+                 ff:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedFiles}">
         </ListBox>
 
         <Button Content="Enregistrer" Command="{Binding Save}" Grid.Column="1" Margin="373,381,65,-445" Grid.Row="1" Width="150" Height="40"/>
