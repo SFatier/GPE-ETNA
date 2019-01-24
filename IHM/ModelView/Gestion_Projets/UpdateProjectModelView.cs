@@ -24,7 +24,7 @@ namespace IHM.ModelView
         {
             try
             {
-                Projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(user => user.Nom.Equals(project.Nom));
+                Projet = Singleton.GetInstance().GetAllProject().FirstOrDefault(p => p.NomProject.Equals(project.NomProject));
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace IHM.ModelView
 
         private void LoadInformation()
         {
-            NomProjet = Projet.Nom;
+            NomProjet = Projet.NomProject;
             DescriptionProjet = Projet.Description;
             List<Utilisateur> lstUtilisateur = Singleton.GetInstance().GetAllUtilisateur();
             LstUser = new List<string>();
@@ -128,9 +128,9 @@ namespace IHM.ModelView
         private void ActionUpdateProject(object obj)
         {
             List<Projet> lst = Singleton.GetInstance().GetAllProject();
-            Projet = lst.FirstOrDefault(item => item.Nom.Equals(Projet.Nom));
+            Projet = lst.FirstOrDefault(item => item.NomProject.Equals(Projet.NomProject));
 
-            Projet.Nom = nomProjet;
+            Projet.NomProject = nomProjet;
             Projet.Description = DescriptionProjet;
     
             #region [Ecriture de l'utilisateur dans le fichier .JSON]
@@ -142,7 +142,6 @@ namespace IHM.ModelView
                     serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
                 }
 
-                Singleton.GetInstance().GetHomeModelView().GetProjets();
                 Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
             }
             catch (Exception ex)

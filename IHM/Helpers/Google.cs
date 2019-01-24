@@ -18,56 +18,35 @@ using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2.Flows;
 using IHM.ModelView;
 using Google.Apis.Download;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace IHM.Helpers
 {
     public class GoogleCloud
     {
-        //defined scope.
         public static string[] Scopes = { DriveService.Scope.Drive };
         public static DriveService service = null;
+        static Dictionary<string, Google.Apis.Drive.v3.Data.File> files = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+        private string clientJson = Constant.ClientSecretJSON; 
 
-        public GoogleCloud()
-        {
-            /**
-             * BEGIN
-             *  Si connexion on ouvre le navigateur on récupère un code 
-             *      puis on l'enregistre sous format JSON
-             *  Sinon
-             *      On récupère le token , on créé le credential
-             * Fin
-             * On connecte le Service
-             **/
-            UserCredential rsltCredential;
-            Utilisateur u = Singleton.GetInstance().GetUtilisateur();
-            if (u.Token_GG == null)
-            {
-                rsltCredential = GetAuthorization();
-                SaveToken(rsltCredential);
-            }
-            else
-            {
-                var accesstoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(*/u.Token_GG; //));
-                var refreshtoken = /*Singleton.GetInstance().Decrypt(Encoding.ASCII.GetBytes(*/u.RefreshToken; //));
-                rsltCredential = CreateCredential(new TokenResponse { AccessToken = accesstoken, RefreshToken = refreshtoken});
-            }
-            GetGoogleService(rsltCredential);
-            GetItems();
-        }
+        public GoogleCloud()  { }
 
         /// <summary>
         /// Réupération de l'autorisation de l'utilisateur
         /// </summary>
         /// <returns></returns>
-        public static UserCredential GetAuthorization()
+        public UserCredential GetAuthorization()
         {
-            UserCredential credential;
+            UserCredential credential = null;
+            service = null;
             try
             {
-                using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
-                {
-                    String FolderPath = @"C:\";
-                    String FilePath = Path.Combine(FolderPath, "DriveServiceCredentials.json");
+                if (Directory.Exists(clientJson) == true)
+                    Directory.Delete(clientJson, true);
+
+                using (var stream = new FileStream(clientJson, FileMode.Open, FileAccess.Read))
+                {                    
+                    String FilePath = Constant.strAppSecretGoogle;
                    
                     credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
@@ -77,11 +56,10 @@ namespace IHM.Helpers
                         new FileDataStore(FilePath, true)).Result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
-
             return credential;            
         }
         
@@ -100,24 +78,9 @@ namespace IHM.Helpers
             
             List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
             Utilisateur _u = lst.FirstOrDefault(item => item.Login.Equals(Singleton.GetInstance().GetUtilisateur().Login));
-            lst.FirstOrDefault(item => item.Login.Equals(Singleton.GetInstance().GetUtilisateur().Login)).Token_GG = /*Singleton.GetInstance().Encrypt(*/token.AccessToken/*).ToString()*/;
-            lst.FirstOrDefault(item => item.Login.Equals(Singleton.GetInstance().GetUtilisateur().Login)).RefreshToken = /*Singleton.GetInstance().Encrypt(*/token.RefreshToken/*).ToString()*/;
-            
-            #region [Ecriture de l'utilisateur dans le fichier .JSON]
-            try
-            {
-                string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
-                using (StreamWriter file = System.IO.File.CreateText(@test))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, lst);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error :\" " + ex.Message);
-            }
-            #endregion
+            _u.Token_GG = token.AccessToken;
+            _u.RefreshToken = token.RefreshToken;
+            Functions.CreateFileUtilisateur();
         }
 
         /// <summary>
@@ -135,9 +98,9 @@ namespace IHM.Helpers
         public UserCredential CreateCredential(TokenResponse token)
         {
             ClientSecrets clientsecret;
-
+            
             //récupération du client secret
-            using (var stream = new FileStream(ConfigurationSettings.AppSettings["ClientSecretJSON"], FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(clientJson, FileMode.Open, FileAccess.Read))
             {
                 clientsecret = GoogleClientSecrets.Load(stream).Secrets;
             }
@@ -150,13 +113,11 @@ namespace IHM.Helpers
                 DataStore = new FileDataStore("Store")
             });
 
-            //creation du credential
             var googleServiceCredential = new UserCredential(flow, Environment.UserName, token);
-
             return googleServiceCredential;
         }
 
-        public static void GetGoogleService(UserCredential credential)
+        public void GetGoogleService(UserCredential credential)
         {
             service = new DriveService(new BaseClientService.Initializer()
             {
@@ -166,65 +127,126 @@ namespace IHM.Helpers
         }
 
         /// <summary>
+        /// Connection de Google Drive
+        /// </summary>
+        public void Connect()
+        {
+            UserCredential uc =  GetAuthorization();
+            SaveToken(uc);
+            GetGoogleService(uc);
+            GetRootFolderId();
+            GetItems();
+        }
+
+        public string GetRootFolderId()
+        {
+            var rootFolder = service.Files.Get("root").Execute();
+            return rootFolder.Id;
+        }
+        
+        /// <summary>
         /// Récupère les fichiers de google drive
         /// </summary>
         /// <returns></returns>
         public List<Fichier> GetItems()
         {
             FilesResource.ListRequest FileListRequest = service.Files.List();
-            FileListRequest.Fields = "nextPageToken, files(id, name, size, version, createdTime)";
+            FileListRequest.Fields = "nextPageToken, files(id, name, size, version, createdTime, parents, fileExtension, iconLink, owners)";
             IList<Google.Apis.Drive.v3.Data.File> files = FileListRequest.Execute().Files;
             List<Fichier> FileList = new List<Fichier>();
-
+            
             if (files != null && files.Count > 0)
-            {
-                foreach (var file in files)
+            {                
+                List<Fichier> filesSansDossier = new List<Fichier>();
+                string root = GetRootFolderId();
+                foreach (var f in files)
                 {
-
-                    Fichier File = new Fichier();
-                        File.IdGoogle = file.Id;
-                        File.Nom = file.Name;
-                        File.Taille = (file.Size == null ? "-" : file.Size.ToString());
-                        File.Version = file.Version;
-                        File.MimeType = GetFile(file.Id);
-                        File.DateDeCreation = file.CreatedTime;
-                        File.IsFile = (file.Parents == null ? true : false);
-                        File.PreviewUrl = (file.WebContentLink == null ? "" : file.WebContentLink);
-                        File.IMG = (File.IsFile != false ? "-" : Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier"));
-                        File.Type = (File.IsFile != false ? Path.GetExtension(file.Name) : "-");
-                        FileList.Add(File);
+                    if (f.Parents != null)
+                    {
+                        foreach(string str_parent in f.Parents)
+                        {
+                            if (str_parent == root || str_parent == null)
+                            {
+                                Google.Apis.Drive.v3.Data.File cFile = GetFile(f.Id);
+                                Fichier File = new Fichier();
+                                File.IdGoogle = cFile.Id;
+                                File.Nom = cFile.Name;
+                                File.Taille = (cFile.Size == null ? "-" : cFile.Size.ToString());
+                                File.Version = cFile.Version;
+                                File.MimeType = cFile.MimeType;
+                                File.DateDeCreation = f.CreatedTime;
+                                File.IsFile = (cFile.Parents == null ? true : false);
+                                File.PreviewUrl = (cFile.WebContentLink == null ? "" : cFile.WebContentLink);
+                                File.IMG = cFile.IconLink == null ? cFile.IconLink : "";  
+                                File.Type = (File.IsFile != false ? Path.GetExtension(cFile.Name) : "-");
+                                FileList.Add(File);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-
             return FileList.OrderBy(f => f.Nom).ToList();
         }
 
-        private string GetFile(String fileId)
+        /// <summary>
+        /// Récupére les id des dossiers parents d'un fichier
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string GetParentByFileId(string id)
+        {
+            string previousParents = "";
+            try
+            {
+                var getRequest = service.Files.Get(id);
+                getRequest.Fields = "parents";
+                var test = getRequest.Execute();
+
+                var test2 = service.About.Get().ExecuteAsStream();
+                
+
+                if (test.Parents != null)
+                    previousParents = String.Join(",", test.Parents);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return previousParents;
+        }
+
+        /// <summary>
+        /// Récupére les informations d'un fichier par son ID
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        private Google.Apis.Drive.v3.Data.File GetFile(String fileId)
         {
             Google.Apis.Drive.v3.Data.File file = new Google.Apis.Drive.v3.Data.File();
             try
             {
-
-                 file = service.Files.Get(fileId).Execute();
+                file = service.Files.Get(fileId).Execute();
             }
             catch (Exception e)
             {
 
                 Console.WriteLine("An error occurred: " + e.Message);
             }
-            return file.MimeType;
-
+            return file;
         }
 
+        /// <summary>
+        /// Télécharge un fichier dans un dossier cible
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="fileId"></param>
+        /// <param name="DownloadFolderPath"></param>
         internal void Download (string filename, string fileId, string DownloadFolderPath)
         {
 
             MemoryStream stream1 = new MemoryStream();
             var request = service.Files.Get(fileId);
-
-            // Add a handler which will be notified on progress changes.
-            // It will notify on each chunk download and when the
-            // download is completed or failed.
 
             request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
             {
@@ -251,6 +273,7 @@ namespace IHM.Helpers
             request.Download(stream1);
             //return FilePath;
         }
+
         private static void SaveStream(MemoryStream stream, string DownloadFolderPath)
         {
             using (System.IO.FileStream file = new FileStream(DownloadFolderPath, FileMode.Create, FileAccess.ReadWrite))
@@ -259,47 +282,125 @@ namespace IHM.Helpers
             }
         }
 
-        private static string GetMimeType(string fileName)
+        /// <summary>
+       /// List MimeType
+       /// </summary>
+       /// <param name="type"></param>
+       /// <returns></returns>
+        private static string GetMimeType(string type)
         {
-            string mimeType = "application/unknown";
-            string ext = System.IO.Path.GetExtension(fileName).ToLower();
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-            if (regKey != null && regKey.GetValue("Content Type") != null)
-                mimeType = regKey.GetValue("Content Type").ToString();
-            return mimeType;
+            string result = string.Empty;
+            switch (type)
+            {
+                case "jpg":
+                case "jpeg":
+                    result = "image/jpeg";
+                    break;
+                case "png":
+                    result = "image/png";
+                    break;
+                case "gif":
+                    result = "image/gif";
+                    break;
+                case "pdf":
+                    result = "application/pdf";
+                    break;
+                case "xls":
+                    result = "application/vnd.ms-excel";
+                    break;
+                case "html":
+                    result = "text/html";
+                    break;
+                case "txt":
+                    result = "text/plain";
+                    break;
+                case "doc":
+                    result = "application/msword";
+                        break;
+                case "docx":
+                    result = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    break;
+                case "csv":
+                    result = "text/csv";
+                    break;
+                case "excel":
+                    result = "application/vnd.ms-excel";
+                    break;
+                case "ppt":
+                    result = "application/vnd.ms-powerpoint";
+                    break;
+                case "pptx":
+                    result = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                    break;
+            }
+            return result;
         }
 
-        public void Upload(string _uploadFile, string _paretn)
+        /// <summary>
+        /// Importe un document dans google drive
+        /// </summary>
+        /// <param name="_uploadFile">Nom du fichier</param>
+        /// <param name="type">Type du fichier </param>
+        /// <param name="pathLocal"> chemin local du fichier</param>
+        /// <returns></returns>
+        public bool Upload(string _uploadFile, string type, string pathLocal)
         {
-
-            /*if (System.IO.File.Exists(_uploadFile))
+            try
             {
-                Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-                body.Name = System.IO.Path.GetFileName(_uploadFile);
-                body.Description = "File uploaded by Diamto Drive Sample";
-                body.MimeType = GetMimeType(_uploadFile);
-                body.Parents = new List() { new ParentReference() { Id = _parent } };
+                var fileMetadata = new File()
+                {
+                    Name = _uploadFile,
+                    MimeType = GetMimeTupeGoogle(type.Split('.')[1]),
+                    CreatedTime = DateTime.Now                    
+                };
+                FilesResource.CreateMediaUpload request;
+                using (var stream = new System.IO.FileStream(pathLocal, System.IO.FileMode.Open))
+                {
+                    request = service.Files.Create(fileMetadata, stream, GetMimeType(type.Split('.')[1]));
+                    request.Fields = "name, id";
+                    request.Upload();
+                }
+                var file = request.ResponseBody;
+                return true;
 
-                // File's content.
-                byte[] byteArray = System.IO.File.ReadAllBytes(_uploadFile);
-                System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
-                try
-                {
-                    service.Files. //(body, stream, GetMimeType(_uploadFile)).Upload();
-                    //return request.ResponseBody;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred: " + e.Message);
-                    return null;
-                }
-            }
-            else
+            }catch(Exception ex)
             {
-                Console.WriteLine("File does not exist: " + _uploadFile);
-                return null;
+                return false;
             }
-            */
+        }
+
+        /// <summary>
+        /// Récupère le mimetype de google par rapport à l'extension du fichier
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private string GetMimeTupeGoogle(string type)
+        {
+            string str = string.Empty;
+            switch (type)
+            {
+                case "jpg":
+                case "jpeg":
+                case "png":
+                case "gif":
+                case "pdf":
+                case "html":
+                case "txt":
+                case "doc":
+                case "docx":
+                    str = "application/vnd.google-apps.document";
+                    break;
+                case "csv":
+                case "excel":
+                case "tsv":
+                    str = "application/vnd.google-apps.spreadsheet";
+                    break;
+                case "ppt":
+                case "pptx":
+                    str = "application/vnd.google-apps.presentation";
+                    break;
+            }
+            return str;
         }
 
         /// <summary>
@@ -354,7 +455,6 @@ namespace IHM.Helpers
                 throw new ArgumentNullException("Erreur de Service Google");
             if (fileId == null)
                 throw new ArgumentNullException("Erreur de suppression du fichier google =>" + fileId);
-
         }
 
         /// <summary>
@@ -362,17 +462,43 @@ namespace IHM.Helpers
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public Channel Watch(string fileId)
+        public bool Watch(string filename, string fileId)
         {
             try
             {
                 Verification(fileId);
-                var request = service.Files.Watch(new Channel(), fileId);
-                return request.Execute();
+                MemoryStream stream1 = new MemoryStream();
+                var request = service.Files.Get(fileId);
+                request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
+                {
+                    switch (progress.Status)
+                    {
+                        case DownloadStatus.Downloading:
+                            {
+                                Console.WriteLine(progress.BytesDownloaded);
+                                break;
+                            }
+                        case DownloadStatus.Completed:
+                            {
+                                string path = @"C:\Temp\" + filename;
+                                SaveStream(stream1, path);
+                                System.Diagnostics.Process.Start(path);
+                                break;
+                            }
+                        case DownloadStatus.Failed:
+                            {
+                                Console.WriteLine("Download failed.");
+                                break;
+                            }
+                    }
+                };
+                request.Download(stream1);
+                return true;
             }
             catch (Exception ex)
             {
                 throw new Exception("Echec de la visualisation d'un document google.", ex);
+                return false;
             }
         }
 

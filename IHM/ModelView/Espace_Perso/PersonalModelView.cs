@@ -23,9 +23,10 @@ namespace IHM.ModelView
         public ICommand MiseAJourUser { get; set; }
 
         private Utilisateur u;
-        private DropBox DBB;
+        private DropBox DBB = Singleton.GetInstance().GetDBB();
         private string strAccessToken = string.Empty;
         private string strAuthenticationURL = string.Empty;
+        private Cloud cloud = Singleton.GetInstance().GetCloud();
 
         public PersonalModelView()
         {
@@ -145,17 +146,17 @@ namespace IHM.ModelView
         }
 
         #region Dropbox        
-        /**
-         * Ouvre une nouvelle fenêtre qui demande l'autorasition de se connecter à dropbox
-         * */
+        /// <summary>
+        /// Ouvre une nouvelle fenêtre qui demande l'autorasition de se connecter à dropbox
+        /// </summary>
+        /// <param name="parameter"></param>
         private void ActionConnecterDropbox(object parameter)
         {
-            DBB = Singleton.GetInstance().GetDBB();
             if (u.Token_DP == null)
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(ConfigurationSettings.AppSettings["strAppKey"]))
+                    if (string.IsNullOrEmpty(Constant.strAppKey))
                     {
                         MessageBox.Show("Rentrer l'API Clé inclus dans le APP.Config");
                         return;
@@ -170,7 +171,6 @@ namespace IHM.ModelView
                             uUpdate.Token_DP = /*Singleton.GetInstance().Encrypt(*/strAccessToken; //).ToString();
                         }
                         UpdateUtilisateur();
-                        Singleton.GetInstance().GetHomeModelView().GetFilesDropbox();
                         strDP = "Dropbox connecté";
                     }
                 }
@@ -186,12 +186,13 @@ namespace IHM.ModelView
          * */
         private void UpdateUtilisateur()
         {
-            StreamWriter file;
-            using (file = File.CreateText(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-            }
+            //StreamWriter file;
+            //using (file = File.CreateText(@ConfigurationSettings.AppSettings["UtilisateurJSON"]))
+            //{
+            //    JsonSerializer serializer = new JsonSerializer();
+            //    serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
+            //}
+            Functions.CreateFileUtilisateur();
         }
 
         #endregion
@@ -204,9 +205,7 @@ namespace IHM.ModelView
         /// <param name="obj"></param>
         private void ActionConnecterGoogle(object obj)
         {
-            //Pas très propre mais bon ... a changé !!!
-            GoogleCloud google = new GoogleCloud();
-            Singleton.GetInstance().SetGoogle(google);
+            Singleton.GetInstance().GetGoogle().Connect();
         }
 
         #endregion  
@@ -217,23 +216,7 @@ namespace IHM.ModelView
             Utilisateur _u = lst.FirstOrDefault(item => item.Login.Equals(Login));
             if (_u != null && _u.Email != Email) {
                 lst.FirstOrDefault(item => item.Login.Equals(Login)).Email = Email;
-
-                #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                try
-                {
-                    string test = ConfigurationSettings.AppSettings["UtilisateurJSON"];
-                    using (StreamWriter file = File.CreateText(@test))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(file, Singleton.GetInstance().GetAllUtilisateur());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error :\" " + ex.Message);
-                }
-                #endregion
-
+                Functions.CreateFileUtilisateur();
                 MessageBox.Show("L'utilisateur a été mise à jour");
             }
         }

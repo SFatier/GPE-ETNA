@@ -18,8 +18,7 @@ namespace IHM.ModelView
     public class AdminModelView : ObservableObject, IPageViewModel
     {
         public string Name => "Adminstration GED";
-        private static string path_img = ConfigurationSettings.AppSettings["FolderIMG"]; //a modifier par rapport à votre ordinateur
-
+       
         public ICommand AddProject { get; set; }
         public ICommand ModifierProjet { get; set; }
         public ICommand SupprimerProjet { get; set; }
@@ -57,8 +56,8 @@ namespace IHM.ModelView
             foreach (Projet p in lstProject)
             {
                 string img = p.IcoIsArchived;
-                p.IcoArchived = path_img + img;
-                if (img != "validate.png")
+                p.IcoArchived = "/IMG/" + img;
+                if (img != "/IMG/validate.png")
                 {
                     p.IcoToolTip = "Projet fini";
                     p.IsprojetEncours = true;
@@ -70,8 +69,8 @@ namespace IHM.ModelView
                     p.IsprojetEncours = false;
                     p.IsprojetFin = true;
                 }
-                p.RbEncours = path_img + "notvalidate.png";
-                p.RbFini = path_img + "validate.png";
+                p.RbEncours = "/IMG/notvalidate.png";
+                p.RbFini = "/IMG/validate.png";
             }
 
             LstProject = lstProject;
@@ -127,26 +126,8 @@ namespace IHM.ModelView
                 try
                 {
                     Singleton.GetInstance().GetAllProject().Remove(SelectedProject);
-
-                    #region [Ecriture de l'utilisateur dans le fichier .JSON]
-                    try
-                    {
-                        using (StreamWriter file = File.CreateText(@ConfigurationSettings.AppSettings["ProjetJSON"]))
-                        {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.Serialize(file, Singleton.GetInstance().GetAllProject());
-                        }
-
-                        Singleton.GetInstance().GetHomeModelView().GetProjets();
-                        Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error :\" " + ex.Message);
-                    }
-                    #endregion
-
+                    Functions.CreateFileProjet();
+                    Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
                     LoadProject();
                 }
                 catch (Exception ex)

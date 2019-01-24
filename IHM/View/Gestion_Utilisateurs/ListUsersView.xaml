@@ -16,14 +16,14 @@
         
         <TextBox Text="{Binding SearchUser}" Margin="5" Width="250" Name="tbxSearchUser"></TextBox>
         <Button  Margin="290,5,0,6" Width="40" Command="{Binding SearchUserBar}">
-            <Image Source="{Binding BtnSearch}"/>
+            <Image Source="/IMG/search.png"/>
         </Button>
 
         <ListBox ItemsSource="{Binding UsersList}" Margin="10,30,10,10"   ScrollViewer.VerticalScrollBarVisibility="Auto"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" SelectedItem="{Binding UserSelected}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" >
-                        <Image Source="{Binding Image}" Height="70"/>
+                        <Image Source="/IMG/user.png" Height="70"/>
                         <StackPanel Margin="10,0">
                             <TextBlock Text="{Binding Login}" FontWeight="Bold" />
                             <TextBlock Text="{Binding Email}"/>
@@ -50,7 +50,7 @@
 
         <Button  HorizontalAlignment="Left" Margin="800,9,0,0" VerticalAlignment="Top" Width="170" Height="30" Foreground="Transparent" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddUtilisateur}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding ImgAddUtilisateur}" Width="40"/>
+                <Image Source="/IMG/add.png" Width="40"/>
                 <Label Content="Ajouter un utilisateur"></Label>
             </StackPanel>
         </Button>

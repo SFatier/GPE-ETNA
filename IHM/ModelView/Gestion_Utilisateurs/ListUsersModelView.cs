@@ -26,8 +26,6 @@ namespace IHM.ModelView
         public ListUsersModelView()
         {
             UsersList = Singleton.GetInstance().GetAllUtilisateur();
-            BtnSearch = ConfigurationSettings.AppSettings["FolderIMG"] +"search.png";
-            ImgAddUtilisateur = ConfigurationSettings.AppSettings["FolderIMG"] + "add.png";
             LoadAction();
         }
 

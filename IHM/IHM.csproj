@@ -13,6 +13,22 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\sigt_sf\Documents\GitHub\SourceForge\v0.1.2\Source Forge\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +48,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7FA3C68D639D2110095E7A09EF75C63CAB304AA0</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>IHM_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dropbox.Api, Version=4.0.0.0, Culture=neutral, PublicKeyToken=310f0e82fbb45d01, processorArchitecture=MSIL">
@@ -98,7 +126,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\Constant.cs" />
     <Compile Include="Helpers\Dropbox.cs" />
+    <Compile Include="Helpers\Encrypt.cs" />
     <Compile Include="Helpers\Functions.cs" />
     <Compile Include="Helpers\Google.cs" />
     <Compile Include="Helpers\ICloud.cs" />
@@ -113,7 +143,6 @@
     <Compile Include="ModelView\Gestions_Roles\RolesModelView.cs" />
     <Compile Include="ModelView\Gestion_Fichiers\AddFolderModelView.cs" />
     <Compile Include="ModelView\Gestion_Fichiers\ListModelView.cs" />
-    <Compile Include="ModelView\Gestion_Fichiers\PopUpModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AddProjectModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\AdminModelView.cs" />
     <Compile Include="ModelView\Gestion_Projets\UpdateProjectModelView.cs" />
@@ -139,9 +168,6 @@
     </Compile>
     <Compile Include="View\Gestion_Fichiers\ListView.xaml.cs">
       <DependentUpon>ListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Gestion_Fichiers\PopUp.xaml.cs">
-      <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Gestion_Projets\AddProjectView.xaml.cs">
       <DependentUpon>AddProjectView.xaml</DependentUpon>
@@ -198,10 +224,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Gestion_Fichiers\ListView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Gestion_Fichiers\PopUp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -263,14 +285,12 @@
     <None Include="client_secret.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="IHM_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <None Include="projets.json" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="roles.json" />
-    <None Include="utilisateurs.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -353,6 +373,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="IMG\notvalidate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IMG\google.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 et x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

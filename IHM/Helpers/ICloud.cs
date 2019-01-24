@@ -1,4 +1,7 @@
-﻿using Google.Apis.Drive.v3.Data;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Drive.v3.Data;
+using GPE;
 using IHM.Model;
 using System;
 using System.Collections.Generic;
@@ -20,6 +23,23 @@ namespace IHM.Helpers
     /// </summary>
     public class Cloud : ICloud
     {
+        private DropBox DBB = Singleton.GetInstance().GetDBB();
+        private GoogleCloud Google = Singleton.GetInstance().GetGoogle();
+
+
+        public void GetCompteClient(string token_dp, string _accesstoken, string refreshtoken)
+        {
+            if (token_dp != "" && token_dp != null)
+                DBB.GetDBClient(token_dp);
+
+            if (_accesstoken != null && refreshtoken != null)
+            {
+                UserCredential rsltCredential = Google.CreateCredential(new TokenResponse { AccessToken = _accesstoken, RefreshToken = refreshtoken });
+                Google.GetGoogleService(rsltCredential);
+            }
+        }
+
+
         /// <summary>
         /// Creer un dossier sur un cloud
         /// </summary>
@@ -33,10 +53,10 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().CreateFolder(path);
+                        DBB.CreateFolder(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().CreateFolder(nameFolder);
+                        Google.CreateFolder(nameFolder);
                         break;
                 }
                 return true;
@@ -55,23 +75,25 @@ namespace IHM.Helpers
         /// <returns></returns>
         public bool Delete(Drive drive, string path, string fileId)
         {
+            bool result = false;
             try
             {
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().Delete(path);
+                        DBB.Delete(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().Delete(fileId);
+                        Google.Delete(fileId);
                         break;
                 }
-                return true;
+                result = true;
             }
             catch (Exception)
             {
-                return false;
+                result =  false;
             }
+            return result;
         }
 
         /// <summary>
@@ -90,10 +112,10 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().Download(FolderPath, FileName, DownloadFolderPath, DownloadFileName);
+                        DBB.Download(FolderPath, FileName, DownloadFolderPath, DownloadFileName);
                         break;
                     case Drive.GG:
-                      Singleton.GetInstance().GetGoogle().Download(FileName,  fileId, DownloadFolderPath);
+                      Google.Download(FileName,  fileId, DownloadFolderPath);
                         break;
                 }
                 return true;
@@ -116,10 +138,10 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().FolderExists(path);
+                        DBB.FolderExists(path);
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().FolderExists(nameFolder);
+                        Google.FolderExists(nameFolder);
                         break;
                 }
                 return true;
@@ -143,10 +165,10 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        Singleton.GetInstance().GetDBB().GetFilesShared();
+                        DBB.GetFilesShared();
                         break;
                     case Drive.GG:
-                        Singleton.GetInstance().GetGoogle().GetFilesShared();
+                        Google.GetFilesShared();
                         break;
                 }
             }
@@ -170,12 +192,13 @@ namespace IHM.Helpers
                 switch (drive)
                 {
                     case Drive.DP:
-                        if (Singleton.GetInstance().GetDBB() != null)
-                            lst = Singleton.GetInstance().GetDBB().GetItems();
+                        if (DBB != null)
+                            lst = DBB.GetItems();
+                            lst.AddRange(DBB.GetFilesShared());
                         break;
                     case Drive.GG:
-                        if (Singleton.GetInstance().GetGoogle() != null)
-                            lst = Singleton.GetInstance().GetGoogle().GetItems();
+                        if (Google != null)
+                            lst = Google.GetItems();
                         break;
                 }
             }
@@ -216,9 +239,27 @@ namespace IHM.Helpers
         /// <param name="UploadfileName"></param>
         /// <param name="SourceFilePath"></param>
         /// <returns></returns>
-        public bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath)
+        public bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath, string type)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                if (drive == Drive.DP)
+                {
+                    result = DBB.Upload(UploadfolderPath, UploadfileName, SourceFilePath);
+                }
+                else
+                {
+                    result = Google.Upload(UploadfileName, type, SourceFilePath);
+                }
+
+               
+            }
+            catch (Exception ex)
+            {
+               //
+            }
+            return result;
         }
 
         /// <summary>
@@ -227,19 +268,19 @@ namespace IHM.Helpers
         /// <param name="drive"></param>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public Channel Watch(Drive drive, string fileId)
+        public bool Watch(Drive drive, string nom ,string fileId)
         {
-            Channel channel = new Channel();
+            bool result = false;
             try
             {
                 if(drive == Drive.GG)
-                    channel = Singleton.GetInstance().GetGoogle().Watch(fileId);
+                     result = Google.Watch(nom, fileId);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return channel;
+            return result;
         }
     }
 
@@ -250,7 +291,7 @@ namespace IHM.Helpers
         bool CreateFolder(Drive drive, string path, string nameFolder);
         bool FolderExists(Drive drive, string path, string nameFolder);
         bool Delete(Drive drive, string path, string fileId);
-        bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath);
+        bool Upload(Drive drive, string UploadfolderPath, string UploadfileName, string SourceFilePath, string type);
         bool SharingFile(Drive drive, Fichier fichier, Utilisateur utilisateur);
         List<Fichier> GetFilesShared(Drive drive);
         bool getSpace(Drive drive);

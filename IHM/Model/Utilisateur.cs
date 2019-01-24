@@ -11,7 +11,7 @@ namespace IHM.Model
 {
     public class Utilisateur : Base
     {
-        private string image = ConfigurationSettings.AppSettings["FolderIMG"] + "user.png";
+        private string image ;
         private string token_DP;
         private string token_GG;
         private string refreshToken;

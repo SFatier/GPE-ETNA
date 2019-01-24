@@ -72,8 +72,6 @@ namespace IHM.ModelView
             RecherchePeriode = new RelayCommand(ActionRecherchePeriode);
         }
 
-       
-
         #region [Binding dgFiles By Drive]
         private List<Fichier> dgFiles_DP;
         public List<Fichier> DgFiles_DP
@@ -646,6 +644,7 @@ namespace IHM.ModelView
                 {
 
                     if (item.Nom.Contains(nomRechercher))
+
                     {
                         trouve = true;
                         Results.Add(item);
@@ -654,10 +653,7 @@ namespace IHM.ModelView
                     }
                     DgFiles[1] = Results;
                 }
-
-
-
-            }
+       }
             if (trouve == false)
             {
                 MessageBox.Show("Le fichier avec le nom indiqué n’existe pas");
@@ -673,6 +669,7 @@ namespace IHM.ModelView
         public void Recherche_Periode()
         {
             Results = new List<Fichier>();
+            
             var lstFilesDropbox = Singleton.GetInstance().GetCloud().GetItems(Drive.GG);
 
             if (dateDebut < dateFin)
@@ -692,7 +689,6 @@ namespace IHM.ModelView
             }
             DgFiles[0] = Results;
            RefreshTab();
-         
         }
 
 
@@ -766,8 +762,8 @@ namespace IHM.ModelView
                 MessageBox.Show("La date séléctioné  n’existe pas");
             }
 
-            DgFiles[0] = Results;
-              DgFiles[1] = Results;
+            //DgFiles[0] = Results;
+            DgFiles[1] = Results;
             RefreshTab();
         }
 

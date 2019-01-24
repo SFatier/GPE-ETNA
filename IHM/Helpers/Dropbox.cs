@@ -7,6 +7,7 @@ using IHM.ModelView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,8 +24,8 @@ namespace GPE
         public DropboxClient DBClient;
         public long espace_utilise;
         private string oauth2State;
-
-         private const string RedirectUri = "https://localhost/authorize"; // Same as we have configured Under [Application] -> settings -> redirect URIs.  
+       
+        private const string RedirectUri = "https://localhost/authorize"; 
         #endregion
 
         #region Constructor  
@@ -83,13 +84,13 @@ namespace GPE
             try
             {
                 this.oauth2State = Guid.NewGuid().ToString("N");
-                Uri authorizeUri = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, AppKey, RedirectUri, state: oauth2State);
+                Uri authorizeUri = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Constant.strAppKey, RedirectUri, state: oauth2State);
                 AuthenticationURL = authorizeUri.AbsoluteUri.ToString();
                 return authorizeUri.AbsoluteUri.ToString();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -222,6 +223,7 @@ namespace GPE
         /// <returns></returns>  
         public bool Upload(string UploadfolderPath, string UploadfileName, string SourceFilePath)
         {
+            bool result = false;
             try
             {
                 using (var stream = new MemoryStream(File.ReadAllBytes(SourceFilePath)))
@@ -230,12 +232,13 @@ namespace GPE
                     var rest = response.Result; //Added to wait for the result from Async method  
                 }
 
-                return true;
+                result = true;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception("Echec de l'importation d'un fichier dropbox.", ex);
             }
+            return result;
         }
 
         /// <summary>  
@@ -305,8 +308,8 @@ namespace GPE
 
                 foreach (var metadata in ListReceivedFiles)
                 {
-                    var type = Path.GetExtension(metadata.Name);
-                    string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                    var type = Path.GetExtension(metadata.Name).Split('.')[1];
+                    string IMG = GetIcoByType(type);
                     
                     Fichier f = new Fichier(string.Empty, metadata.Name, IMG, type, null, null, string.Empty, true);
                     f.PreviewUrl = metadata.PreviewUrl;
@@ -354,38 +357,67 @@ namespace GPE
         public List<Fichier> GetFolderAndFiles(List<Metadata> Entries)
         {
             List<Fichier> lstFiles = new List<Fichier>();
-
+            
             // folder
-            List<String> lstFolder = new List<string>();
             foreach (var item in Entries.Where(i => i.IsFolder))
             {
-                string IdFile = item.AsFolder.Id;
-                string nom = item.Name;
-                string type = "dossier de fichiers";
-                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType("dossier");
-                string taille = "";
-                string path = item.PathDisplay;
-                Fichier f = new Fichier(IdFile, nom, IMG, type, null, null, taille, false);
-                f.path = path;
+                string IMG = "/IMG/folder.ico";
+                Fichier f = new Fichier(item.AsFolder.Id, item.Name, IMG, "dossier de fichiers", null, null, "-", false);
+                f.path = item.PathDisplay;
                 lstFiles.Add(f);
             }
 
             //Files
             foreach (var item in Entries.Where(i => i.IsFile))
             {
-                string IdFile = item.AsFile.Id;
-                string nom = item.Name;
-                var type = Path.GetExtension(item.Name);
-                string IMG = Singleton.GetInstance().GetHomeModelView().lMVM.GetIcoByType(type);
+                string type = Path.GetExtension(item.Name).Split('.')[1];
+                string IMG = GetIcoByType(type);
                 DateTime dateDeCreation = Convert.ToDateTime(item.AsFile.ClientModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 DateTime ModifieLe = Convert.ToDateTime( item.AsFile.ServerModified.ToString("f",  CultureInfo.CreateSpecificCulture("fr-FR")));
                 string taille = Convert.ToInt32(((item.AsFile.Size / 1024f) / 1024f) * 1024).ToString();
-                string path = item.PathDisplay;
-                Fichier f = new Fichier(IdFile, nom, IMG, type, dateDeCreation, ModifieLe, taille, true);
-                f.path = path;
+                Fichier f = new Fichier(item.AsFile.Id, item.Name, IMG, type, dateDeCreation, ModifieLe, taille, true);
+                f.path = item.PathDisplay;
                 lstFiles.Add(f);
             }
             return lstFiles;
+        }
+
+        /// <summary>
+        /// Récupère une ico en fonction du type de l'image
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public string GetIcoByType(string type)
+        {
+            string str = string.Empty;
+
+            switch (type)
+            {
+                case "jpg":
+                case "jpeg":
+                case "png":
+                case "gif":
+                    str = "image.ico";
+                    break;
+                case "txt":
+                    str = "text.ico";
+                    break;
+                case "doc":
+                case "docx":
+                    str = "doc.ico";
+                    break;
+                case "pdf":
+                    str = "pdf.ico";
+                    break;
+                case "csv":
+                case "excel":
+                    str = "excel.ico";
+                    break;
+                case "dossier":
+                    str = "folder.ico";
+                    break;
+            }
+            return "/IMG/"  + str;
         }
 
         #endregion
@@ -401,11 +433,11 @@ namespace GPE
             {
                 if (AppKey == null)
                 {
-                    throw new ArgumentNullException("AppKey");
+                    AppKey = Constant.strAppKey;
                 }
                 if (AppSecret == null)
                 {
-                    throw new ArgumentNullException("AppSecret");
+                    AppSecret = Constant.strAppSecret;
                 }
                 return true;
             }
