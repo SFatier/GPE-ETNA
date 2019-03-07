@@ -12,28 +12,41 @@ namespace IHM.Model
     public class Utilisateur : Base
     {
         private string image ;
-        private string token_DP;
-        private string token_GG;
-        private string refreshToken;
         private string login;
         private string email;
         private string mdp;
         private string role;
-        private UserCredential credentiel;
         private List<Projet> lstProjet;
 
-        public UserCredential Credentiel
+        //cloudRail
+        private string crededentielCloudRailDropbox;
+        public string CrededentielCloudRailDropbox
         {
-            get { return this.credentiel; }
+            get { return this.crededentielCloudRailDropbox; }
             set
             {
-                if (!string.Equals(this.credentiel, value))
+                if (!string.Equals(this.crededentielCloudRailDropbox, value))
                 {
-                    this.credentiel = value;
-                    RaisePropertyChanged(nameof(Credentiel));
+                    this.crededentielCloudRailDropbox = value;
+                    RaisePropertyChanged(nameof(CrededentielCloudRailDropbox));
                 }
             }
         }
+
+        private string crededentielCloudRailGoogle;
+        public string CrededentielCloudRailGoogle
+        {
+            get { return this.crededentielCloudRailGoogle; }
+            set
+            {
+                if (!string.Equals(this.crededentielCloudRailGoogle, value))
+                {
+                    this.crededentielCloudRailGoogle = value;
+                    RaisePropertyChanged(nameof(CrededentielCloudRailGoogle));
+                }
+            }
+        }
+        //
 
         public string Image
         {
@@ -100,32 +113,6 @@ namespace IHM.Model
             }
         }
 
-        public string Token_DP
-        {
-            get { return this.token_DP; }
-            set
-            {
-                if (!string.Equals(this.token_DP, value))
-                {
-                    this.token_DP = value;
-                    RaisePropertyChanged(nameof(Token_DP));
-                }
-            }
-        }
-
-        public string Token_GG
-        {
-            get { return this.token_GG; }
-            set
-            {
-                if (!string.Equals(this.token_GG, value))
-                {
-                    this.token_GG = value;
-                    RaisePropertyChanged(nameof(Token_GG));
-                }
-            }
-        }
-
         public string Role
         {
             get { return this.role; }
@@ -139,17 +126,5 @@ namespace IHM.Model
             }
         }
 
-        public string RefreshToken
-        {
-            get { return this.refreshToken; }
-            set
-            {
-                if (!string.Equals(this.refreshToken, value))
-                {
-                    this.refreshToken = value;
-                    RaisePropertyChanged(nameof(RefreshToken));
-                }
-            }
-        }
     }
 }

@@ -81,16 +81,22 @@ namespace IHM.ModelView
             Mdp = p.Password;
 
             List<Utilisateur> lst = Singleton.GetInstance().GetAllUtilisateur();
-            Utilisateur u = (Utilisateur) lst.First(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
-            if (u != null)
+            if (lst.Count() > 0)
             {
-                Singleton.GetInstance().SetUtilisateur(u);
-                HomeModelView HMV = new HomeModelView(u);
-                Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = HMV;
+                Utilisateur u = (Utilisateur)lst.First(x => x.Login.Equals(Login) && x.MDP.Equals(Mdp));
+                if (u != null)
+                {
+                    Singleton.GetInstance().SetUtilisateur(u);
+                    Singleton.GetInstance().GetMainWindowViewModel().CurrentPageViewModel = new HomeModelView(u);
+                }
+                else
+                {
+                    MessageBox.Show("Aucun utilisateur trouvé.");
+                }
             }
             else
             {
-                MessageBox.Show("Aucun utilisateur trouvé.");
+                MessageBox.Show("Aucun utilisateur enregistré, merci de vous inscrire");
             }
         }
 
