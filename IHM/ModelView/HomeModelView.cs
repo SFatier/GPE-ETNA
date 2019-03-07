@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Responses;
 using GPE;
 using IHM.Helpers;
@@ -23,7 +24,6 @@ namespace IHM.ModelView
         #region [ Fields ]   
         private Utilisateur curentUtilisateur;
         public ListModelView _listModelView;
-        public Cloud cloud = new Cloud();
         public string Name => "Home";
         private IPageViewModel _currentContentViewModel;
         private List<IPageViewModel> _contentViewModels;
@@ -35,6 +35,10 @@ namespace IHM.ModelView
         public ICommand Disconnect { get; set; }
         public ICommand PageFichiers { get; set; }
         public ICommand PageRoles { get; set; }
+
+        public DriveBase driveBaseDropbox;
+        public DriveBase driveBaseGoogle;
+
         #endregion
 
         #region [Constructor]
@@ -43,19 +47,16 @@ namespace IHM.ModelView
         {
             Singleton.GetInstance().SetHomeModelView(this);
             curentUtilisateur = u;
-          
-            Singleton.GetInstance().SetCloud(cloud); //Instance du cloud
 
-            if (curentUtilisateur.Token_GG != null || curentUtilisateur.Token_DP != null)
-            {
-                var _accesstoken = curentUtilisateur.Token_GG;
-                var refreshtoken = curentUtilisateur.RefreshToken;
+            if (curentUtilisateur.CrededentielCloudRailDropbox != null)
+                driveBaseDropbox = new DropBoxCloud();
 
-                cloud.GetCompteClient(curentUtilisateur.Token_DP, _accesstoken, refreshtoken);
-            }
-            _listModelView = new ListModelView();
+            if (curentUtilisateur.CrededentielCloudRailGoogle != null)
+                driveBaseGoogle = new GoogleCloud();
+
+            _listModelView = new ListModelView(driveBaseDropbox, driveBaseGoogle);
             
-            ContentViewModels.Add(new HomePageModelView());
+            ContentViewModels.Add(new HomePageModelView(driveBaseDropbox, driveBaseGoogle));
             CurrentContentViewModel = ContentViewModels[0];
 
             LoadAction();
@@ -163,7 +164,7 @@ namespace IHM.ModelView
          * */
         private void ActionPageHome(object parameter)
         {
-            CurrentContentViewModel = new HomePageModelView();
+            CurrentContentViewModel = new HomePageModelView(driveBaseDropbox, driveBaseGoogle);
         }
 
         private void ActionPagePerso(object paramter)
