@@ -38,7 +38,7 @@ namespace IHM.Model
             }
         }
 
-       public string IcoIsArchived
+        public string IcoIsArchived
         {
             get { return this.icoIsArchived; }
             set

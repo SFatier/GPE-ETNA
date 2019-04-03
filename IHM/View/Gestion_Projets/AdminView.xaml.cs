@@ -1,4 +1,5 @@
 ﻿using IHM.Helpers;
+using IHM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace IHM.View
                 //ItemsList.ContextMenu.Visibility = Visibility.Hidden;
                 //lblPageProjets.Content = "Mes projets attribués";
             }
+        }
+
+        private void TextBlock_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock test = sender as TextBlock;
+            Fichier fichierSelected = test.DataContext as Fichier;
+            string path = fichierSelected.path;
+            Singleton.GetInstance().GetListModelView().OpenFile(fichierSelected);
         }
     }
 }

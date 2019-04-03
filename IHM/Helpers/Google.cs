@@ -52,7 +52,28 @@ namespace IHM.Helpers
             List<Fichier> FileList = ConvertMedatadaToFile(result);
             return FileList.OrderBy(f => f.Nom).ToList(); 
         }
-        
+
+        public override Fichier GetItemsByPath(string path)
+        {
+            serviceCloudStorage.LoadAsString(u.CrededentielCloudRailGoogle);
+            try
+            {
+                CloudMetaData result = serviceCloudStorage.GetMetadata(path);
+                Fichier File = new Fichier();
+                File.Nom = result.GetName();
+                File.Taille = result.GetSize().ToString();
+                File.path = result.GetPath();
+                File.Type = (result.GetFolder() ? "dossier de fichiers" : (Path.GetExtension(result.GetName()).Split('.').Length != 2 ? "" : Path.GetExtension(result.GetName()).Split('.')[1]));
+                //File.IMG = c.GetImageMetaData().ToString();
+                File.DateDeCreation = new DateTime(result.GetModifiedAt());
+                return File;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
         public override List<Fichier> GetItemsFolder(string folderPath)
         {
             serviceCloudStorage.LoadAsString(u.CrededentielCloudRailGoogle);
@@ -101,8 +122,10 @@ namespace IHM.Helpers
                 }
 
                 return true;
-            }catch (Exception)
+            }
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -151,7 +174,7 @@ namespace IHM.Helpers
             try
             {
                 serviceCloudStorage.LoadAsString(u.CrededentielCloudRailGoogle);
-                string pathLocal = System.IO.Path.GetTempPath() + nom;
+                string pathLocal = System.IO.Path.GetTempPath() + nom.Replace(" ", "");
                 if (System.IO.File.Exists(pathLocal))
                     System.IO.File.Delete(pathLocal);
 
@@ -178,8 +201,27 @@ namespace IHM.Helpers
 
         public override bool SharingFile(Fichier fichier, Utilisateur utilisateur)
         {
+            return false;
+        }
+
+        public override string CreateShareLink(Fichier fichier)
+        {
+            try
+            {
+                serviceCloudStorage.LoadAsString(u.CrededentielCloudRailGoogle);
+                string link = serviceCloudStorage.CreateShareLink(fichier.path);
+                return link;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public override List<Fichier> GetItemsNoShared()
+        {
             throw new NotImplementedException();
         }
-                
     }
 }

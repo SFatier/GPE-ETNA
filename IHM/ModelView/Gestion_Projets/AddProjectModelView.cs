@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,7 +22,7 @@ namespace IHM.ModelView
         ObservableCollection<string> _selectedUsers = new ObservableCollection<string>();
         ObservableCollection<string> _selectedFiles = new ObservableCollection<string>();
         public ICommand  Save{ get; set; }
-        
+                
         public AddProjectModelView()
         {
             TitrePage = "Ajouter un projet";
@@ -132,8 +134,9 @@ namespace IHM.ModelView
                 p.IsprojetEncours = true;
                 p.DateDeCreation = DateTime.Now;
                 Singleton.GetInstance().addProject(p);
-                shareFile(p);
+                shareFile(p); //partage les fichiers correspondant avec l'utilisateur (dropbox seulement)
                 Functions.CreateFileProjet();
+                //SendMail(p);//Envoie d'email
                 Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
             }
             else
@@ -142,18 +145,71 @@ namespace IHM.ModelView
             }
         }
 
+        private void SendMail( Projet p)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+
+                //ajouter les destinataires
+                foreach (string adress in p.LstUser.Select(x => x.Email))
+                {
+                    mail.To.Add(adress);
+                }
+
+                mail.Subject = "[GED ETNA] Creation de projet "+  p.NomProject ;
+                mail.Body = "Vous trouverez ci-dessous le récapitulatif du projet "+p.NomProject;
+
+                for (int i = 0; i < p.LstFiles.Count(); i++) {
+                    mail.Body += " - " + p.LstFiles[i].Nom;
+                    mail.Body += @"<a href="+ p.LstFiles[i].PreviewUrl + "> Voir</a>" +  "<\br>";
+                }
+                
+                //définir l'expéditeur
+                mail.From = new MailAddress("fatier_s@etna-alternance.net", "Contact GED ETNA");
+
+                //définir les paramètres smtp pour l'envoi
+                SmtpClient smtpServer = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 465,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("fatier_s@etna-alternance.net", "couliana971")
+                };
+                //envoi du mail
+                smtpServer.Send(mail);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+   
         //partage les fichiers dropbox avec les différents utilisateurs
         private void shareFile(Projet p)
         {
-            foreach (Fichier f in p.LstFiles) {
-                if (f.IdDropbox != null) {
-                    foreach (Utilisateur u in p.LstUser) {
-                        Singleton.GetInstance().GetHomeModelView().driveBaseDropbox.SharingFile(f, u);
-                     }
-                }
-                else
+            foreach (Fichier f in p.LstFiles) {      
+                bool result = false;
+
+                foreach (Utilisateur u in p.LstUser)
                 {
-                    //non fait
+                    Fichier file = Singleton.GetInstance().GetListModelView().driveBaseGoogle.GetItemsByPath(f.path);
+                    if (file != null)
+                    {
+                        //result = Singleton.GetInstance().GetListModelView().driveBaseGoogle.SharingFile(f, u);
+                        result = true; //non connecté
+                    }
+                    else
+                    {
+                        file = Singleton.GetInstance().GetListModelView().driveBaseDropbox.GetItemsByPath(f.path);
+                        result = Singleton.GetInstance().GetListModelView().driveBaseDropbox.SharingFile(f, u);
+                    }
+
+                    if (!result)
+                        MessageBox.Show("Impossible de partager le fichier avec l'utilistauer  " + u.Email);
                 }
             }
         }
@@ -166,7 +222,7 @@ namespace IHM.ModelView
         private void LoadFiles()
         {
             List<string> lst_file_gg = Singleton.GetInstance().GetListModelView().DgFiles_GG.Select(f => f.Nom).ToList();
-            List<string> lst_file_dp = Singleton.GetInstance().GetListModelView().DgFiles_DP.Select(f => f.Nom).ToList();
+            List<string> lst_file_dp = Singleton.GetInstance().GetListModelView().driveBaseDropbox.GetItemsNoShared().Select(f => f.Nom).ToList();
             List<string> rslt = new List<string>();
             rslt.AddRange(lst_file_dp);
             rslt.AddRange(lst_file_gg);
@@ -202,24 +258,26 @@ namespace IHM.ModelView
             List<Fichier> lst = new List<Fichier>();
             if (SelectedFiles != null)
             {
-                List<Fichier> lstdp = Singleton.GetInstance().GetListModelView().DgFiles_DP;
+                List<Fichier> lstdp = Singleton.GetInstance().GetListModelView().driveBaseDropbox.GetItems();
 
                 foreach (var item in SelectedFiles)
                 {
-                    Fichier u = lstdp.Find(f => f.Nom == item);
+                    Fichier u = lstdp.FirstOrDefault(f => f.Nom == item);
                     if (u != null)
                     {
+                        u.PreviewUrl = Singleton.GetInstance().GetListModelView().driveBaseDropbox.CreateShareLink(u);
                         lst.Add(u);
                     }
                 }
 
-                List<Fichier> lstgg = Singleton.GetInstance().GetListModelView().DgFiles_GG;
+                List<Fichier> lstgg = Singleton.GetInstance().GetListModelView().driveBaseGoogle.GetItems();
 
                 foreach (var item in SelectedFiles)
                 {
-                    Fichier u = lstgg.Find(f => f.Nom == item);
+                    Fichier u = lstgg.FirstOrDefault(f => f.Nom == item);
                     if (u != null)
                     {
+                        u.PreviewUrl = Singleton.GetInstance().GetListModelView().driveBaseGoogle.CreateShareLink(u);
                         lst.Add(u);
                     }
                 }

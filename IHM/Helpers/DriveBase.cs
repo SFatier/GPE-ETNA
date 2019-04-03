@@ -28,7 +28,9 @@ namespace IHM.Helpers
         public abstract bool Upload(string path);
         public abstract string CreateShareLink(string filepath);
         public abstract bool Watch(string nom, string path);
-
+        public abstract Fichier GetItemsByPath(string path);
+        public abstract List<Fichier> GetItemsNoShared();
+        public abstract string CreateShareLink(Fichier fichier);
 
         //**//
         public abstract List<Fichier> GetFilesShared();

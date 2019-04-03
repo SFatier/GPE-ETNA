@@ -131,7 +131,7 @@ namespace IHM.ModelView
                 try
                 {
                     Singleton.GetInstance().GetDeleteProject(SelectedProject);
-                    Singleton.GetInstance().GetHomeModelView().CurrentContentViewModel = new AdminModelView();
+                    LoadProject();
                 }
                 catch (Exception ex)
                 {

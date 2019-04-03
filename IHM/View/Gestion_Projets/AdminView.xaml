@@ -85,12 +85,12 @@
 
                                 <StackPanel HorizontalAlignment="Left" Margin="20,15"  Grid.Column="0" Grid.Row="2">
                                     <Label>Liste des fichiers</Label>
-                                    <ListView ItemsSource="{Binding LstFiles}" BorderBrush="White" AlternationCount="2" Width="450" Height="auto">
+                                    <ListView ItemsSource="{Binding LstFiles}" x:Name="lstItemFile" BorderBrush="White" AlternationCount="2" Width="450" Height="auto" >
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <WrapPanel>
                                                     <Label Content="-"></Label>
-                                                    <TextBlock Text="{Binding Nom}" Margin=" 4" />
+                                                    <TextBlock Text="{Binding Nom}" Margin=" 4" MouseUp="TextBlock_MouseUp" />
                                                 </WrapPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>

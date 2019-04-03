@@ -33,8 +33,8 @@ namespace IHM.ModelView
         public ICommand Download { get; set; }
         public ICommand Open { get; set; }
 
-        private DriveBase driveBaseDropbox;
-        private DriveBase driveBaseGoogle;
+        public DriveBase driveBaseDropbox;
+        public DriveBase driveBaseGoogle;
 
         /// <summary>
         /// Constructeur
@@ -50,7 +50,7 @@ namespace IHM.ModelView
             if (cUtilisateur.CrededentielCloudRailGoogle != null)
             {
                 driveBaseGoogle = _driveBaseGoogle;
-                DgFiles_GG = driveBaseDropbox.GetItems();
+                DgFiles_GG = driveBaseGoogle.GetItems();
             }
 
             Singleton.GetInstance().setListFilesView(this);
@@ -245,16 +245,19 @@ namespace IHM.ModelView
         {
             List<Projet> lst = new List<Projet>();
 
-            LstProjet = Singleton.GetInstance().GetAllProject();
-            foreach (var item in LstProjet)
-            {
-                if (item.LstFiles.Exists(f => (f.IdDropbox == filesSelected.IdDropbox || f.IdGoogle == filesSelected.IdGoogle) && f.Nom.Equals(filesSelected.Nom)))
+            if (filesSelected != null){
+
+                LstProjet = Singleton.GetInstance().GetAllProject();
+                foreach (var item in LstProjet)
                 {
-                    item.IscheckedProject = true;
-                }
-                else
-                {
-                    item.IscheckedProject = false;
+                    if (item.LstFiles.Exists(f => (f.IdDropbox == filesSelected.IdDropbox || f.IdGoogle == filesSelected.IdGoogle) && f.Nom.Equals(filesSelected.Nom)))
+                    {
+                        item.IscheckedProject = true;
+                    }
+                    else
+                    {
+                        item.IscheckedProject = false;
+                    }
                 }
             }
         }
@@ -563,7 +566,33 @@ namespace IHM.ModelView
                 MessageBox.Show("Aucun fichier(s) sélectioné(s).");
             }
         }
-        
+
+        public void OpenFile( Fichier fichier)
+        {
+            Fichier file = driveBaseGoogle.GetItemsByPath(fichier.path);
+            if (file != null)
+            {
+
+                bool result = driveBaseGoogle.Watch(file.Nom, file.path);
+                if (!result)
+                    MessageBox.Show("Impossible d'ouvrir ce fichier.");
+            }
+            else
+            {
+                file = driveBaseDropbox.GetItemsByPath(fichier.path);
+                if (file.PreviewUrl == null )
+                {
+                    bool result = driveBaseDropbox.Watch(file.Nom, file.path);
+                    if (!result)
+                        MessageBox.Show("Impossible d'ouvrir ce fichier.");
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(file.PreviewUrl);
+                }
+            }
+        }
+
         /// <summary>
         /// Permet de visualiser un fichier dans dropbox
         /// </summary>

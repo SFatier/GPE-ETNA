@@ -16,7 +16,6 @@ namespace GPE
 {
     public class DropBoxCloud : DriveBase
     {
-        
 
         ICloudStorage serviceCloudStorage;
         private Utilisateur u = Singleton.GetInstance().GetUtilisateur();
@@ -44,6 +43,14 @@ namespace GPE
             return serviceCloudStorage.GetUserLogin();
         }
 
+        public override List<Fichier> GetItemsNoShared()
+        {
+            serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
+            List<CloudMetaData> result = serviceCloudStorage.GetChildren("/");
+            List<Fichier> FileList = ConvertMedatadaToFile(result);
+            return FileList.OrderBy(f => f.Nom).ToList();
+        }
+
         public override List<Fichier> GetItems()
         {
             serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
@@ -52,6 +59,26 @@ namespace GPE
             FileList.AddRange(GetFilesShared());
             return FileList.OrderBy(f => f.Nom).ToList();
         }
+
+        public override Fichier GetItemsByPath(string path)
+        {
+            serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
+            try { 
+                CloudMetaData result = serviceCloudStorage.GetMetadata(path);
+                Fichier File = new Fichier();
+                File.Nom = result.GetName();
+                File.Taille = result.GetSize().ToString();
+                File.path = result.GetPath();
+                File.Type = (result.GetFolder() ? "dossier de fichiers" : (Path.GetExtension(result.GetName()).Split('.').Length != 2 ? "" : Path.GetExtension(result.GetName()).Split('.')[1]));
+                //File.IMG = c.GetImageMetaData().ToString();
+                File.DateDeCreation = new DateTime(result.GetModifiedAt());
+                return File;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+}
 
         public override List<Fichier> GetItemsFolder(string folderPath)
         {
@@ -89,12 +116,12 @@ namespace GPE
             }
         }
 
-        public override bool Download(string pathGoogle, string pathLocal)
+        public override bool Download(string pathdropbox, string pathLocal)
         {
             serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
             try
             {
-                Stream stream = serviceCloudStorage.Download(pathGoogle);
+                Stream stream = serviceCloudStorage.Download(pathdropbox);
 
                 using (var fileStream = new FileStream(pathLocal, FileMode.Create, FileAccess.Write))
                 {
@@ -103,8 +130,9 @@ namespace GPE
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -153,7 +181,7 @@ namespace GPE
             try
             {
                 serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
-                string pathLocal = System.IO.Path.GetTempPath() + nom;
+                string pathLocal = System.IO.Path.GetTempPath() + nom.Replace(" ", "");
                 if (System.IO.File.Exists(pathLocal))
                     System.IO.File.Delete(pathLocal);
 
@@ -248,5 +276,19 @@ namespace GPE
             }
         }
 
+        public override string CreateShareLink(Fichier fichier)
+        {
+            try
+            {
+                serviceCloudStorage.LoadAsString(u.CrededentielCloudRailDropbox);
+                string link = serviceCloudStorage.CreateShareLink(fichier.path);
+                return link;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
     }
 }
